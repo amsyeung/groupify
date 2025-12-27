@@ -72,6 +72,7 @@ export default function App() {
         <input
           type="text"
           placeholder="Search tabs..."
+          autoFocus
           spellCheck={false}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
