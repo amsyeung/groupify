@@ -7,6 +7,9 @@
   
   <a href="https://vite.dev"><img alt="Vite logo" src="https://img.shields.io/badge/MADE%20BY%20Vite-000000.svg?style=for-the-badge&logo=Vite&labelColor=000"></a>
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&labelColor=000000"></a>
+
+  [View Chrome Extension](https://chromewebstore.google.com/detail/groupify/kkajifdljgkcniokopfhllcocblblmeh)
+  
 </div>
 
 # 📂 Tap Master
