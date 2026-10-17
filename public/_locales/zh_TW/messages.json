@@ -120,17 +120,6 @@
   "closeGroup": {
     "message": "關閉群組"
   },
-  "closeGroupConfirm": {
-    "message": "關閉 $VALUE$ 個分頁？",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "closeGroupConfirmOne": {
-    "message": "關閉 1 個分頁？"
-  },
   "closeTab": {
     "message": "關閉分頁"
   },

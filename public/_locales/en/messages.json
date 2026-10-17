@@ -120,17 +120,6 @@
   "closeGroup": {
     "message": "Close group"
   },
-  "closeGroupConfirm": {
-    "message": "Close $VALUE$ tabs?",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "closeGroupConfirmOne": {
-    "message": "Close 1 tab?"
-  },
   "closeTab": {
     "message": "Close tab"
   },
