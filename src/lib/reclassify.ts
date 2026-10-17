@@ -13,7 +13,7 @@ import {
   type ReclassifyMode,
 } from './classify'
 import { t } from './i18n'
-import { dateName, sessionName, suggestClusters } from './naming'
+import { dateName, sessionName, suggestClusters, type AiChoice } from './naming'
 import { OPENED_KEY } from './settings'
 import { pickColor } from './tabs'
 
@@ -26,12 +26,12 @@ export interface ReclassifyResult {
   undo: () => Promise<void>
 }
 
-async function planFor(mode: ReclassifyMode, tabs: chrome.tabs.Tab[], useAi: boolean): Promise<{ buckets: Bucket[]; usedFallback: boolean }> {
+async function planFor(mode: ReclassifyMode, tabs: chrome.tabs.Tab[], ai: AiChoice): Promise<{ buckets: Bucket[]; usedFallback: boolean }> {
   if (mode === 'category') return { buckets: planByCategory(tabs), usedFallback: false }
   if (mode === 'site') return { buckets: planBySite(tabs), usedFallback: false }
   if (mode === 'recency') return { buckets: planByRecency(tabs), usedFallback: false }
 
-  const clusters = useAi ? await suggestClusters(tabs) : null
+  const clusters = await suggestClusters(tabs, ai)
   if (clusters)
     return {
       buckets: planFromClusters(
@@ -58,10 +58,10 @@ export async function reclassify(
   tabs: chrome.tabs.Tab[],
   groups: chrome.tabGroups.TabGroup[],
   locks: string[],
-  useAi: boolean
+  ai: AiChoice
 ): Promise<ReclassifyResult | null> {
   const movable = movableTabs(tabs, groups, locks)
-  const { buckets, usedFallback } = await planFor(mode, movable, useAi)
+  const { buckets, usedFallback } = await planFor(mode, movable, ai)
   if (!buckets.length) return null
 
   // Remember the current layout for Undo.

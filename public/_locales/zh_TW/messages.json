@@ -272,7 +272,7 @@
     "message": "按工作／專案"
   },
   "modeProjectDesc": {
-    "message": "本機 AI 找出屬於同一件事的分頁；沒有 AI 時，一起開啟的分頁會放在一起。"
+    "message": "AI 找出屬於同一件事的分頁，即使來自不同網站；沒有 AI 時，一起開啟的分頁會放在一起。"
   },
   "modeCategory": {
     "message": "按用途"
@@ -313,7 +313,7 @@
     "message": "沒有可以分在一起的分頁"
   },
   "projectNoAi": {
-    "message": "沒有本機 AI，已按開啟時間分組"
+    "message": "AI 暫時無法使用，已按開啟時間分組"
   },
   "lockGroup": {
     "message": "鎖定"
@@ -397,10 +397,71 @@
   "optShortcut": {
     "message": "鍵盤快捷鍵"
   },
-  "optShortcutDesc": {
-    "message": "Alt+Shift+G 開啟側邊欄。"
-  },
   "openShortcuts": {
     "message": "更改快捷鍵"
+  },
+  "optCloudAi": {
+    "message": "沒有本機 AI 時，使用 Groupify 的雲端 AI"
+  },
+  "optCloudAiDesc": {
+    "message": "把要分組的分頁標題和網站名稱（不含完整網址）傳到 Groupify 在 Cloudflare 上的伺服器，由 AI 模型處理，伺服器不會保留任何資料。免費、所有人共用，每日有上限；用完時改以日期命名。"
+  },
+  "projectNoAiHint": {
+    "message": "沒有可用的 AI，已按開啟時間分組。可在「設定」開啟雲端 AI。"
+  },
+  "optAutoSave": {
+    "message": "設定會即時儲存，並透過 Chrome 同步到你的其他電腦。"
+  },
+  "optAiHeading": {
+    "message": "AI"
+  },
+  "optDownloadModel": {
+    "message": "下載本機 AI"
+  },
+  "optDownloading": {
+    "message": "下載中… $VALUE$%",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optDownloadModelDesc": {
+    "message": "Chrome 會下載一次 AI 模型（數 GB，需用不按流量收費的網絡）。之後命名都在這部電腦上完成。"
+  },
+  "optDownloadFailed": {
+    "message": "下載未能開始。請確認有足夠的可用空間，然後再試。"
+  },
+  "optCloudAiHint": {
+    "message": "這部電腦沒有本機 AI，除非開啟這個選項，否則群組會以日期命名。"
+  },
+  "privacyPolicy": {
+    "message": "私隱政策"
+  },
+  "optGroupsHeading": {
+    "message": "群組"
+  },
+  "optLocked": {
+    "message": "已鎖定的群組"
+  },
+  "optLockedNone": {
+    "message": "暫時沒有。可在側邊欄的群組選單鎖定群組。"
+  },
+  "optShortcutIs": {
+    "message": "$VALUE$ 開啟側邊欄。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optShortcutNone": {
+    "message": "尚未設定快捷鍵，可以自行加入。"
+  },
+  "optFaq": {
+    "message": "說明與常見問題"
+  },
+  "optSource": {
+    "message": "原始碼"
   }
 }

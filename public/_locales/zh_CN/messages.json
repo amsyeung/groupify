@@ -272,7 +272,7 @@
     "message": "按工作／项目"
   },
   "modeProjectDesc": {
-    "message": "本机 AI 找出属于同一件事的标签页；没有 AI 时，一起打开的标签页会放在一起。"
+    "message": "AI 找出属于同一件事的标签页，即使来自不同网站；没有 AI 时，一起打开的标签页会放在一起。"
   },
   "modeCategory": {
     "message": "按用途"
@@ -313,7 +313,7 @@
     "message": "没有可以分在一起的标签页"
   },
   "projectNoAi": {
-    "message": "没有本机 AI，已按打开时间分组"
+    "message": "AI 暂时无法使用，已按打开时间分组"
   },
   "lockGroup": {
     "message": "锁定"
@@ -397,10 +397,71 @@
   "optShortcut": {
     "message": "键盘快捷键"
   },
-  "optShortcutDesc": {
-    "message": "Alt+Shift+G 打开侧边栏。"
-  },
   "openShortcuts": {
     "message": "更改快捷键"
+  },
+  "optCloudAi": {
+    "message": "没有本机 AI 时，使用 Groupify 的云端 AI"
+  },
+  "optCloudAiDesc": {
+    "message": "把要分组的标签页标题和网站名称（不含完整网址）传到 Groupify 在 Cloudflare 上的服务器，由 AI 模型处理，服务器不会保留任何数据。免费、所有人共用，每日有上限；用完时改以日期命名。"
+  },
+  "projectNoAiHint": {
+    "message": "没有可用的 AI，已按打开时间分组。可在“设置”开启云端 AI。"
+  },
+  "optAutoSave": {
+    "message": "设置会即时保存，并通过 Chrome 同步到你的其他电脑。"
+  },
+  "optAiHeading": {
+    "message": "AI"
+  },
+  "optDownloadModel": {
+    "message": "下载本机 AI"
+  },
+  "optDownloading": {
+    "message": "下载中… $VALUE$%",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optDownloadModelDesc": {
+    "message": "Chrome 会下载一次 AI 模型（数 GB，需使用不按流量计费的网络）。之后命名都在这台电脑上完成。"
+  },
+  "optDownloadFailed": {
+    "message": "下载未能开始。请确认有足够的可用空间，然后再试。"
+  },
+  "optCloudAiHint": {
+    "message": "这台电脑没有本机 AI，除非开启这个选项，否则组会以日期命名。"
+  },
+  "privacyPolicy": {
+    "message": "隐私政策"
+  },
+  "optGroupsHeading": {
+    "message": "组"
+  },
+  "optLocked": {
+    "message": "已锁定的组"
+  },
+  "optLockedNone": {
+    "message": "暂时没有。可在侧边栏的组菜单锁定组。"
+  },
+  "optShortcutIs": {
+    "message": "$VALUE$ 打开侧边栏。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optShortcutNone": {
+    "message": "尚未设置快捷键，可以自行添加。"
+  },
+  "optFaq": {
+    "message": "帮助与常见问题"
+  },
+  "optSource": {
+    "message": "源代码"
   }
 }

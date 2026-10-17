@@ -7,6 +7,8 @@ export interface Settings {
   useAi: boolean
   /** Keep recently closed groups so they can be reopened. */
   rememberClosed: boolean
+  /** Send tab titles and hostnames to Groupify's shared AI proxy when the on-device model isn't available. */
+  cloudAi: boolean
 }
 
 export const SETTINGS_KEY = 'settings'
@@ -16,7 +18,7 @@ export const LOCKS_KEY = 'lockedGroups'
 export const LIVE_KEY = 'liveGroups'
 export const OPENED_KEY = 'openedAt'
 
-export const DEFAULT_SETTINGS: Settings = { reclassifyMode: 'project', useAi: true, rememberClosed: true }
+export const DEFAULT_SETTINGS: Settings = { reclassifyMode: 'project', useAi: true, rememberClosed: true, cloudAi: false }
 
 /** Fills in defaults for anything missing or invalid, e.g. settings written by an older version. */
 export function parseSettings(raw: unknown): Settings {
@@ -27,6 +29,7 @@ export function parseSettings(raw: unknown): Settings {
       : DEFAULT_SETTINGS.reclassifyMode,
     useAi: typeof value.useAi === 'boolean' ? value.useAi : DEFAULT_SETTINGS.useAi,
     rememberClosed: typeof value.rememberClosed === 'boolean' ? value.rememberClosed : DEFAULT_SETTINGS.rememberClosed,
+    cloudAi: typeof value.cloudAi === 'boolean' ? value.cloudAi : DEFAULT_SETTINGS.cloudAi,
   }
 }
 

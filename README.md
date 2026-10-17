@@ -12,24 +12,25 @@
 
 ## Features
 
-|                          |                                                                                                                                                                                         |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Side panel**           | Click the toolbar icon (or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) to keep Groupify open beside the page while you browse.                                                  |
-| **Group as a series**    | One click puts every ungrouped tab into one new group, for whatever you're working on right now.                                                                                        |
-| **Reclassify**           | Sort every unlocked group again: by task or project, by purpose (development, design, docs, AI, video, social, shopping, news…), by site or by last use. **Undo** puts everything back. |
-| **Lock groups**          | A locked group is left alone when you reclassify.                                                                                                                                       |
-| **Named for you**        | Chrome's on-device AI suggests names and finds tabs for the same task, privately on your computer. Without it, groups are named after the date.                                         |
-| **Add to current group** | New tabs join the group you're working in.                                                                                                                                              |
-| **Recently closed**      | Closed groups are remembered, so you can reopen them or keep them under **Saved**.                                                                                                      |
-| **Search**               | Filter tabs by title or URL. <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd> jump to a tab, <kbd>Esc</kbd> clears.                                                                       |
-| **Manage groups**        | The ⋯ menu renames, recolors, locks, collapses, saves, ungroups or closes a group. Drag tabs between groups.                                                                            |
-| **Settings**             | Choose the default way to reclassify, and turn on-device AI or closed-group history on or off.                                                                                          |
+|                           |                                                                                                                                                                                         |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Side panel**            | Click the toolbar icon (or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) to keep Groupify open beside the page while you browse.                                                  |
+| **Group as a series**     | One click puts every ungrouped tab into one new group, for whatever you're working on right now.                                                                                        |
+| **Reclassify**            | Sort every unlocked group again: by task or project, by purpose (development, design, docs, AI, video, social, shopping, news…), by site or by last use. **Undo** puts everything back. |
+| **Named for you**         | Chrome's on-device AI suggests names and finds tabs for the same task, privately on your computer. Without it, turn on Groupify's free cloud AI, or groups are named after the date.    |
+| **Lock, save and reopen** | Lock a group so Reclassify leaves it alone, save it for later, or reopen one you closed from **Recently closed**.                                                                       |
+| **Add to current group**  | New tabs join the group you're working in.                                                                                                                                              |
+| **Search**                | Filter tabs by title or URL. <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd> jump to a tab, <kbd>Esc</kbd> clears.                                                                       |
+| **Tidy up**               | Rename, recolor, collapse, ungroup or close a group from its icons, drag tabs between groups, and close duplicate tabs from the ⋯ menu.                                                 |
+| **Settings**              | The default way to reclassify, on-device or cloud AI, closed-group history, your locked groups and the shortcut.                                                                        |
 
 In English, 繁體中文 and 简体中文, in light and dark mode. More in the [FAQ](SUPPORT.md).
 
 ## Privacy
 
-Groupify reads the tabs open in your window. The groups you save, and the last 20 groups you closed (name, color and tab addresses), stay in Chrome's extension storage; saved groups sync through Chrome if you have sync on. AI features use the model built into Chrome, on your computer. Groupify sends nothing to any server of its own.
+Groupify reads the tabs open in your window and keeps everything in your browser: settings, locked groups, the groups you save and the last 20 groups you closed. AI features use the model built into Chrome, on your computer. Cloud AI is off by default; only if you turn it on are the titles and site names of the tabs being grouped (never full addresses) sent to Groupify's AI server, which keeps nothing. Read the [privacy policy](https://groupify.aoricreative.com/privacy) and [how the AI server works](server/ai-proxy/README.md).
+
+<p align="center"><img src="images/settings.png" alt="Groupify settings: default way to reclassify, on-device AI status, the cloud AI switch with a link to the privacy policy, and closed-group history" width="420"></p>
 
 ## Development
 
@@ -39,8 +40,8 @@ pnpm build   # extension in dist/, load it unpacked at chrome://extensions
 pnpm test
 ```
 
-Merging to `main` releases automatically, up to the Chrome Web Store: see [docs/PUBLISHING.md](docs/PUBLISHING.md).
+Merging to `main` releases automatically, up to the Chrome Web Store: see [docs/PUBLISHING.md](docs/PUBLISHING.md). The optional cloud AI is a Cloudflare Worker in [`server/ai-proxy`](server/ai-proxy/README.md), deployed separately with Wrangler. The website and privacy policy at [groupify.aoricreative.com](https://groupify.aoricreative.com) are in [`website`](website/README.md), deployed the same way.
 
 ## Support
 
-[Open an issue](https://github.com/amsyeung/groupify/issues) or email [info@aoricreative.com](mailto:info@aoricreative.com).
+See the [FAQ](SUPPORT.md), [open an issue](https://github.com/amsyeung/groupify/issues) or email [info@aoricreative.com](mailto:info@aoricreative.com).

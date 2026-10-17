@@ -1,6 +1,7 @@
 // Names for new groups: Chrome's on-device model suggests one from the tab titles; without it,
 // the group is named after today's date. Nothing leaves the computer.
 
+import { cloudClusters, cloudName } from './cloud'
 import { siteOf, tabUrl, type TabLike } from './tabs'
 
 const MAX_TABS = 15
@@ -84,8 +85,34 @@ async function promptModel(system: string, input: string, schema: object, timeou
   }
 }
 
+/** Which AI may be asked: Chrome's on-device model first, then Groupify's cloud proxy if the user turned it on. */
+export interface AiChoice {
+  onDevice: boolean
+  cloud: boolean
+}
+
+/** A name for a new group from the tab titles, or null when no AI is allowed or available. */
+export async function suggestName(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[], ai: AiChoice): Promise<string | null> {
+  const local = ai.onDevice ? await onDeviceName(tabs) : null
+  if (local) return local
+  return ai.cloud ? cloudName(tabs, uiLanguage()) : null
+}
+
+/** Tabs grouped by task, or null when no AI is allowed or available. */
+export async function suggestClusters(
+  tabs: (Pick<TabLike, 'title' | 'url' | 'pendingUrl'> & { id?: number })[],
+  ai: AiChoice
+): Promise<{ name: string; tabIds: number[] }[] | null> {
+  const local = ai.onDevice ? await onDeviceClusters(tabs) : null
+  if (local) return local
+  if (!ai.cloud) return null
+  const listed = tabs.slice(0, MAX_CLUSTER_TABS)
+  const clusters = await cloudClusters(listed, uiLanguage())
+  return clusters && clusters.map((c) => ({ name: c.name, tabIds: c.tabs.filter((n) => n >= 1 && n <= listed.length).map((n) => listed[n - 1].id!) }))
+}
+
 /** Asks the on-device model for a group name. Null when the model isn't available or anything goes wrong. */
-export async function suggestName(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[]): Promise<string | null> {
+async function onDeviceName(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[]): Promise<string | null> {
   if (!tabs.length) return null
   const result = await promptModel(
     SYSTEM_PROMPT,
@@ -131,7 +158,7 @@ export function parseClusters(raw: string, tabIds: number[]): { name: string; ta
 }
 
 /** Groups tabs by task with the on-device model. Null when the model isn't available. */
-export async function suggestClusters(
+async function onDeviceClusters(
   tabs: (Pick<TabLike, 'title' | 'url' | 'pendingUrl'> & { id?: number })[]
 ): Promise<{ name: string; tabIds: number[] }[] | null> {
   const listed = tabs.slice(0, MAX_CLUSTER_TABS)
@@ -184,5 +211,24 @@ export async function aiStatus(): Promise<'available' | 'downloadable' | 'unavai
     return status === 'downloadable' || status === 'downloading' ? 'downloadable' : 'unavailable'
   } catch {
     return 'unavailable'
+  }
+}
+
+/**
+ * Downloads Chrome's on-device model, reporting progress from 0 to 1. Only call this from a click:
+ * Chrome needs a user gesture, and the model is several gigabytes. Resolves true once it's ready.
+ */
+export async function downloadModel(onProgress: (loaded: number) => void): Promise<boolean> {
+  const model = globalThis.LanguageModel
+  if (!model) return false
+  try {
+    const session = await model.create({
+      ...ENGLISH,
+      monitor: (m) => m.addEventListener('downloadprogress', (event) => onProgress(event.loaded)),
+    })
+    session.destroy()
+    return true
+  } catch {
+    return false
   }
 }

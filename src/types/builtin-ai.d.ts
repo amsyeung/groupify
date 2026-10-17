@@ -17,10 +17,23 @@ export interface LanguageModelSession {
   destroy(): void
 }
 
+/** Fired while a model downloads; `loaded` is a 0..1 fraction. */
+export interface DownloadProgressEvent extends Event {
+  readonly loaded: number
+}
+
+export interface CreateMonitor extends EventTarget {
+  addEventListener(type: 'downloadprogress', listener: (event: DownloadProgressEvent) => void): void
+}
+
 export interface LanguageModelStatic {
   availability(options?: LanguageOptions): Promise<AIAvailability>
   create(
-    options?: LanguageOptions & { initialPrompts?: { role: 'system' | 'user' | 'assistant'; content: string }[]; signal?: AbortSignal }
+    options?: LanguageOptions & {
+      initialPrompts?: { role: 'system' | 'user' | 'assistant'; content: string }[]
+      signal?: AbortSignal
+      monitor?: (monitor: CreateMonitor) => void
+    }
   ): Promise<LanguageModelSession>
 }
 
