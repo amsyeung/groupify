@@ -18,7 +18,7 @@
 | **Group as a series**    | One click puts every ungrouped tab into one new group, for whatever you're working on right now.                                                                                        |
 | **Reclassify**           | Sort every unlocked group again: by task or project, by purpose (development, design, docs, AI, video, social, shopping, news…), by site or by last use. **Undo** puts everything back. |
 | **Lock groups**          | A locked group is left alone when you reclassify.                                                                                                                                       |
-| **Named for you**        | Chrome's on-device AI suggests names and finds tabs for the same task, privately on your computer. Without it, groups are named after the date.                                         |
+| **Named for you**        | Chrome's on-device AI suggests names and finds tabs for the same task, privately on your computer. Without it, turn on Groupify's free cloud AI, or groups are named after the date.    |
 | **Add to current group** | New tabs join the group you're working in.                                                                                                                                              |
 | **Recently closed**      | Closed groups are remembered, so you can reopen them or keep them under **Saved**.                                                                                                      |
 | **Search**               | Filter tabs by title or URL. <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd> jump to a tab, <kbd>Esc</kbd> clears.                                                                       |
@@ -29,7 +29,7 @@ In English, 繁體中文 and 简体中文, in light and dark mode. More in the [
 
 ## Privacy
 
-Groupify reads the tabs open in your window. The groups you save, and the last 20 groups you closed (name, color and tab addresses), stay in Chrome's extension storage; saved groups sync through Chrome if you have sync on. AI features use the model built into Chrome, on your computer. Groupify sends nothing to any server of its own.
+Groupify reads the tabs open in your window. The groups you save, and the last 20 groups you closed (name, color and tab addresses), stay in Chrome's extension storage; saved groups sync through Chrome if you have sync on. AI features use the model built into Chrome, on your computer. Only if you turn on cloud AI in Settings are the titles and site names of the tabs being grouped (never full addresses) sent to Groupify's AI server, which keeps nothing ([how it works](server/ai-proxy/README.md)).
 
 ## Development
 

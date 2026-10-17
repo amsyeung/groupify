@@ -31,6 +31,10 @@ It puts every tab that isn't in a group yet into one new group, so the tabs you 
 
 If Chrome's on-device AI (Gemini Nano) is already on your computer, it suggests a name from the tab titles. It runs locally, so nothing is sent anywhere, and Groupify never downloads the model itself. Otherwise, the group is named after today's date. You can rename it any time from the ⋯ menu.
 
+## My computer has no on-device AI. Can I still get names?
+
+Yes: in Settings, turn on **Use Groupify's cloud AI**. It is off by default. When on, and only when Chrome's own model isn't available, the titles and site names of the tabs being grouped (never full addresses) go to Groupify's server on Cloudflare, which asks an AI model and keeps nothing. It is free and shared by everyone with a daily limit; when the limit is reached, groups are named after the date until the next day.
+
 ## What does "Add to …" do?
 
 It adds the ungrouped tabs to the group you're working in: the group of the tab you're on, or of the grouped tab you used last. Links you open from a grouped tab already join its group in Chrome, so this is for tabs you opened yourself.
