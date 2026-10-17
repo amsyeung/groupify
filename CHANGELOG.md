@@ -4,6 +4,28 @@ See the GitHub Releases page for detailed changelogs: https://github.com/amsyeun
 
 
 
+## [1.2.0](https://github.com/amsyeung/groupify/compare/v1.1.0...v1.2.0) (2026-10-17)
+
+### Features
+
+* a clearer settings page ([bd25102](https://github.com/amsyeung/groupify/commit/bd251029cee16c1520734de46bae96a64a6be504))
+* Groupify's own website and privacy policy at groupify.aoricreative.com ([ea0c0fc](https://github.com/amsyeung/groupify/commit/ea0c0fc8740955164a3d398b335eb8993800a7cb))
+* icon buttons for lock, collapse, save, ungroup and close in the group menu ([1f900cc](https://github.com/amsyeung/groupify/commit/1f900cc7298d93eb2f18a160a1b04d8f2c182ff4))
+* manual first - auto-lock, remembered sites and Only tidy new tabs ([2053e57](https://github.com/amsyeung/groupify/commit/2053e57283688a942d585d41a66c96944cc5274c))
+* multi-step history and Ungroup all ([f4f545a](https://github.com/amsyeung/groupify/commit/f4f545ab13a33de665c189268efc99d95483b735))
+* optional cloud AI through a shared Workers AI proxy ([5b0c283](https://github.com/amsyeung/groupify/commit/5b0c283cf297e6260f1e2a04c077d47647484050))
+* save tab groups and reopen them later ([bb8c2d6](https://github.com/amsyeung/groupify/commit/bb8c2d620724da6df067cf62953fca04e29ecc3e))
+* side panel with reclassify, locked groups and recently closed groups ([eab6b69](https://github.com/amsyeung/groupify/commit/eab6b694f77489ce8d8aff1235108a1bd5be5e20))
+
+### Bug Fixes
+
+* **ai-proxy:** retry once and strip half-finished characters from model names ([dcac9e4](https://github.com/amsyeung/groupify/commit/dcac9e41500e2840ecebdbbeebc2b2c25337472f))
+* history labels without a Chinese colon in English, and "1 group" ([13f63fc](https://github.com/amsyeung/groupify/commit/13f63fcbac86821a89b0bcea9e16aa88a3edbbf5))
+* keep group shortcuts at full width in the scrolling row ([ca035d1](https://github.com/amsyeung/groupify/commit/ca035d1ac90a46abf33d99596ea05a0fdebd6997))
+* keep group shortcuts at full width in the scrolling row ([9c9a339](https://github.com/amsyeung/groupify/commit/9c9a33987ab8cd53ce8bbc343cf6ae3780377117))
+* open Settings from the side panel ([883a9d4](https://github.com/amsyeung/groupify/commit/883a9d47aae2ec2933723e7af2de39fde8cffaf7))
+* say "1 tab" for a saved group with one tab ([9899bc3](https://github.com/amsyeung/groupify/commit/9899bc32b88e263f94eedd8d8e98ef610062fd62))
+
 ## 1.1.0 (2026-10-17)
 
 ### Features
