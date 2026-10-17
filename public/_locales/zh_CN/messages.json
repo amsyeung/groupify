@@ -272,7 +272,7 @@
     "message": "按工作／项目"
   },
   "modeProjectDesc": {
-    "message": "本机 AI 找出属于同一件事的标签页；没有 AI 时，一起打开的标签页会放在一起。"
+    "message": "AI 找出属于同一件事的标签页，即使来自不同网站；没有 AI 时，一起打开的标签页会放在一起。"
   },
   "modeCategory": {
     "message": "按用途"
@@ -397,9 +397,6 @@
   "optShortcut": {
     "message": "键盘快捷键"
   },
-  "optShortcutDesc": {
-    "message": "Alt+Shift+G 打开侧边栏。"
-  },
   "openShortcuts": {
     "message": "更改快捷键"
   },
@@ -411,5 +408,60 @@
   },
   "projectNoAiHint": {
     "message": "没有可用的 AI，已按打开时间分组。可在“设置”开启云端 AI。"
+  },
+  "optAutoSave": {
+    "message": "设置会即时保存，并通过 Chrome 同步到你的其他电脑。"
+  },
+  "optAiHeading": {
+    "message": "AI"
+  },
+  "optDownloadModel": {
+    "message": "下载本机 AI"
+  },
+  "optDownloading": {
+    "message": "下载中… $VALUE$%",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optDownloadModelDesc": {
+    "message": "Chrome 会下载一次 AI 模型（数 GB，需使用不按流量计费的网络）。之后命名都在这台电脑上完成。"
+  },
+  "optDownloadFailed": {
+    "message": "下载未能开始。请确认有足够的可用空间，然后再试。"
+  },
+  "optCloudAiHint": {
+    "message": "这台电脑没有本机 AI，除非开启这个选项，否则组会以日期命名。"
+  },
+  "privacyPolicy": {
+    "message": "隐私政策"
+  },
+  "optGroupsHeading": {
+    "message": "组"
+  },
+  "optLocked": {
+    "message": "已锁定的组"
+  },
+  "optLockedNone": {
+    "message": "暂时没有。可在侧边栏的组菜单锁定组。"
+  },
+  "optShortcutIs": {
+    "message": "$VALUE$ 打开侧边栏。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optShortcutNone": {
+    "message": "尚未设置快捷键，可以自行添加。"
+  },
+  "optFaq": {
+    "message": "帮助与常见问题"
+  },
+  "optSource": {
+    "message": "源代码"
   }
 }

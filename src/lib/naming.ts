@@ -213,3 +213,22 @@ export async function aiStatus(): Promise<'available' | 'downloadable' | 'unavai
     return 'unavailable'
   }
 }
+
+/**
+ * Downloads Chrome's on-device model, reporting progress from 0 to 1. Only call this from a click:
+ * Chrome needs a user gesture, and the model is several gigabytes. Resolves true once it's ready.
+ */
+export async function downloadModel(onProgress: (loaded: number) => void): Promise<boolean> {
+  const model = globalThis.LanguageModel
+  if (!model) return false
+  try {
+    const session = await model.create({
+      ...ENGLISH,
+      monitor: (m) => m.addEventListener('downloadprogress', (event) => onProgress(event.loaded)),
+    })
+    session.destroy()
+    return true
+  } catch {
+    return false
+  }
+}

@@ -272,7 +272,7 @@
     "message": "By task or project"
   },
   "modeProjectDesc": {
-    "message": "On-device AI finds tabs that belong to the same task. Without it, tabs opened together stay together."
+    "message": "AI finds tabs that belong to the same task, even across sites. Without AI, tabs opened together stay together."
   },
   "modeCategory": {
     "message": "By purpose"
@@ -397,9 +397,6 @@
   "optShortcut": {
     "message": "Keyboard shortcut"
   },
-  "optShortcutDesc": {
-    "message": "Alt+Shift+G opens the side panel."
-  },
   "openShortcuts": {
     "message": "Change shortcut"
   },
@@ -411,5 +408,60 @@
   },
   "projectNoAiHint": {
     "message": "No AI available, so tabs were grouped by when they were opened. You can turn on cloud AI in Settings."
+  },
+  "optAutoSave": {
+    "message": "Changes are saved right away and follow you to other computers through Chrome sync."
+  },
+  "optAiHeading": {
+    "message": "AI"
+  },
+  "optDownloadModel": {
+    "message": "Download on-device AI"
+  },
+  "optDownloading": {
+    "message": "Downloading… $VALUE$%",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optDownloadModelDesc": {
+    "message": "Chrome downloads its AI model once (several gigabytes, on an unmetered connection). After that, names are made on this computer."
+  },
+  "optDownloadFailed": {
+    "message": "The download didn’t start. Check that there is enough free space and try again."
+  },
+  "optCloudAiHint": {
+    "message": "This computer has no on-device AI, so groups are named after the date unless you turn this on."
+  },
+  "privacyPolicy": {
+    "message": "Privacy policy"
+  },
+  "optGroupsHeading": {
+    "message": "Groups"
+  },
+  "optLocked": {
+    "message": "Locked groups"
+  },
+  "optLockedNone": {
+    "message": "None yet. Lock a group from its menu in the side panel."
+  },
+  "optShortcutIs": {
+    "message": "$VALUE$ opens the side panel.",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "optShortcutNone": {
+    "message": "No shortcut is set. You can add one."
+  },
+  "optFaq": {
+    "message": "Help & FAQ"
+  },
+  "optSource": {
+    "message": "Source code"
   }
 }
