@@ -546,5 +546,49 @@
   },
   "histRestore": {
     "message": "還原"
+  },
+  "modeTidy": {
+    "message": "只整理新分頁"
+  },
+  "modeTidyDesc": {
+    "message": "未分組的分頁加入所屬群組（先按你記住的網站，再按相同網站），其他分頁不會移動。"
+  },
+  "tidied": {
+    "message": "已把 $VALUE$ 個分頁放進群組",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "tidiedOne": {
+    "message": "已把 1 個分頁放進群組"
+  },
+  "tidyNothing": {
+    "message": "暫時沒有新分頁屬於現有的群組"
+  },
+  "histTidy": {
+    "message": "整理新分頁"
+  },
+  "optAutoLock": {
+    "message": "自動鎖定我親手建立或修改的群組"
+  },
+  "optAutoLockDesc": {
+    "message": "你命名、改名或拖分頁進去的群組會被鎖定，重新分類時不會改動它，包括在 Chrome 分頁列上的改動。"
+  },
+  "optRules": {
+    "message": "記住的網站"
+  },
+  "optRulesDesc": {
+    "message": "你親手把分頁放進有名稱的群組時，會記住它的網站。之後無論用哪種方式重新分類或整理新分頁，這個網站都會回到那個群組。"
+  },
+  "optRulesNone": {
+    "message": "暫時沒有。把分頁拖進群組，或者自己為群組命名，就會記住。"
+  },
+  "forgetRule": {
+    "message": "忘記"
+  },
+  "forgetAllRules": {
+    "message": "全部忘記"
   }
 }

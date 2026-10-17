@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { asGroupify } from '../lib/manual'
 import { findReplaced, fitsSyncItem, listSaved, SAVED_PREFIX, savedKey, snapshotGroup, type ListedGroup, type SavedGroup } from '../lib/saved'
 
 async function loadSaved(): Promise<ListedGroup[]> {
@@ -62,7 +63,9 @@ export async function keepClosed(group: SavedGroup): Promise<void> {
 const stored = ({ id, title, color, urls, savedAt, closedAt }: SavedGroup): SavedGroup => ({ id, title, color, urls, savedAt, closedAt })
 
 /** Opens a saved group as a new tab group at the end of the current window, without leaving the panel. */
-export async function openSaved(group: SavedGroup): Promise<number> {
+export const openSaved = (group: SavedGroup): Promise<number> => asGroupify(() => openSavedGroup(group))
+
+async function openSavedGroup(group: SavedGroup): Promise<number> {
   const { id: windowId } = await chrome.windows.getCurrent()
   const tabIds: number[] = []
   for (const url of group.urls) {

@@ -15,6 +15,27 @@ It takes every group that isn't locked, plus the tabs that aren't in a group, an
 
 Pinned tabs are never moved. Click **Undo** right after to put everything back. The default method is in Settings.
 
+## Will Reclassify move tabs I put in a group myself?
+
+No. Groupify keeps track of what you decide by hand, in the side panel or in Chrome's own tab bar:
+
+- A group you name, rename or drag a tab into is **locked automatically**, so Reclassify leaves it alone. Turn this off in Settings if you prefer to lock groups yourself.
+- The **site** of a tab you put into a named group is remembered there (for example amsyn.org → Me). Whatever method you reclassify with, and when you use **Only tidy new tabs**, tabs from that site go back to that group. Settings lists the remembered sites, and you can forget any of them.
+
+Groupify tells its own changes apart from yours, so its automatic sorting never counts as your decision.
+
+## What does "Only tidy new tabs" do?
+
+It's the first item in the Reclassify menu. Each ungrouped tab joins the group it belongs to: the group remembered for its site, or else the one group that already has tabs from the same site. Tabs with no clear home stay ungrouped, and no other tab moves.
+
+## Can I undo more than one step?
+
+Yes. Before every change Groupify makes to your groups, it saves the layout. In the ⋯ menu next to the search box, **Undo last change** goes back one step, and **History** lists the last 20 changes in this window: **Restore** puts every group back as it was before that change. A restore can be undone too. History is kept until you close the browser.
+
+## How do I remove all groups at once?
+
+⋯ menu → **Ungroup all**. Every group in the window is removed and the tabs stay open. Click **Undo**, or restore it from History, if you change your mind.
+
 ## How do I keep a group out of Reclassify?
 
 Lock it: click ⋯ on the group, then the lock icon. Locked groups show a 🔒, and Settings lists them all, so you can unlock any from there. Locks are remembered by the group's name, so a group renamed in Chrome's tab bar loses its lock (renaming from Groupify keeps it).

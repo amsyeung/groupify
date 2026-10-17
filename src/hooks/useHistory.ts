@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { MessageKey } from '../lib/i18n'
+import { asGroupify } from '../lib/manual'
 import { parseHistory, planRestore, pushHistory, takeSnapshot, type Snapshot } from '../lib/history'
 
 type TabIds = [number, ...number[]]
@@ -29,6 +30,10 @@ export async function recordHistory(label: MessageKey, detail?: string): Promise
  */
 export async function restoreSnapshot(snapshot: Snapshot): Promise<void> {
   await recordHistory('histRestore')
+  await asGroupify(() => applySnapshot(snapshot))
+}
+
+async function applySnapshot(snapshot: Snapshot): Promise<void> {
   const windowId = await currentWindowId()
   const tabs = await chrome.tabs.query({ windowId })
   const grouped = tabs.filter((tab) => tab.groupId !== -1).map((tab) => tab.id!)

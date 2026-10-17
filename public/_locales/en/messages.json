@@ -546,5 +546,49 @@
   },
   "histRestore": {
     "message": "Restore"
+  },
+  "modeTidy": {
+    "message": "Only tidy new tabs"
+  },
+  "modeTidyDesc": {
+    "message": "Ungrouped tabs join the group they belong to (your remembered sites, then the same site). Nothing else moves."
+  },
+  "tidied": {
+    "message": "Put $VALUE$ tabs into groups",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "tidiedOne": {
+    "message": "Put 1 tab into a group"
+  },
+  "tidyNothing": {
+    "message": "No new tab belongs to an existing group yet"
+  },
+  "histTidy": {
+    "message": "Tidy new tabs"
+  },
+  "optAutoLock": {
+    "message": "Lock groups I make or change myself"
+  },
+  "optAutoLockDesc": {
+    "message": "A group you name, rename or drag a tab into is locked, so Reclassify leaves it alone. This includes changes in Chrome’s tab bar."
+  },
+  "optRules": {
+    "message": "Remembered sites"
+  },
+  "optRulesDesc": {
+    "message": "When you put a tab into a named group yourself, its site is remembered there. Reclassify and Only tidy new tabs then put that site back in that group, whatever the method."
+  },
+  "optRulesNone": {
+    "message": "None yet. Drag a tab into a group, or name a group yourself."
+  },
+  "forgetRule": {
+    "message": "Forget"
+  },
+  "forgetAllRules": {
+    "message": "Forget all"
   }
 }

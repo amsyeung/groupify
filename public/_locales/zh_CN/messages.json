@@ -546,5 +546,49 @@
   },
   "histRestore": {
     "message": "还原"
+  },
+  "modeTidy": {
+    "message": "只整理新标签页"
+  },
+  "modeTidyDesc": {
+    "message": "未分组的标签页加入所属组（先按你记住的网站，再按相同网站），其他标签页不会移动。"
+  },
+  "tidied": {
+    "message": "已把 $VALUE$ 个标签页放进组",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "tidiedOne": {
+    "message": "已把 1 个标签页放进组"
+  },
+  "tidyNothing": {
+    "message": "暂时没有新标签页属于现有的组"
+  },
+  "histTidy": {
+    "message": "整理新标签页"
+  },
+  "optAutoLock": {
+    "message": "自动锁定我亲手创建或修改的组"
+  },
+  "optAutoLockDesc": {
+    "message": "你命名、改名或拖标签页进去的组会被锁定，重新分类时不会改动它，包括在 Chrome 标签栏上的改动。"
+  },
+  "optRules": {
+    "message": "记住的网站"
+  },
+  "optRulesDesc": {
+    "message": "你亲手把标签页放进有名称的组时，会记住它的网站。之后无论用哪种方式重新分类或整理新标签页，这个网站都会回到那个组。"
+  },
+  "optRulesNone": {
+    "message": "暂时没有。把标签页拖进组，或者自己为组命名，就会记住。"
+  },
+  "forgetRule": {
+    "message": "忘记"
+  },
+  "forgetAllRules": {
+    "message": "全部忘记"
   }
 }

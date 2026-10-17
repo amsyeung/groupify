@@ -14,10 +14,11 @@ import { isLocked, MODE_LABELS, type ReclassifyMode } from './lib/classify'
 import type { Snapshot } from './lib/history'
 import { t, tn } from './lib/i18n'
 import { dateName, suggestName } from './lib/naming'
-import { reclassify } from './lib/reclassify'
+import { asGroupify, noteManualPlacement } from './lib/manual'
+import { reclassify, tidyNewTabs } from './lib/reclassify'
 import { savedMatchesQuery, type ListedGroup } from './lib/saved'
-import { renameLock, toggleLock } from './lib/settings'
-import { currentGroupId, findDuplicates, groupable, matchesQuery, pickColor, tabUrl } from './lib/tabs'
+import { toggleLock } from './lib/settings'
+import { currentGroupId, findDuplicates, groupable, matchesQuery, pickColor, siteOf, tabUrl } from './lib/tabs'
 
 /**
  * Opens the settings page in a tab, or switches to it if it's already open. Not
@@ -113,10 +114,16 @@ export default function App() {
     requestAnimationFrame(() => document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
   }
 
+  /** Dragging a tab is the user's own decision: the site is remembered in that group (see lib/manual.ts). */
   const moveTab = async (tabId: number, groupId: number | null) => {
     await recordHistory('histMove')
-    if (groupId === null) await chrome.tabs.ungroup(tabId)
-    else await chrome.tabs.group({ tabIds: tabId, groupId })
+    await asGroupify(async () => {
+      if (groupId === null) await chrome.tabs.ungroup(tabId)
+      else await chrome.tabs.group({ tabIds: tabId, groupId })
+    })
+    const title = groups.find((g) => g.id === groupId)?.title
+    const tab = tabs.find((t) => t.id === tabId)
+    if (title && tab) await noteManualPlacement([siteOf(tabUrl(tab))], title)
   }
 
   /**
@@ -128,12 +135,22 @@ export default function App() {
     const typed = newGroupName.trim()
     const placeholder = typed || dateName()
     await recordHistory('histGroup', typed || undefined)
-    const groupId = await chrome.tabs.group({ tabIds: asTabIds(ids) })
-    await chrome.tabGroups.update(groupId, { title: placeholder, color: pickColor(groups.map((g) => g.color)) })
+    const groupId = await asGroupify(async () => {
+      const id = await chrome.tabs.group({ tabIds: asTabIds(ids) })
+      await chrome.tabGroups.update(id, { title: placeholder, color: pickColor(groups.map((g) => g.color)) })
+      return id
+    })
     setNewGroupName('')
     setSelected(new Set())
-    setToast({ message: t('madeGroup'), undo: () => chrome.tabs.ungroup(asTabIds(ids)).catch(() => {}) })
-    if (typed) return
+    setToast({ message: t('madeGroup'), undo: () => asGroupify(() => chrome.tabs.ungroup(asTabIds(ids))).catch(() => {}) })
+    // A name the user typed makes it their group; a suggested name doesn't.
+    if (typed) {
+      await noteManualPlacement(
+        tabs.filter((tab) => ids.includes(tab.id!)).map((tab) => siteOf(tabUrl(tab))),
+        typed
+      )
+      return
+    }
     const suggested = await suggestName(
       tabs.filter((tab) => ids.includes(tab.id!)),
       ai
@@ -141,17 +158,17 @@ export default function App() {
     if (!suggested) return
     // Keep a name the user has typed in the meantime.
     const group = await chrome.tabGroups.get(groupId).catch(() => null)
-    if (group?.title === placeholder) await chrome.tabGroups.update(groupId, { title: suggested })
+    if (group?.title === placeholder) await asGroupify(() => chrome.tabGroups.update(groupId, { title: suggested }))
   }
 
   const addToCurrentGroup = async () => {
     if (!currentGroup || !selectable.length) return
     const ids = selectable.map((tab) => tab.id!)
     await recordHistory('histAddTo', currentGroup.title || undefined)
-    await chrome.tabs.group({ tabIds: asTabIds(ids), groupId: currentGroup.id })
+    await asGroupify(() => chrome.tabs.group({ tabIds: asTabIds(ids), groupId: currentGroup.id }))
     setToast({
       message: t('addedToGroup', currentGroup.title || t('untitledGroup')),
-      undo: () => chrome.tabs.ungroup(asTabIds(ids)).catch(() => {}),
+      undo: () => asGroupify(() => chrome.tabs.ungroup(asTabIds(ids))).catch(() => {}),
     })
   }
 
@@ -159,16 +176,25 @@ export default function App() {
     setBusy(true)
     setToast({ message: t('reclassifying'), sticky: true })
     try {
-      const result = await reclassify(mode, tabs, groups, locks, ai, () => recordHistory('histReclassify', t(MODE_LABELS[mode].label)))
+      const result = await asGroupify(() =>
+        reclassify(mode, tabs, groups, locks, ai, () => recordHistory('histReclassify', t(MODE_LABELS[mode].label)))
+      )
       if (!result) return setToast({ message: t('reclassifyNothing') })
       setOpenIds(null)
       const fallback = settings.cloudAi ? t('projectNoAi') : t('projectNoAiHint')
-      setToast({ message: result.usedFallback ? fallback : tn('reclassified', result.groups), undo: () => result.undo().catch(() => {}) })
+      setToast({ message: result.usedFallback ? fallback : tn('reclassified', result.groups), undo: () => asGroupify(result.undo).catch(() => {}) })
     } catch {
       setToast(null)
     } finally {
       setBusy(false)
     }
+  }
+
+  /** "Only tidy new tabs": ungrouped tabs join the group they belong to; nothing else moves. */
+  const runTidy = async () => {
+    const before = await asGroupify(() => tidyNewTabs(tabs, groups, () => recordHistory('histTidy')))
+    if (!before) return setToast({ message: t('tidyNothing') })
+    setToast({ message: tn('tidied', before.moved), undo: () => restore(before.snapshot).catch(() => {}) })
   }
 
   const restore = async (snapshot: Snapshot) => {
@@ -182,7 +208,7 @@ export default function App() {
     const grouped = tabs.filter((tab) => tab.groupId !== -1).map((tab) => tab.id!)
     if (!grouped.length) return
     const before = await recordHistory('histUngroupAll')
-    await chrome.tabs.ungroup(asTabIds(grouped))
+    await asGroupify(() => chrome.tabs.ungroup(asTabIds(grouped)))
     setToast({ message: tn('ungroupedAll', groups.length), undo: () => restore(before).catch(() => {}) })
   }
 
@@ -368,7 +394,7 @@ export default function App() {
           >
             {t('groupSeries', selectable.length)}
           </button>
-          <ReclassifyMenu defaultMode={settings.reclassifyMode} busy={busy} onPick={runReclassify} />
+          <ReclassifyMenu defaultMode={settings.reclassifyMode} busy={busy} onPick={runReclassify} onTidy={() => runTidy().catch(() => {})} />
         </div>
         {currentGroup && selectable.length > 0 && (
           <button
@@ -448,7 +474,6 @@ export default function App() {
               group={g}
               locked={isLocked(g, locks)}
               onToggleLock={() => setLocks(toggleLock(locks, g.title ?? ''))}
-              onRenamed={(from, to) => setLocks(renameLock(locks, from, to))}
               icons={groupTabs.map((tab) => ({ src: tab.favIconUrl, label: tab.title ?? '' }))}
             >
               {groupTabs.map((tab) => (

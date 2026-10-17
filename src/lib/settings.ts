@@ -9,6 +9,8 @@ export interface Settings {
   rememberClosed: boolean
   /** Send tab titles and hostnames to Groupify's shared AI proxy when the on-device model isn't available. */
   cloudAi: boolean
+  /** Lock groups the user names, renames or drags tabs into, so Reclassify leaves them alone. */
+  autoLock: boolean
 }
 
 export const SETTINGS_KEY = 'settings'
@@ -18,7 +20,7 @@ export const LOCKS_KEY = 'lockedGroups'
 export const LIVE_KEY = 'liveGroups'
 export const OPENED_KEY = 'openedAt'
 
-export const DEFAULT_SETTINGS: Settings = { reclassifyMode: 'project', useAi: true, rememberClosed: true, cloudAi: false }
+export const DEFAULT_SETTINGS: Settings = { reclassifyMode: 'project', useAi: true, rememberClosed: true, cloudAi: false, autoLock: true }
 
 /** Fills in defaults for anything missing or invalid, e.g. settings written by an older version. */
 export function parseSettings(raw: unknown): Settings {
@@ -30,6 +32,7 @@ export function parseSettings(raw: unknown): Settings {
     useAi: typeof value.useAi === 'boolean' ? value.useAi : DEFAULT_SETTINGS.useAi,
     rememberClosed: typeof value.rememberClosed === 'boolean' ? value.rememberClosed : DEFAULT_SETTINGS.rememberClosed,
     cloudAi: typeof value.cloudAi === 'boolean' ? value.cloudAi : DEFAULT_SETTINGS.cloudAi,
+    autoLock: typeof value.autoLock === 'boolean' ? value.autoLock : DEFAULT_SETTINGS.autoLock,
   }
 }
 
