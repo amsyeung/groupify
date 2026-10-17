@@ -1,78 +1,44 @@
-# Groupify
-
 <div align="center">
-  <picture>
-    <img src="public/store.png" alt="store-icon" height="256">
-  </picture>
-  
-  <a href="https://vite.dev"><img alt="Vite logo" src="https://img.shields.io/badge/MADE%20BY%20Vite-000000.svg?style=for-the-badge&logo=Vite&labelColor=000"></a>
-  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&labelColor=000000"></a>
-
-  [View Chrome Extension](https://chromewebstore.google.com/detail/groupify/kkajifdljgkcniokopfhllcocblblmeh)
-  
+  <img src="store/store.png" alt="Groupify icon" height="128">
+  <h1>Groupify</h1>
+  <p><strong>Find any tab in a second and keep your tab groups tidy, all from one popup.</strong></p>
+  <a href="https://chromewebstore.google.com/detail/groupify/kkajifdljgkcniokopfhllcocblblmeh"><img alt="Chrome Web Store version" src="https://img.shields.io/chrome-web-store/v/kkajifdljgkcniokopfhllcocblblmeh?style=for-the-badge&logo=googlechrome&logoColor=white&label=Chrome%20Web%20Store&labelColor=000"></a>
+  <a href="./LICENSE"><img alt="License: GPLv3" src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&labelColor=000"></a>
+  <p><a href="https://chromewebstore.google.com/detail/groupify/kkajifdljgkcniokopfhllcocblblmeh"><strong>➜ Add to Chrome — it's free</strong></a></p>
+  <img src="images/popup.png" alt="The popup with the Group as a series button, three groups and three ungrouped tabs" width="260">
+  <img src="images/search.png" alt="Searching for &quot;tab&quot; shows only the matching tabs, with the match highlighted" width="260">
+  <img src="images/group-menu.png" alt="The menu of the github.com group: name, color, collapse, ungroup and close" width="260">
 </div>
 
-# 📂 Tap Master
+## Features
 
-A modern, high-performance Chrome Extension for power users to organize, search, and manage tab groups. Built with React 19, Vite, and Tailwind CSS.
+|                          |                                                                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Group as a series**    | One click puts every ungrouped tab into one new group, for whatever you're working on right now.                                                                         |
+| **Named for you**        | Chrome's on-device AI suggests a name from the tab titles, privately on your computer. Without it, the group is named after today's date.                                |
+| **Add to current group** | New tabs join the group you're working in.                                                                                                                               |
+| **Search**               | Filter tabs by title or URL. <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd> jump to a tab, <kbd>Esc</kbd> clears. Grouping while searching only takes the matching tabs. |
+| **Manage groups**        | The ⋯ menu renames, recolors, collapses, ungroups or closes a group.                                                                                                     |
+| **Tidy up**              | Group by site, or close duplicate tabs with **Undo**.                                                                                                                    |
+| **Drag and drop**        | Drop a tab on a group, or on a shortcut at the top, to move it.                                                                                                          |
+| **Shortcut**             | <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> opens the popup (change it at `chrome://extensions/shortcuts`).                                                             |
 
-## ✨ Features
+In English, 繁體中文 and 简体中文, in light and dark mode. More in the [FAQ](SUPPORT.md).
 
-<details>
-<summary>🔍 Intelligent Search & Highlighting</summary>
+## Privacy
 
-- Instant filtering across all open tabs.
-- Dynamic yellow highlighting for matched text in titles.
-- Auto-expands collapsed groups if a matching tab is found inside.
-</details>
+Groupify only reads the tabs open in your window. It stores nothing and sends nothing anywhere.
 
-<details>
-<summary>🖱️ Modern Drag & Drop Management</summary>
+## Development
 
-- Move tabs between groups or "ungroup" them via native HTML5 drag-and-drop.
-- Pinterest-style visual feedback with scaling and glowing drop zones.
-- Quick-Drop navigation bar for moving tabs to distant groups instantly.
-</details>
+```bash
+pnpm install
+pnpm build   # extension in dist/, load it unpacked at chrome://extensions
+pnpm test
+```
 
-<details>
-<summary>🏷️ Advanced Grouping Tools</summary>
+Merging to `main` releases automatically, up to the Chrome Web Store: see [docs/PUBLISHING.md](docs/PUBLISHING.md).
 
-- One-click "Add All" or "Add Selected" for ungrouped tabs.
-- Smart color assignment: New groups automatically pick colors not currently in use.
-- Rename groups on the fly during creation.
-</details>
+## Support
 
-<details>
-<summary>🚀 High-Speed Navigation</summary>
-
-- Sticky header with a multi-line Quick-Nav pill bar.
-- Click a group pill to auto-scroll and auto-expand that specific group.
-- One-tap "Jump to Tab" to switch focus to any open website.
-</details>
-
-## 🛠️ Tech Stack (2025)
-
-- **Framework:** [React 19](react.dev)
-- **Build Tool:** [Vite](vitejs.dev)
-- **Styling:** [Tailwind CSS 4.0](tailwindcss.com)
-- **Language:** [TypeScript](www.typescriptlang.org)
-- **API:** Chrome Extensions API (Manifest V3)
-
-## 📄 Privacy & Security
-
-- **Zero Data Collection** – We never collect IP addresses, browsing history, or personal identifiers.
-- **Local-First** – All tab management happens locally on your machine. No data is sent to external servers.
-- **Secure Storage** – Your preferences are stored in `chrome.storage.local` and are permanently deleted when the extension is uninstalled.
-
-See our full Privacy Policy [here](https://translateme-privacy.netlify.app/)
-
-## 📬 Support & Feedback
-
-Got questions or want to suggest a feature for the next update?
-
-- **Issues:** [Open an issue on GitHub](github.com)
-- **Email:** [yeung.ming.sang@gmail.com](mailto:yeung.ming.sang@gmail.com)
-
-## 🎉 Thanks for using Groupify!
-
-Organize your workflow and take back control of your browser. Happy browsing! 🚀
+[Open an issue](https://github.com/amsyeung/groupify/issues) or email [info@aoricreative.com](mailto:info@aoricreative.com).

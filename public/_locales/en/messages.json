@@ -1,0 +1,186 @@
+{
+  "appName": {
+    "message": "Groupify"
+  },
+  "appDescription": {
+    "message": "Search, group and tidy your tabs: group by site, close duplicates and manage tab groups from one popup."
+  },
+  "commandOpen": {
+    "message": "Open Groupify"
+  },
+  "searchPlaceholder": {
+    "message": "Search tabs by title or URL…"
+  },
+  "searchHint": {
+    "message": "↑ ↓ to move, Enter to open, Esc to clear"
+  },
+  "ungrouped": {
+    "message": "Ungrouped"
+  },
+  "untitledGroup": {
+    "message": "Untitled group"
+  },
+  "newGroupPlaceholder": {
+    "message": "Group name (leave blank to name it for you)"
+  },
+  "groupSelected": {
+    "message": "Group selected ($VALUE$)",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "selectAll": {
+    "message": "Select all"
+  },
+  "groupBySite": {
+    "message": "Group by site"
+  },
+  "groupBySiteTitle": {
+    "message": "Put ungrouped tabs from the same site into one group each"
+  },
+  "groupBySiteNone": {
+    "message": "No site has two or more ungrouped tabs"
+  },
+  "closeDuplicates": {
+    "message": "Close $VALUE$ duplicates",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "closeDuplicatesOne": {
+    "message": "Close 1 duplicate"
+  },
+  "closeDuplicatesTitle": {
+    "message": "Close tabs that show the same page as another tab, keeping one of each"
+  },
+  "noDuplicates": {
+    "message": "No duplicates"
+  },
+  "undo": {
+    "message": "Undo"
+  },
+  "closedTabs": {
+    "message": "Closed $VALUE$ tabs",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "closedTabsOne": {
+    "message": "Closed 1 tab"
+  },
+  "groupedTabs": {
+    "message": "Made $VALUE$ groups",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupedTabsOne": {
+    "message": "Made 1 group"
+  },
+  "noResults": {
+    "message": "No tabs match “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupActions": {
+    "message": "Group actions"
+  },
+  "rename": {
+    "message": "Name"
+  },
+  "color": {
+    "message": "Color"
+  },
+  "collapseInChrome": {
+    "message": "Collapse in tab bar"
+  },
+  "expandInChrome": {
+    "message": "Expand in tab bar"
+  },
+  "ungroup": {
+    "message": "Ungroup"
+  },
+  "closeGroup": {
+    "message": "Close group"
+  },
+  "closeTab": {
+    "message": "Close tab"
+  },
+  "pinned": {
+    "message": "Pinned"
+  },
+  "dropHere": {
+    "message": "Drop a tab here"
+  },
+  "colorGrey": {
+    "message": "Grey"
+  },
+  "colorBlue": {
+    "message": "Blue"
+  },
+  "colorRed": {
+    "message": "Red"
+  },
+  "colorYellow": {
+    "message": "Yellow"
+  },
+  "colorGreen": {
+    "message": "Green"
+  },
+  "colorPink": {
+    "message": "Pink"
+  },
+  "colorPurple": {
+    "message": "Purple"
+  },
+  "colorCyan": {
+    "message": "Cyan"
+  },
+  "colorOrange": {
+    "message": "Orange"
+  },
+  "groupSeries": {
+    "message": "Group as a series ($VALUE$)",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupSeriesTitle": {
+    "message": "Put every ungrouped tab into one new group and name it for you"
+  },
+  "addToCurrent": {
+    "message": "Add to “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "addToCurrentTitle": {
+    "message": "Add the ungrouped tabs to the group you are working in"
+  },
+  "addedToGroup": {
+    "message": "Added to “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "madeGroup": {
+    "message": "Made a new group"
+  }
+}
