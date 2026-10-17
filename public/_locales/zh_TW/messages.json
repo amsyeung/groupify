@@ -590,5 +590,8 @@
   },
   "forgetAllRules": {
     "message": "全部忘記"
+  },
+  "historyGroupsOne": {
+    "message": "1 個群組"
   }
 }

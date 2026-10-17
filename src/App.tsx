@@ -11,7 +11,7 @@ import { deleteSaved, keepClosed, openSaved, restoreDeleted, useSavedGroups } fr
 import { useLocks, useSettings } from './hooks/useSynced'
 import { useWindowTabs } from './hooks/useWindowTabs'
 import { isLocked, MODE_LABELS, type ReclassifyMode } from './lib/classify'
-import type { Snapshot } from './lib/history'
+import { historyLabel, type Snapshot } from './lib/history'
 import { t, tn } from './lib/i18n'
 import { dateName, suggestName } from './lib/naming'
 import { asGroupify, noteManualPlacement } from './lib/manual'
@@ -317,11 +317,7 @@ export default function App() {
                   type="button"
                   role="menuitem"
                   disabled={!history.length}
-                  title={
-                    history[0]
-                      ? t('historyBefore', history[0].detail ? `${t(history[0].label)}：${history[0].detail}` : t(history[0].label))
-                      : undefined
-                  }
+                  title={history[0] ? t('historyBefore', historyLabel(history[0], t)) : undefined}
                   onClick={() => {
                     close()
                     if (history[0]) restore(history[0]).catch(() => {})

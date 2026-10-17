@@ -1,5 +1,5 @@
-import { t } from '../lib/i18n'
-import type { Snapshot } from '../lib/history'
+import { t, tn } from '../lib/i18n'
+import { historyLabel, type Snapshot } from '../lib/history'
 import { uiLanguage } from '../lib/naming'
 
 interface Props {
@@ -37,8 +37,8 @@ export default function HistorySection({ history, onRestore, onClose }: Props) {
           {history.map((s) => (
             <li key={s.id} className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800/60">
               <span className="w-14 shrink-0 text-[11px] text-slate-400 tabular-nums">{time(s.at)}</span>
-              <span className="min-w-0 flex-1 truncate text-xs">{t('historyBefore', s.detail ? `${t(s.label)}：${s.detail}` : t(s.label))}</span>
-              <span className="shrink-0 text-[10px] text-slate-400">{t('historyGroups', s.groups.length)}</span>
+              <span className="min-w-0 flex-1 truncate text-xs">{t('historyBefore', historyLabel(s, t))}</span>
+              <span className="shrink-0 text-[10px] text-slate-400">{tn('historyGroups', s.groups.length)}</span>
               <button
                 type="button"
                 onClick={() => onRestore(s)}

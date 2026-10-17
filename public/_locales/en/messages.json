@@ -590,5 +590,8 @@
   },
   "forgetAllRules": {
     "message": "Forget all"
+  },
+  "historyGroupsOne": {
+    "message": "1 group"
   }
 }

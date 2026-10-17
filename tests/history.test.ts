@@ -41,3 +41,12 @@ describe('history', () => {
     expect(parseHistory('x')).toEqual([])
   })
 })
+
+describe('history labels', () => {
+  it('join the action and its detail without a language-specific colon', async () => {
+    const { historyLabel } = await import('../src/lib/history')
+    const t = (k: string) => (k === 'histReclassify' ? 'Reclassify' : k)
+    expect(historyLabel({ label: 'histReclassify', detail: 'By purpose' }, t as never)).toBe('Reclassify · By purpose')
+    expect(historyLabel({ label: 'histReclassify' }, t as never)).toBe('Reclassify')
+  })
+})
