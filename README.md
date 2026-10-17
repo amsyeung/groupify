@@ -28,7 +28,7 @@ In English, 繁體中文 and 简体中文, in light and dark mode. More in the [
 
 ## Privacy
 
-Groupify reads the tabs open in your window and keeps everything in your browser: settings, locked groups, the groups you save and the last 20 groups you closed. AI features use the model built into Chrome, on your computer. Cloud AI is off by default; only if you turn it on are the titles and site names of the tabs being grouped (never full addresses) sent to Groupify's AI server, which keeps nothing. Read the [privacy policy](https://translate-me.aoricreative.com/groupify/privacy/) and [how the AI server works](server/ai-proxy/README.md).
+Groupify reads the tabs open in your window and keeps everything in your browser: settings, locked groups, the groups you save and the last 20 groups you closed. AI features use the model built into Chrome, on your computer. Cloud AI is off by default; only if you turn it on are the titles and site names of the tabs being grouped (never full addresses) sent to Groupify's AI server, which keeps nothing. Read the [privacy policy](https://groupify.aoricreative.com/privacy) and [how the AI server works](server/ai-proxy/README.md).
 
 <p align="center"><img src="images/settings.png" alt="Groupify settings: default way to reclassify, on-device AI status, the cloud AI switch with a link to the privacy policy, and closed-group history" width="420"></p>
 
@@ -40,7 +40,7 @@ pnpm build   # extension in dist/, load it unpacked at chrome://extensions
 pnpm test
 ```
 
-Merging to `main` releases automatically, up to the Chrome Web Store: see [docs/PUBLISHING.md](docs/PUBLISHING.md). The optional cloud AI is a Cloudflare Worker in [`server/ai-proxy`](server/ai-proxy/README.md), deployed separately with Wrangler.
+Merging to `main` releases automatically, up to the Chrome Web Store: see [docs/PUBLISHING.md](docs/PUBLISHING.md). The optional cloud AI is a Cloudflare Worker in [`server/ai-proxy`](server/ai-proxy/README.md), deployed separately with Wrangler. The website and privacy policy at [groupify.aoricreative.com](https://groupify.aoricreative.com) are in [`website`](website/README.md), deployed the same way.
 
 ## Support
 

@@ -5,7 +5,7 @@ import { t } from '../lib/i18n'
 import { aiStatus, downloadModel } from '../lib/naming'
 import { toggleLock } from '../lib/settings'
 
-const PRIVACY_URL = 'https://translate-me.aoricreative.com/groupify/privacy/'
+const PRIVACY_URL = 'https://groupify.aoricreative.com/privacy'
 const FAQ_URL = 'https://github.com/amsyeung/groupify/blob/main/SUPPORT.md'
 const SOURCE_URL = 'https://github.com/amsyeung/groupify'
 

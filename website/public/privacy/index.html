@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy policy — Groupify</title>
+    <meta
+      name="description"
+      content="How the Groupify Chrome extension handles your data: your tabs are organized on your device, with an optional cloud AI that only receives tab titles and site names."
+    />
+    <link rel="canonical" href="https://groupify.aoricreative.com/privacy" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icon32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icon16.png" />
+    <meta name="theme-color" content="#1a73e8" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Privacy policy — Groupify" />
+    <meta
+      property="og:description"
+      content="Your tabs are organized on your device. No analytics, no tracking, nothing sold or shared. Cloud AI is optional and off by default."
+    />
+    <meta property="og:url" content="https://groupify.aoricreative.com/privacy" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/"><img src="/img/icon48.png" alt="" width="28" height="28" />Groupify</a>
+        <nav class="nav" aria-label="Main">
+          <a href="/privacy" aria-current="page">Privacy</a>
+          <a href="https://github.com/amsyeung/groupify/blob/main/SUPPORT.md" rel="noopener">Help</a>
+          <a class="btn small" href="https://chromewebstore.google.com/detail/groupify/kkajifdljgkcniokopfhllcocblblmeh" rel="noopener"
+            >Add to Chrome</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <p class="eyebrow">Legal</p>
+        <h1>Groupify privacy policy</h1>
+        <p class="meta">Last updated 17 October 2026</p>
+
+        <p>
+          This policy explains what the <strong>Groupify</strong> Chrome extension (“the extension”, “we”) does with your information. Groupify
+          searches, groups and tidies the tabs in your browser, and it is built so that your tabs stay on your computer unless you turn on cloud AI.
+        </p>
+
+        <section id="summary" class="summary">
+          <h2>Summary</h2>
+          <ul>
+            <li>
+              <strong>Your tabs are organized on your computer.</strong> Groupify reads the tabs open in your browser to show and group them. It
+              doesn't send them anywhere.
+            </li>
+            <li><strong>AI runs on your computer first.</strong> Names and task sorting use the AI model built into Chrome when it is installed.</li>
+            <li>
+              <strong>Cloud AI is optional and off by default.</strong> If you turn it on, only the titles and site names of the tabs being grouped
+              are sent to Groupify's AI server, never full addresses. The server keeps nothing.
+            </li>
+            <li><strong>No analytics, no tracking, no ads, nothing sold or shared.</strong></li>
+          </ul>
+        </section>
+
+        <section id="tabs">
+          <h2>Your tabs</h2>
+          <p>
+            To list, search and group your tabs, the extension reads the <strong>title, address and icon</strong> of the tabs open in the window
+            you're using, and the names and colors of your tab groups. It reads them while the side panel is open and when it remembers a group you
+            close (see <a href="#stored">What's stored</a>). This information is used only on your computer.
+          </p>
+          <p>
+            <strong>Reclassify</strong> by purpose, by site or by last use, <strong>Close duplicates</strong> and search all work on your computer
+            with no AI and no network connection.
+          </p>
+        </section>
+
+        <section id="on-device-ai">
+          <h2>On-device AI</h2>
+          <p>
+            When you group tabs without typing a name, or reclassify by task, the extension asks <strong>Chrome's built-in AI model</strong> (Gemini
+            Nano) to suggest a name or sort the tabs, using the tab titles and site names. For Chinese, it may also use Chrome's built-in translator.
+            Both run on your computer, and the text is not sent to us or to Google.
+          </p>
+          <p>
+            If Chrome has already downloaded the model, Groupify uses it. If Chrome supports it but hasn't downloaded it, Groupify asks Chrome to
+            download it only when you click <em>Download on-device AI</em> in <em>Settings</em>; Chrome then downloads it from Google under Google's
+            privacy policy. Otherwise groups are named after the date. You can turn on-device AI off in <em>Settings</em>.
+          </p>
+        </section>
+
+        <section id="cloud-ai">
+          <h2>Cloud AI (optional, off by default)</h2>
+          <p>
+            For computers without Chrome's built-in model, you can turn on <em>Settings → Use Groupify's cloud AI</em>. It is used only when the
+            on-device model isn't available, and only when you group tabs without a name or reclassify by task.
+          </p>
+          <h3>What is sent</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Sent</th>
+                  <th scope="col">Never sent</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    For each tab being grouped (at most 40 per request): its <strong>title</strong>, shortened to 120 characters, and its
+                    <strong>site name</strong> (for example <code>vercel.com</code>).<br />
+                    The language you use Chrome in (English, Traditional or Simplified Chinese), so the name comes back in that language.
+                  </td>
+                  <td>
+                    Full addresses or paths, page content, cookies, passwords, your Google account, your other tabs, or any identifier for you or your
+                    browser.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Where it goes and what happens to it</h3>
+          <p>
+            The request is sent over an encrypted connection to Groupify's AI server, which runs on <strong>Cloudflare Workers</strong>. The server
+            passes the titles and site names to an open-source AI model hosted by <strong>Cloudflare Workers AI</strong>, gets back a name or a
+            grouping, and returns it to the extension. On our server:
+          </p>
+          <ul>
+            <li>The titles, site names and answers are <strong>never logged or stored</strong>.</li>
+            <li>Your IP address is used only to limit how many requests one address can make per minute. We don't log or store it.</li>
+            <li>Only requests from the Groupify extension are answered.</li>
+          </ul>
+          <p>
+            Cloudflare processes the request as our service provider to run the server and the AI model, and handles your IP address to carry the
+            connection, under its own terms and privacy policy. The service is free and shared by everyone with a daily limit; when it's reached, or
+            if anything goes wrong, the extension names groups after the date instead.
+          </p>
+        </section>
+
+        <section id="stored">
+          <h2>What's stored in your browser</h2>
+          <p>The extension keeps the following in your browser's extension storage. None of it is sent to us.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Data</th>
+                  <th scope="col">Where</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Settings: default way to reclassify, AI and cloud AI switches, remembering closed groups</td>
+                  <td>Chrome sync storage</td>
+                  <td>If Chrome sync is on, Google syncs these between your own devices.</td>
+                </tr>
+                <tr>
+                  <td>Names of groups you lock</td>
+                  <td>Chrome sync storage</td>
+                  <td>Used so Reclassify leaves those groups alone.</td>
+                </tr>
+                <tr>
+                  <td>Groups you save: name, color and the addresses of their tabs</td>
+                  <td>Chrome sync storage, or this device only if too large to sync</td>
+                  <td>Kept until you delete them from <em>Saved</em>.</td>
+                </tr>
+                <tr>
+                  <td>Recently closed groups: name, color and the addresses of their tabs</td>
+                  <td>This device only</td>
+                  <td>The last 20 groups you closed. Turn it off in <em>Settings</em>, or delete entries from <em>Recently closed</em>.</td>
+                </tr>
+                <tr>
+                  <td>When each tab was opened, and a copy of your open groups</td>
+                  <td>This device, session storage only</td>
+                  <td>Used to sort tabs by task without AI and to remember closed groups. Cleared when you close the browser.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="not-collected">
+          <h2>What we don't do</h2>
+          <ul>
+            <li>No analytics, telemetry, crash reporting or advertising, and no third-party scripts in the extension.</li>
+            <li>No accounts, and no collection of names, email addresses, identifiers or browsing history.</li>
+            <li>No selling, renting or sharing of user data, and no use of it for advertising, credit or lending decisions.</li>
+            <li>No remotely hosted code: everything the extension runs ships inside the package reviewed by the Chrome Web Store.</li>
+          </ul>
+        </section>
+
+        <section id="permissions">
+          <h2>Why the extension asks for each permission</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Permission</th>
+                  <th scope="col">Used for</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>tabs</code></td>
+                  <td>Reading the titles, addresses and icons of your open tabs to list, search, group and close them.</td>
+                </tr>
+                <tr>
+                  <td><code>tabGroups</code></td>
+                  <td>Creating, renaming, recoloring, collapsing and ungrouping tab groups.</td>
+                </tr>
+                <tr>
+                  <td><code>storage</code></td>
+                  <td>Saving your settings, locked groups, saved groups and recently closed groups in your browser.</td>
+                </tr>
+                <tr>
+                  <td><code>sidePanel</code></td>
+                  <td>Showing Groupify in Chrome's side panel.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The cloud AI server is contacted without any extra permission: it only answers the extension's own requests.</p>
+        </section>
+
+        <section id="choices">
+          <h2>Your choices</h2>
+          <ul>
+            <li><strong>Keep everything on your computer:</strong> leave <em>Use Groupify's cloud AI</em> off (the default).</li>
+            <li>
+              <strong>No AI at all:</strong> turn off <em>Use on-device AI</em> and leave cloud AI off in <em>Settings</em>; groups are then named
+              after the date.
+            </li>
+            <li><strong>Forget closed groups:</strong> turn off <em>Remember closed groups</em>, or delete entries one by one.</li>
+            <li><strong>Delete everything:</strong> removing the extension from Chrome deletes the data it stored in your browser.</li>
+          </ul>
+        </section>
+
+        <section id="children">
+          <h2>Children</h2>
+          <p>The extension isn't directed at children under 13, and we don't knowingly collect personal information from anyone.</p>
+        </section>
+
+        <section id="limited-use">
+          <h2>Chrome Web Store User Data Policy</h2>
+          <p>
+            The use of information received from your browser will adhere to the
+            <a href="https://developer.chrome.com/docs/webstore/program-policies/limited-use" rel="noopener"
+              >Chrome Web Store User Data Policy, including the Limited Use requirements</a
+            >. Data is used only to provide the features described above, and is not transferred to third parties except to Cloudflare, as described
+            in this policy, when you turn on cloud AI.
+          </p>
+        </section>
+
+        <section id="changes">
+          <h2>Changes and contact</h2>
+          <p>
+            If this policy changes, we'll update the date at the top and describe significant changes in the
+            <a href="https://github.com/amsyeung/groupify/releases" rel="noopener">release notes</a>. The extension and its AI server are open source,
+            so you can review exactly what they do on <a href="https://github.com/amsyeung/groupify" rel="noopener">GitHub</a>.
+          </p>
+          <p>
+            Questions or requests: <a href="mailto:info@aoricreative.com">info@aoricreative.com</a>, or
+            <a href="https://github.com/amsyeung/groupify/issues" rel="noopener">open an issue on GitHub</a>.
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>© 2026 Groupify · Open source under GPLv3 · <a href="https://github.com/amsyeung/groupify" rel="noopener">Source code</a></p>
+        <p>Not affiliated with Google. Chrome is a trademark of Google LLC.</p>
+      </div>
+    </footer>
+  </body>
+</html>
