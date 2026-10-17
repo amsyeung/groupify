@@ -212,6 +212,9 @@
       }
     }
   },
+  "tabCountOne": {
+    "message": "1 個分頁"
+  },
   "openSaved": {
     "message": "開啟"
   },
