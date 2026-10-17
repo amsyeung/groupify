@@ -2,16 +2,15 @@ import { ArrowsPointingInIcon, ArrowsPointingOutIcon, BookmarkIcon, LinkSlashIco
 import { BookmarkIcon as BookmarkSolid, LockClosedIcon as LockClosedSolid } from '@heroicons/react/24/solid'
 import { useState, type ReactNode } from 'react'
 import { recordHistory } from '../hooks/useHistory'
+import { asGroupify, noteRename } from '../lib/manual'
 import { saveGroup } from '../hooks/useSavedGroups'
 import { t, type MessageKey } from '../lib/i18n'
-import { GROUP_COLORS } from '../lib/tabs'
+import { GROUP_COLORS, siteOf, tabUrl } from '../lib/tabs'
 
 interface Props {
   group: chrome.tabGroups.TabGroup
   locked: boolean
   onToggleLock: () => void
-  /** Called after a rename from here, so a lock can follow the new name. */
-  onRenamed: (from: string, to: string) => void
 }
 
 interface IconButtonProps {
@@ -53,15 +52,24 @@ function IconButton({ label, hint, onClick, onBlur, disabled, pressed, danger, c
 const colorName = (c: string) => t(`color${c[0].toUpperCase()}${c.slice(1)}` as MessageKey)
 
 /** Rename, recolour, lock, collapse, save, ungroup or close one tab group. */
-export default function GroupMenu({ group, locked, onToggleLock, onRenamed }: Props) {
+export default function GroupMenu({ group, locked, onToggleLock }: Props) {
   const [title, setTitle] = useState(group.title ?? '')
   const [saveResult, setSaveResult] = useState<'saved' | 'nothing' | null>(null)
 
   const saveTitle = () => {
     const from = group.title ?? ''
     if (title === from) return
-    chrome.tabGroups.update(group.id, { title })
-    onRenamed(from, title)
+    // Renaming is the user's decision: rules and the lock follow the new name (lib/manual.ts).
+    asGroupify(() => chrome.tabGroups.update(group.id, { title }))
+      .then(() => chrome.tabs.query({ groupId: group.id }))
+      .then((tabs) =>
+        noteRename(
+          from,
+          title,
+          tabs.map((tab) => siteOf(tabUrl(tab)))
+        )
+      )
+      .catch(() => {})
   }
 
   const ungroup = async () => {
@@ -69,7 +77,7 @@ export default function GroupMenu({ group, locked, onToggleLock, onRenamed }: Pr
     const ids = tabs.map((tab) => tab.id).filter((id): id is number => id !== undefined)
     if (!ids.length) return
     await recordHistory('histUngroup', group.title || undefined)
-    await chrome.tabs.ungroup(ids as [number, ...number[]])
+    await asGroupify(() => chrome.tabs.ungroup(ids as [number, ...number[]]))
   }
 
   const save = async () => {

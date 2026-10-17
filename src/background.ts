@@ -2,8 +2,9 @@
 // closed, and notes when tabs were opened (for "Reclassify by task" without AI).
 
 import { listSaved, planClosed, restorableUrl, savedKey, type SavedGroup } from './lib/saved'
+import { isOwnChange, noteManualPlacement, noteRename } from './lib/manual'
 import { LIVE_KEY, OPENED_KEY, parseSettings, SETTINGS_KEY } from './lib/settings'
-import { GROUP_COLORS, tabUrl, type GroupColor } from './lib/tabs'
+import { GROUP_COLORS, siteOf, tabUrl, type GroupColor } from './lib/tabs'
 
 interface LiveGroup {
   title: string
@@ -60,8 +61,26 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
   await chrome.storage.session.set({ [OPENED_KEY]: opened })
 })
 
-chrome.tabs.onUpdated.addListener((_tabId, change) => {
+chrome.tabs.onUpdated.addListener(async (_tabId, change, tab) => {
   if (change.url !== undefined || change.groupId !== undefined || change.title !== undefined) scheduleSnapshot()
+  // A tab moved into a named group by the user (for example in Chrome's tab bar): remember its site there.
+  if (change.groupId === undefined || change.groupId === -1 || (await isOwnChange())) return
+  const group = await chrome.tabGroups.get(change.groupId).catch(() => null)
+  if (group?.title?.trim()) await noteManualPlacement([siteOf(tabUrl(tab))], group.title)
+})
+
+// A group renamed by the user: rules and locks follow it, and its sites now belong to it.
+chrome.tabGroups.onUpdated.addListener(async (group) => {
+  const live = await readSession<Record<string, LiveGroup>>(LIVE_KEY, {})
+  const before = live[group.id]?.title ?? ''
+  const after = group.title ?? ''
+  if (before === after || (await isOwnChange())) return
+  const tabs = await chrome.tabs.query({ groupId: group.id })
+  await noteRename(
+    before,
+    after,
+    tabs.map((tab) => siteOf(tabUrl(tab)))
+  )
 })
 for (const event of [chrome.tabs.onMoved, chrome.tabs.onAttached, chrome.tabs.onDetached, chrome.tabGroups.onCreated, chrome.tabGroups.onUpdated]) {
   ;(event as chrome.events.Event<() => void>).addListener(scheduleSnapshot)

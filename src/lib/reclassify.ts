@@ -14,6 +14,7 @@ import {
 } from './classify'
 import { t } from './i18n'
 import { dateName, sessionName, suggestClusters, type AiChoice } from './naming'
+import { parseRules, planTidy, RULES_KEY, splitByRules, type SiteRule } from './rules'
 import { OPENED_KEY } from './settings'
 import { pickColor } from './tabs'
 
@@ -63,7 +64,12 @@ export async function reclassify(
   beforeChange?: () => Promise<unknown>
 ): Promise<ReclassifyResult | null> {
   const movable = movableTabs(tabs, groups, locks)
-  const { buckets, usedFallback } = await planFor(mode, movable, ai)
+  // Sites the user placed by hand go back to their group first; the chosen mode sorts the rest.
+  const rules = parseRules((await chrome.storage.sync.get(RULES_KEY))[RULES_KEY])
+  const { claimed, rest } = splitByRules(movable, rules)
+  const planned = await planFor(mode, rest, ai)
+  const usedFallback = planned.usedFallback
+  const buckets = mergeRuleBuckets(planned.buckets, claimed, groups, movable)
   if (!buckets.length) return null
 
   // Remember the current layout for Undo.
@@ -82,6 +88,11 @@ export async function reclassify(
   if (grouped.length) await chrome.tabs.ungroup(grouped as TabIds)
   const used = groups.filter((g) => !before.some((b) => b.title === (g.title ?? '') && b.color === g.color)).map((g) => g.color as string)
   for (const bucket of buckets) {
+    if (bucket.joinGroupId !== undefined) {
+      // A locked group a rule points to: add the tabs, leave the group as it is.
+      await chrome.tabs.group({ tabIds: bucket.tabIds as TabIds, groupId: bucket.joinGroupId })
+      continue
+    }
     const color = bucket.color ?? pickColor(used)
     used.push(color)
     const groupId = await chrome.tabs.group({ tabIds: bucket.tabIds as TabIds })
@@ -100,4 +111,60 @@ export async function reclassify(
     }
   }
   return { groups: buckets.length, usedFallback, undo }
+}
+
+type RuleBucket = Bucket & { joinGroupId?: number }
+
+/**
+ * Adds the tabs claimed by site rules to the plan. A rule's group that stays (locked) gains the tabs;
+ * otherwise its tabs form a group with that name, joining a planned group of the same name and keeping
+ * the old group's colour when there was one.
+ */
+export function mergeRuleBuckets(
+  buckets: Bucket[],
+  claimed: Map<string, { title: string; tabIds: number[] }>,
+  groups: { id: number; title?: string; color: string }[],
+  movable: { groupId: number }[]
+): RuleBucket[] {
+  const result: RuleBucket[] = buckets.map((b) => ({ ...b, tabIds: [...b.tabIds] }))
+  const dissolving = new Set(movable.map((tab) => tab.groupId))
+  for (const [key, { title, tabIds }] of claimed) {
+    const existing = groups.find((g) => (g.title ?? '').trim().toLowerCase() === key)
+    if (existing && !dissolving.has(existing.id)) {
+      result.push({ title, tabIds, joinGroupId: existing.id })
+      continue
+    }
+    const same = result.find((b) => b.joinGroupId === undefined && (b.title ?? '').trim().toLowerCase() === key)
+    if (same) same.tabIds.push(...tabIds)
+    else result.push({ title, tabIds, color: existing?.color as Bucket['color'] })
+  }
+  return result
+}
+
+/**
+ * "Only tidy new tabs": puts ungrouped tabs into the group they belong to (a site rule, else the one
+ * group that already has that site). Returns null when no tab has a home; otherwise how many tabs
+ * moved and the layout from before, for Undo.
+ */
+export async function tidyNewTabs(
+  tabs: chrome.tabs.Tab[],
+  groups: chrome.tabGroups.TabGroup[],
+  beforeChange: () => Promise<import('./history').Snapshot>
+): Promise<{ moved: number; snapshot: import('./history').Snapshot } | null> {
+  const rules: SiteRule[] = parseRules((await chrome.storage.sync.get(RULES_KEY))[RULES_KEY])
+  const targets = planTidy(tabs, groups, rules)
+  if (!targets.length) return null
+  const snapshot = await beforeChange()
+  const used = groups.map((g) => g.color as string)
+  for (const target of targets) {
+    if (target.groupId !== undefined) {
+      await chrome.tabs.group({ tabIds: target.tabIds as TabIds, groupId: target.groupId })
+    } else {
+      const color = pickColor(used)
+      used.push(color)
+      const groupId = await chrome.tabs.group({ tabIds: target.tabIds as TabIds })
+      await chrome.tabGroups.update(groupId, { title: target.title, color })
+    }
+  }
+  return { moved: targets.reduce((n, t) => n + t.tabIds.length, 0), snapshot }
 }

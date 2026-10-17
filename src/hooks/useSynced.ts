@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { parseRules, RULES_KEY, type SiteRule } from '../lib/rules'
 import { LOCKS_KEY, parseLocks, parseSettings, SETTINGS_KEY, type Settings } from '../lib/settings'
 
 /** A value in chrome.storage.sync, kept current when it changes anywhere (another page or computer). */
@@ -26,6 +27,8 @@ function useSyncedValue<T>(key: string, parse: (raw: unknown) => T): [T, (value:
 }
 
 export const useSettings = (): [Settings, (value: Settings) => Promise<void>] => useSyncedValue(SETTINGS_KEY, parseSettings)
+
+export const useRules = (): [SiteRule[], (value: SiteRule[]) => Promise<void>] => useSyncedValue(RULES_KEY, parseRules)
 
 export const useLocks = (): [string[], (value: string[]) => Promise<void>] => useSyncedValue(LOCKS_KEY, parseLocks)
 

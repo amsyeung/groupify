@@ -18,7 +18,8 @@
 | **Group as a series**     | One click puts every ungrouped tab into one new group, for whatever you're working on right now.                                                                                        |
 | **Reclassify**            | Sort every unlocked group again: by task or project, by purpose (development, design, docs, AI, video, social, shopping, news…), by site or by last use. **Undo** puts everything back. |
 | **Named for you**         | Chrome's on-device AI suggests names and finds tabs for the same task, privately on your computer. Without it, turn on Groupify's free cloud AI, or groups are named after the date.    |
-| **Lock, save and reopen** | Lock a group so Reclassify leaves it alone, save it for later, or reopen one you closed from **Recently closed**.                                                                       |
+| **Your groups stay yours** | Groups you name, rename or drag tabs into are locked automatically, and their sites are remembered, so Reclassify never pulls them apart. **Only tidy new tabs** puts new tabs into the groups they belong to and moves nothing else. |
+| **Save, reopen and go back** | Save a group for later, reopen one you closed from **Recently closed**, go back any number of steps from **History**, or **Ungroup all** in one click. |
 | **Add to current group**  | New tabs join the group you're working in.                                                                                                                                              |
 | **Search**                | Filter tabs by title or URL. <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd> jump to a tab, <kbd>Esc</kbd> clears.                                                                       |
 | **Tidy up**               | Rename, recolor, collapse, ungroup or close a group from its icons, drag tabs between groups, and close duplicate tabs from the ⋯ menu.                                                 |

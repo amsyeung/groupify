@@ -19,7 +19,6 @@ interface Props {
   group?: chrome.tabGroups.TabGroup
   locked?: boolean
   onToggleLock?: () => void
-  onRenamed?: (from: string, to: string) => void
   /** Favicons shown in the header while the section is collapsed. */
   icons?: { src?: string; label: string }[]
   /** Extra controls above the tab list (the ungrouped section's selection bar). */
@@ -39,7 +38,6 @@ export default function GroupSection({
   group,
   locked = false,
   onToggleLock,
-  onRenamed,
   icons = [],
   toolbar,
   children,
@@ -113,9 +111,7 @@ export default function GroupSection({
           </button>
         )}
       </div>
-      {group && menuOpen && (
-        <GroupMenu group={group} locked={locked} onToggleLock={() => onToggleLock?.()} onRenamed={(from, to) => onRenamed?.(from, to)} />
-      )}
+      {group && menuOpen && <GroupMenu group={group} locked={locked} onToggleLock={() => onToggleLock?.()} />}
       {open && toolbar}
       {open && (
         <div className="space-y-px px-1.5 pb-1.5">

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useLocks, useSettings } from '../hooks/useSynced'
+import { useLocks, useRules, useSettings } from '../hooks/useSynced'
 import { MODE_LABELS, RECLASSIFY_MODES } from '../lib/classify'
 import { t } from '../lib/i18n'
 import { aiStatus, downloadModel } from '../lib/naming'
+import { removeRule } from '../lib/rules'
 import { toggleLock } from '../lib/settings'
 
 const PRIVACY_URL = 'https://groupify.aoricreative.com/privacy'
@@ -53,6 +54,7 @@ const smallButton =
 export default function Options() {
   const [settings, save] = useSettings()
   const [locks, setLocks] = useLocks()
+  const [rules, setRules] = useRules()
   const [status, setStatus] = useState<AiStatus | null>(null)
   const [progress, setProgress] = useState<number | null>(null)
   const [downloadFailed, setDownloadFailed] = useState(false)
@@ -156,6 +158,13 @@ export default function Options() {
       <section className={card}>
         <h2 className={heading}>{t('optGroupsHeading')}</h2>
         <Toggle
+          id="auto-lock"
+          label={t('optAutoLock')}
+          description={t('optAutoLockDesc')}
+          checked={settings.autoLock}
+          onChange={(autoLock) => save({ ...settings, autoLock })}
+        />
+        <Toggle
           id="remember-closed"
           label={t('optRememberClosed')}
           description={t('optRememberClosedDesc')}
@@ -186,6 +195,36 @@ export default function Options() {
             </ul>
           )}
         </div>
+      </section>
+
+      <section className={card}>
+        <div className="space-y-1">
+          <h2 className={heading}>{t('optRules')}</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('optRulesDesc')}</p>
+        </div>
+        {rules.length === 0 ? (
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('optRulesNone')}</p>
+        ) : (
+          <>
+            <ul className="divide-y divide-slate-100 text-sm dark:divide-slate-800">
+              {rules.map(([site, group]) => (
+                <li key={site} className="flex items-center gap-2 py-1.5">
+                  <span className="min-w-0 flex-1 truncate font-mono text-xs">{site}</span>
+                  <span aria-hidden className="text-slate-400">
+                    →
+                  </span>
+                  <span className="min-w-0 flex-1 truncate">{group}</span>
+                  <button type="button" onClick={() => setRules(removeRule(rules, site))} className={smallButton}>
+                    {t('forgetRule')}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button type="button" onClick={() => setRules([])} className={smallButton}>
+              {t('forgetAllRules')}
+            </button>
+          </>
+        )}
       </section>
 
       <section className={card}>
