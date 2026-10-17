@@ -12,3 +12,8 @@ export function t(key: MessageKey, value?: string | number): string {
   if (fromChrome) return fromChrome
   return en[key].message.replace(/\$VALUE\$/g, subs[0] ?? '')
 }
+
+type CountKey = 'closeDuplicates' | 'closedTabs' | 'groupedTabs' | 'closeGroupConfirm'
+
+/** Chrome's i18n has no plurals, so each count message has a separate "…One" variant for 1. */
+export const tn = (key: CountKey, count: number) => (count === 1 ? t(`${key}One`) : t(key, count))
