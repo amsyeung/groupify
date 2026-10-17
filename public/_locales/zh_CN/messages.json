@@ -182,5 +182,65 @@
   },
   "madeGroup": {
     "message": "已创建新组"
+  },
+  "saved": {
+    "message": "已保存"
+  },
+  "saveGroup": {
+    "message": "保存群组"
+  },
+  "saveGroupTitle": {
+    "message": "保留这个群组的名称、颜色和标签页，之后可以重新打开，其他电脑上也可以"
+  },
+  "savedGroupDone": {
+    "message": "已保存 ✓"
+  },
+  "saveGroupNothing": {
+    "message": "没有可保存的标签页"
+  },
+  "savedLocalOnly": {
+    "message": "仅此设备"
+  },
+  "savedLocalOnlyTitle": {
+    "message": "太大无法同步，只保存在这台设备上"
+  },
+  "tabCount": {
+    "message": "$VALUE$ 个标签页",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabCountOne": {
+    "message": "1 个标签页"
+  },
+  "openSaved": {
+    "message": "打开"
+  },
+  "openSavedTitle": {
+    "message": "在这个窗口重新打开为新群组"
+  },
+  "openedSaved": {
+    "message": "已打开“$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "openSavedFailed": {
+    "message": "这些标签页都无法打开"
+  },
+  "deleteSaved": {
+    "message": "删除已保存的群组"
+  },
+  "deletedSaved": {
+    "message": "已删除“$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
   }
 }

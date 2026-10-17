@@ -17,8 +17,9 @@
 | **Group as a series**    | One click puts every ungrouped tab into one new group, for whatever you're working on right now.                                                                         |
 | **Named for you**        | Chrome's on-device AI suggests a name from the tab titles, privately on your computer. Without it, the group is named after today's date.                                |
 | **Add to current group** | New tabs join the group you're working in.                                                                                                                               |
+| **Save for later**       | Save a group from its ⋯ menu and reopen it from **Saved** with the same name, color and tabs, on any computer with Chrome sync.                                          |
 | **Search**               | Filter tabs by title or URL. <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd> jump to a tab, <kbd>Esc</kbd> clears. Grouping while searching only takes the matching tabs. |
-| **Manage groups**        | The ⋯ menu renames, recolors, collapses, ungroups or closes a group.                                                                                                     |
+| **Manage groups**        | The ⋯ menu renames, recolors, collapses, saves, ungroups or closes a group.                                                                                              |
 | **Tidy up**              | Group by site, or close duplicate tabs with **Undo**.                                                                                                                    |
 | **Drag and drop**        | Drop a tab on a group, or on a shortcut at the top, to move it.                                                                                                          |
 | **Shortcut**             | <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> opens the popup (change it at `chrome://extensions/shortcuts`).                                                             |
@@ -27,7 +28,7 @@ In English, 繁體中文 and 简体中文, in light and dark mode. More in the [
 
 ## Privacy
 
-Groupify only reads the tabs open in your window. It stores nothing and sends nothing anywhere.
+Groupify reads the tabs open in your window and keeps the groups you save (name, color and tab addresses) in Chrome's extension storage, synced by Chrome if you have sync on. It sends nothing to any server of its own.
 
 ## Development
 

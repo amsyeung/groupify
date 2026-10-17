@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { saveGroup } from '../hooks/useSavedGroups'
 import { t, type MessageKey } from '../lib/i18n'
 import { GROUP_COLORS } from '../lib/tabs'
 
@@ -8,9 +9,10 @@ interface Props {
 
 const colorName = (c: string) => t(`color${c[0].toUpperCase()}${c.slice(1)}` as MessageKey)
 
-/** Rename, recolour, collapse, ungroup or close one tab group. */
+/** Rename, recolour, collapse, save, ungroup or close one tab group. */
 export default function GroupMenu({ group }: Props) {
   const [title, setTitle] = useState(group.title ?? '')
+  const [saveResult, setSaveResult] = useState<'saved' | 'nothing' | null>(null)
 
   const saveTitle = () => {
     if (title !== (group.title ?? '')) chrome.tabGroups.update(group.id, { title })
@@ -20,6 +22,11 @@ export default function GroupMenu({ group }: Props) {
     const tabs = await chrome.tabs.query({ groupId: group.id })
     const ids = tabs.map((tab) => tab.id).filter((id): id is number => id !== undefined)
     if (ids.length) await chrome.tabs.ungroup(ids as [number, ...number[]])
+  }
+
+  const save = async () => {
+    const saved = await saveGroup(group)
+    setSaveResult(saved ? 'saved' : 'nothing')
   }
 
   const closeGroup = async () => {
@@ -63,6 +70,9 @@ export default function GroupMenu({ group }: Props) {
       <div className="flex flex-wrap gap-1.5 pt-1">
         <button type="button" className={button} onClick={() => chrome.tabGroups.update(group.id, { collapsed: !group.collapsed })}>
           {group.collapsed ? t('expandInChrome') : t('collapseInChrome')}
+        </button>
+        <button type="button" className={button} onClick={save} onBlur={() => setSaveResult(null)} title={t('saveGroupTitle')}>
+          {saveResult === 'saved' ? t('savedGroupDone') : saveResult === 'nothing' ? t('saveGroupNothing') : t('saveGroup')}
         </button>
         <button type="button" className={button} onClick={ungroup}>
           {t('ungroup')}

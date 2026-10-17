@@ -24,6 +24,7 @@
   },
   "permissions": [
     "tabs",
-    "tabGroups"
+    "tabGroups",
+    "storage"
   ]
 }
