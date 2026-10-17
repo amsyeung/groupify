@@ -1,5 +1,17 @@
 # Frequently asked questions
 
+## What does "Group as a series" do?
+
+It puts every tab that isn't in a group yet into one new group, so the tabs you opened for what you're doing now (say, Pinterest, the Next.js docs, Cloudflare and Vercel for a new project) stay together. If you're searching, only the matching tabs are grouped. Type a name in the Ungrouped section first to use your own.
+
+## How is the group named?
+
+If Chrome's on-device AI (Gemini Nano) is already on your computer, it suggests a name from the tab titles. It runs locally, so nothing is sent anywhere, and Groupify never downloads the model itself. Otherwise, the group is named after today's date. You can rename it any time from the ⋯ menu.
+
+## What does "Add to …" do?
+
+It adds the ungrouped tabs to the group you're working in: the group of the tab you're on, or of the grouped tab you used last. Links you open from a grouped tab already join its group in Chrome, so this is for tabs you opened yourself.
+
 ## How do I move a tab into a group?
 
 Drag the tab and drop it on a group in the list, or on one of the group shortcuts at the top of the popup so you don't have to scroll.
