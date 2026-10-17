@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import { t, tn, type MessageKey } from '../lib/i18n'
+import { t, type MessageKey } from '../lib/i18n'
 import { GROUP_COLORS } from '../lib/tabs'
 
 interface Props {
   group: chrome.tabGroups.TabGroup
-  tabCount: number
 }
 
 const colorName = (c: string) => t(`color${c[0].toUpperCase()}${c.slice(1)}` as MessageKey)
 
 /** Rename, recolour, collapse, ungroup or close one tab group. */
-export default function GroupMenu({ group, tabCount }: Props) {
+export default function GroupMenu({ group }: Props) {
   const [title, setTitle] = useState(group.title ?? '')
-  const [confirmClose, setConfirmClose] = useState(false)
 
   const saveTitle = () => {
     if (title !== (group.title ?? '')) chrome.tabGroups.update(group.id, { title })
@@ -25,7 +23,6 @@ export default function GroupMenu({ group, tabCount }: Props) {
   }
 
   const closeGroup = async () => {
-    if (!confirmClose) return setConfirmClose(true)
     const tabs = await chrome.tabs.query({ groupId: group.id })
     await chrome.tabs.remove(tabs.map((tab) => tab.id).filter((id): id is number => id !== undefined))
   }
@@ -70,13 +67,8 @@ export default function GroupMenu({ group, tabCount }: Props) {
         <button type="button" className={button} onClick={ungroup}>
           {t('ungroup')}
         </button>
-        <button
-          type="button"
-          onClick={closeGroup}
-          onBlur={() => setConfirmClose(false)}
-          className={`${button} ${confirmClose ? 'bg-red-600 text-white ring-red-600 hover:bg-red-700' : 'text-red-600 dark:text-red-400'}`}
-        >
-          {confirmClose ? tn('closeGroupConfirm', tabCount) : t('closeGroup')}
+        <button type="button" onClick={closeGroup} className={`${button} text-red-600 dark:text-red-400`}>
+          {t('closeGroup')}
         </button>
       </div>
     </div>

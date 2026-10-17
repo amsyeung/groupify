@@ -77,7 +77,7 @@ export default function GroupSection({ id, title, color, count, query, open, onT
           </button>
         )}
       </div>
-      {group && menuOpen && <GroupMenu group={group} tabCount={count} />}
+      {group && menuOpen && <GroupMenu group={group} />}
       {open && toolbar}
       {open && (
         <div className="space-y-px px-1.5 pb-1.5">

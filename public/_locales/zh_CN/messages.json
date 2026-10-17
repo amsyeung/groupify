@@ -120,17 +120,6 @@
   "closeGroup": {
     "message": "关闭组"
   },
-  "closeGroupConfirm": {
-    "message": "关闭 $VALUE$ 个标签页？",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "closeGroupConfirmOne": {
-    "message": "关闭 1 个标签页？"
-  },
   "closeTab": {
     "message": "关闭标签页"
   },
