@@ -1,4 +1,4 @@
-import { t } from '../lib/i18n'
+import { t, tn } from '../lib/i18n'
 import type { ListedGroup } from '../lib/saved'
 import Highlight from './Highlight'
 
@@ -53,7 +53,7 @@ export default function SavedSection({ id, title, saved, query, open, onToggle, 
                   {t('savedLocalOnly')}
                 </span>
               )}
-              <span className="shrink-0 text-[10px] text-slate-400">{t('tabCount', g.urls.length)}</span>
+              <span className="shrink-0 text-[10px] text-slate-400">{tn('tabCount', g.urls.length)}</span>
               {onKeep && (
                 <button
                   type="button"
