@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  currentGroupId,
   duplicateKey,
   findDuplicates,
   matchesOnlyUrl,
@@ -103,5 +104,22 @@ describe('findDuplicates', () => {
     const blank2 = tab('')
     const closing = findDuplicates([first, active, third, plainB, pinned, unique, blank1, blank2])
     expect(closing.sort()).toEqual([first.id, third.id, plainB.id].sort())
+  })
+})
+
+describe('currentGroupId', () => {
+  it("uses the active tab's group", () => {
+    expect(currentGroupId([tab('https://a.com', { groupId: 3, lastAccessed: 1 }), tab('https://b.com', { groupId: 5, active: true })])).toBe(5)
+  })
+  it('otherwise uses the most recently used grouped tab', () => {
+    const tabs = [
+      tab('https://a.com', { groupId: 3, lastAccessed: 10 }),
+      tab('https://b.com', { groupId: 5, lastAccessed: 20 }),
+      tab('https://c.com', { active: true, lastAccessed: 30 }),
+    ]
+    expect(currentGroupId(tabs)).toBe(5)
+  })
+  it('is null without groups', () => {
+    expect(currentGroupId([tab('https://a.com', { active: true })])).toBeNull()
   })
 })

@@ -17,14 +17,11 @@
   "ungrouped": {
     "message": "未分组"
   },
-  "newGroup": {
-    "message": "新组"
-  },
   "untitledGroup": {
     "message": "未命名组"
   },
   "newGroupPlaceholder": {
-    "message": "新组名称…"
+    "message": "组名称（留空自动命名）"
   },
   "groupSelected": {
     "message": "将所选标签页分组（$VALUE$）",
@@ -33,9 +30,6 @@
         "content": "$1"
       }
     }
-  },
-  "groupAll": {
-    "message": "全部分组"
   },
   "selectAll": {
     "message": "全选"
@@ -155,5 +149,38 @@
   },
   "colorOrange": {
     "message": "橙色"
+  },
+  "groupSeries": {
+    "message": "组成系列（$VALUE$）",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupSeriesTitle": {
+    "message": "把所有未分组的标签页组成一个新组，并自动命名"
+  },
+  "addToCurrent": {
+    "message": "加入“$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "addToCurrentTitle": {
+    "message": "把未分组的标签页加入你正在使用的组"
+  },
+  "addedToGroup": {
+    "message": "已加入“$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "madeGroup": {
+    "message": "已创建新组"
   }
 }
