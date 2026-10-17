@@ -3,10 +3,10 @@
     "message": "Groupify"
   },
   "appDescription": {
-    "message": "Search, group and tidy your tabs: group by site, close duplicates and manage tab groups from one popup."
+    "message": "Sort tabs by task, purpose or site from a side panel, lock groups, reopen closed groups and search every tab."
   },
   "commandOpen": {
-    "message": "Open Groupify"
+    "message": "Open the Groupify side panel"
   },
   "searchPlaceholder": {
     "message": "Search tabs by title or URL…"
@@ -33,15 +33,6 @@
   },
   "selectAll": {
     "message": "Select all"
-  },
-  "groupBySite": {
-    "message": "Group by site"
-  },
-  "groupBySiteTitle": {
-    "message": "Put ungrouped tabs from the same site into one group each"
-  },
-  "groupBySiteNone": {
-    "message": "No site has two or more ungrouped tabs"
   },
   "closeDuplicates": {
     "message": "Close $VALUE$ duplicates",
@@ -73,17 +64,6 @@
   },
   "closedTabsOne": {
     "message": "Closed 1 tab"
-  },
-  "groupedTabs": {
-    "message": "Made $VALUE$ groups",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "groupedTabsOne": {
-    "message": "Made 1 group"
   },
   "noResults": {
     "message": "No tabs match “$VALUE$”",
@@ -239,5 +219,185 @@
         "content": "$1"
       }
     }
+  },
+  "catMail": {
+    "message": "Mail & meetings"
+  },
+  "catAi": {
+    "message": "AI tools"
+  },
+  "catDocs": {
+    "message": "Docs & notes"
+  },
+  "catDev": {
+    "message": "Development"
+  },
+  "catDesign": {
+    "message": "Design inspiration"
+  },
+  "catMedia": {
+    "message": "Video & music"
+  },
+  "catSocial": {
+    "message": "Social"
+  },
+  "catShopping": {
+    "message": "Shopping"
+  },
+  "catNews": {
+    "message": "News & reading"
+  },
+  "catOther": {
+    "message": "Other"
+  },
+  "recToday": {
+    "message": "Today"
+  },
+  "recWeek": {
+    "message": "This week"
+  },
+  "recOlder": {
+    "message": "Older"
+  },
+  "reclassify": {
+    "message": "Reclassify"
+  },
+  "reclassifyTitle": {
+    "message": "Sort every unlocked group and ungrouped tab again"
+  },
+  "modeProject": {
+    "message": "By task or project"
+  },
+  "modeProjectDesc": {
+    "message": "On-device AI finds tabs that belong to the same task. Without it, tabs opened together stay together."
+  },
+  "modeCategory": {
+    "message": "By purpose"
+  },
+  "modeCategoryDesc": {
+    "message": "Development, design, docs, AI, video, social, shopping, news…"
+  },
+  "modeSite": {
+    "message": "By site"
+  },
+  "modeSiteDesc": {
+    "message": "One group per website"
+  },
+  "modeRecency": {
+    "message": "By last use"
+  },
+  "modeRecencyDesc": {
+    "message": "Today, this week and older, to find tabs you can close"
+  },
+  "defaultMode": {
+    "message": "Default"
+  },
+  "reclassifying": {
+    "message": "Sorting tabs…"
+  },
+  "reclassified": {
+    "message": "Sorted into $VALUE$ groups",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "reclassifiedOne": {
+    "message": "Sorted into 1 group"
+  },
+  "reclassifyNothing": {
+    "message": "Nothing to sort: no tabs fit together"
+  },
+  "projectNoAi": {
+    "message": "On-device AI isn’t available, so tabs were grouped by when they were opened"
+  },
+  "lockGroup": {
+    "message": "Lock"
+  },
+  "unlockGroup": {
+    "message": "Unlock"
+  },
+  "lockTitle": {
+    "message": "Reclassify won’t touch a locked group"
+  },
+  "lockNeedsName": {
+    "message": "Name the group to lock it"
+  },
+  "locked": {
+    "message": "Locked"
+  },
+  "moreActions": {
+    "message": "More actions"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "selectedCount": {
+    "message": "$VALUE$ selected",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupThem": {
+    "message": "Group"
+  },
+  "clearSelection": {
+    "message": "Cancel"
+  },
+  "recentlyClosed": {
+    "message": "Recently closed"
+  },
+  "keepGroup": {
+    "message": "Keep"
+  },
+  "keepGroupTitle": {
+    "message": "Move to Saved, so it isn’t cleared with old closed groups"
+  },
+  "optionsTitle": {
+    "message": "Groupify settings"
+  },
+  "optDefaultMode": {
+    "message": "Default way to reclassify"
+  },
+  "optAiNaming": {
+    "message": "Use on-device AI"
+  },
+  "optAiNamingDesc": {
+    "message": "Names new groups and sorts tabs by task with the AI model built into Chrome, which runs on this computer, when it is already installed. Otherwise groups are named after the date, and tabs opened together stay together."
+  },
+  "optAiStatus": {
+    "message": "On-device AI on this computer: $VALUE$",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "aiAvailable": {
+    "message": "ready"
+  },
+  "aiDownloadable": {
+    "message": "supported, not downloaded yet"
+  },
+  "aiUnavailable": {
+    "message": "not supported"
+  },
+  "optRememberClosed": {
+    "message": "Remember closed groups"
+  },
+  "optRememberClosedDesc": {
+    "message": "Keeps the last 20 groups you close under Recently closed, so you can reopen them."
+  },
+  "optShortcut": {
+    "message": "Keyboard shortcut"
+  },
+  "optShortcutDesc": {
+    "message": "Alt+Shift+G opens the side panel."
+  },
+  "openShortcuts": {
+    "message": "Change shortcut"
   }
 }

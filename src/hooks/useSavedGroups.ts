@@ -11,7 +11,7 @@ async function loadSaved(): Promise<ListedGroup[]> {
  * Returns the area it went to.
  */
 async function writeSaved({ id, title, color, urls, savedAt }: SavedGroup): Promise<'sync' | 'local'> {
-  // Only the stored fields, not the `area` a listed group carries.
+  // Only the stored fields: not the `area` a listed group carries, nor `closedAt` (writing here means keeping it).
   const group: SavedGroup = { id, title, color, urls, savedAt }
   const key = savedKey(id)
   if (fitsSyncItem(group)) {
@@ -31,7 +31,10 @@ async function writeSaved({ id, title, color, urls, savedAt }: SavedGroup): Prom
 /** Saves a live tab group. Saving a group with the same name as a saved one replaces it. Returns null if it has no tab worth saving. */
 export async function saveGroup(group: chrome.tabGroups.TabGroup): Promise<SavedGroup | null> {
   const tabs = await chrome.tabs.query({ groupId: group.id })
-  const replaced = findReplaced(await loadSaved(), group.title ?? '')
+  const replaced = findReplaced(
+    (await loadSaved()).filter((g) => g.closedAt === undefined),
+    group.title ?? ''
+  )
   const saved = snapshotGroup(group, tabs, replaced?.id ?? crypto.randomUUID())
   if (saved) await writeSaved(saved)
   return saved
@@ -42,10 +45,23 @@ export async function deleteSaved(group: SavedGroup): Promise<void> {
   await Promise.all([chrome.storage.sync.remove(key), chrome.storage.local.remove(key)])
 }
 
-/** Puts a deleted group back (for Undo). */
-export const restoreDeleted = (group: SavedGroup) => writeSaved(group)
+/** Puts a deleted group back (for Undo), as it was: recently closed groups stay on this device. */
+export const restoreDeleted = (group: SavedGroup) =>
+  group.closedAt !== undefined ? chrome.storage.local.set({ [savedKey(group.id)]: stored(group) }) : writeSaved(group)
 
-/** Opens a saved group as a new tab group at the end of the current window, without leaving the popup. */
+/** Moves a recently closed group to Saved, replacing a saved group with the same name. */
+export async function keepClosed(group: SavedGroup): Promise<void> {
+  const replaced = findReplaced(
+    (await loadSaved()).filter((g) => g.closedAt === undefined),
+    group.title
+  )
+  await chrome.storage.local.remove(savedKey(group.id))
+  await writeSaved({ ...group, id: replaced?.id ?? group.id, savedAt: Date.now() })
+}
+
+const stored = ({ id, title, color, urls, savedAt, closedAt }: SavedGroup): SavedGroup => ({ id, title, color, urls, savedAt, closedAt })
+
+/** Opens a saved group as a new tab group at the end of the current window, without leaving the panel. */
 export async function openSaved(group: SavedGroup): Promise<number> {
   const { id: windowId } = await chrome.windows.getCurrent()
   const tabIds: number[] = []

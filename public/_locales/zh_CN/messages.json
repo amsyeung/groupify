@@ -3,10 +3,10 @@
     "message": "Groupify"
   },
   "appDescription": {
-    "message": "搜索、分组和整理标签页：一键按网站分组、关闭重复标签页，在同一个窗口管理所有标签页组。"
+    "message": "在侧边栏按工作、用途或网站整理标签页，锁定组、重开已关闭的组，并快速搜索所有标签页。"
   },
   "commandOpen": {
-    "message": "打开 Groupify"
+    "message": "打开 Groupify 侧边栏"
   },
   "searchPlaceholder": {
     "message": "按标题或网址搜索标签页…"
@@ -33,15 +33,6 @@
   },
   "selectAll": {
     "message": "全选"
-  },
-  "groupBySite": {
-    "message": "按网站分组"
-  },
-  "groupBySiteTitle": {
-    "message": "把同一网站的未分组标签页各自放进一个组"
-  },
-  "groupBySiteNone": {
-    "message": "没有网站有两个或以上未分组的标签页"
   },
   "closeDuplicates": {
     "message": "关闭 $VALUE$ 个重复标签页",
@@ -73,17 +64,6 @@
   },
   "closedTabsOne": {
     "message": "已关闭 1 个标签页"
-  },
-  "groupedTabs": {
-    "message": "已创建 $VALUE$ 个组",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "groupedTabsOne": {
-    "message": "已创建 1 个组"
   },
   "noResults": {
     "message": "没有标签页匹配“$VALUE$”",
@@ -239,5 +219,185 @@
         "content": "$1"
       }
     }
+  },
+  "catMail": {
+    "message": "邮件与会议"
+  },
+  "catAi": {
+    "message": "AI 工具"
+  },
+  "catDocs": {
+    "message": "文档与笔记"
+  },
+  "catDev": {
+    "message": "开发"
+  },
+  "catDesign": {
+    "message": "设计灵感"
+  },
+  "catMedia": {
+    "message": "影音"
+  },
+  "catSocial": {
+    "message": "社交"
+  },
+  "catShopping": {
+    "message": "购物"
+  },
+  "catNews": {
+    "message": "新闻与阅读"
+  },
+  "catOther": {
+    "message": "其他"
+  },
+  "recToday": {
+    "message": "今天"
+  },
+  "recWeek": {
+    "message": "本周"
+  },
+  "recOlder": {
+    "message": "较旧"
+  },
+  "reclassify": {
+    "message": "重新分类"
+  },
+  "reclassifyTitle": {
+    "message": "把所有未锁定的组和未分组的标签页重新分类"
+  },
+  "modeProject": {
+    "message": "按工作／项目"
+  },
+  "modeProjectDesc": {
+    "message": "本机 AI 找出属于同一件事的标签页；没有 AI 时，一起打开的标签页会放在一起。"
+  },
+  "modeCategory": {
+    "message": "按用途"
+  },
+  "modeCategoryDesc": {
+    "message": "开发、设计、文档、AI、影音、社交、购物、新闻等"
+  },
+  "modeSite": {
+    "message": "按网站"
+  },
+  "modeSiteDesc": {
+    "message": "每个网站一个组"
+  },
+  "modeRecency": {
+    "message": "按最后使用时间"
+  },
+  "modeRecencyDesc": {
+    "message": "今天、本周和较旧，方便找出可以关掉的标签页"
+  },
+  "defaultMode": {
+    "message": "默认"
+  },
+  "reclassifying": {
+    "message": "正在分类…"
+  },
+  "reclassified": {
+    "message": "已分成 $VALUE$ 个组",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "reclassifiedOne": {
+    "message": "已分成 1 个组"
+  },
+  "reclassifyNothing": {
+    "message": "没有可以分在一起的标签页"
+  },
+  "projectNoAi": {
+    "message": "没有本机 AI，已按打开时间分组"
+  },
+  "lockGroup": {
+    "message": "锁定"
+  },
+  "unlockGroup": {
+    "message": "解锁"
+  },
+  "lockTitle": {
+    "message": "重新分类时不会改动锁定的组"
+  },
+  "lockNeedsName": {
+    "message": "先为组命名才能锁定"
+  },
+  "locked": {
+    "message": "已锁定"
+  },
+  "moreActions": {
+    "message": "更多操作"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "selectedCount": {
+    "message": "已选 $VALUE$ 个",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupThem": {
+    "message": "分组"
+  },
+  "clearSelection": {
+    "message": "取消"
+  },
+  "recentlyClosed": {
+    "message": "最近关闭"
+  },
+  "keepGroup": {
+    "message": "保留"
+  },
+  "keepGroupTitle": {
+    "message": "移到“已保存”，不会随旧的关闭记录被清除"
+  },
+  "optionsTitle": {
+    "message": "Groupify 设置"
+  },
+  "optDefaultMode": {
+    "message": "默认的重新分类方式"
+  },
+  "optAiNaming": {
+    "message": "使用本机 AI"
+  },
+  "optAiNamingDesc": {
+    "message": "用 Chrome 内置、在这台电脑上运行的 AI 模型（如已安装）为新组命名和按工作分类。否则以日期命名，并把一起打开的标签页放在一起。"
+  },
+  "optAiStatus": {
+    "message": "这台电脑的本机 AI：$VALUE$",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "aiAvailable": {
+    "message": "可以使用"
+  },
+  "aiDownloadable": {
+    "message": "支持，但尚未下载"
+  },
+  "aiUnavailable": {
+    "message": "不支持"
+  },
+  "optRememberClosed": {
+    "message": "记住关闭的组"
+  },
+  "optRememberClosedDesc": {
+    "message": "把最近关闭的 20 个组放在“最近关闭”，方便重新打开。"
+  },
+  "optShortcut": {
+    "message": "键盘快捷键"
+  },
+  "optShortcutDesc": {
+    "message": "Alt+Shift+G 打开侧边栏。"
+  },
+  "openShortcuts": {
+    "message": "更改快捷键"
   }
 }

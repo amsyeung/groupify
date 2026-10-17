@@ -6,6 +6,7 @@ import { siteOf, tabUrl, type TabLike } from './tabs'
 const MAX_TABS = 15
 const MAX_LENGTH = 32
 const TIMEOUT_MS = 10_000
+const CLUSTER_TIMEOUT_MS = 30_000
 
 export const uiLanguage = () => (typeof chrome !== 'undefined' && chrome.i18n ? chrome.i18n.getUILanguage() : navigator.language)
 
@@ -14,10 +15,15 @@ export function dateName(date = new Date(), locale = uiLanguage()): string {
   return new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' }).format(date)
 }
 
+/** "10月17日 下午3:05" in Chinese, "Oct 17, 3:05 PM" in English: names tabs opened together at that time. */
+export function sessionName(time: number, locale = uiLanguage()): string {
+  return new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(time)
+}
+
 /** The tabs as the model sees them: one "title (site)" per line. */
-export function describeTabs(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[]): string {
+export function describeTabs(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[], max = MAX_TABS): string {
   return tabs
-    .slice(0, MAX_TABS)
+    .slice(0, max)
     .map((tab) => {
       const site = siteOf(tabUrl(tab))
       const title = (tab.title ?? '').replace(/\s+/g, ' ').trim().slice(0, 120)
@@ -56,25 +62,18 @@ Name the task, not the websites, unless every tab is from the same site.`
 
 const ENGLISH = { expectedInputs: [{ type: 'text' as const, languages: ['en'] }], expectedOutputs: [{ type: 'text' as const, languages: ['en'] }] }
 
-/**
- * Asks Chrome's on-device model for a group name. Returns null when the model isn't already on
- * this computer (it is never downloaded from here), or when anything goes wrong.
- */
-export async function suggestName(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[]): Promise<string | null> {
+/** Runs one prompt on Chrome's on-device model, or returns null if the model isn't already on this computer. */
+async function promptModel(system: string, input: string, schema: object, timeoutMs: number): Promise<string | null> {
   const model = globalThis.LanguageModel
-  if (!model || !tabs.length) return null
+  if (!model) return null
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
+    // Never download the model from here: it is several gigabytes.
     if ((await model.availability(ENGLISH)) !== 'available') return null
-    const session = await model.create({ ...ENGLISH, initialPrompts: [{ role: 'system', content: SYSTEM_PROMPT }], signal: controller.signal })
+    const session = await model.create({ ...ENGLISH, initialPrompts: [{ role: 'system', content: system }], signal: controller.signal })
     try {
-      const raw = await session.prompt(describeTabs(tabs), {
-        signal: controller.signal,
-        responseConstraint: { type: 'object', properties: { name: { type: 'string' } }, required: ['name'] },
-      })
-      const name = cleanName(raw)
-      return name ? await translateName(name, controller.signal) : null
+      return await session.prompt(input, { signal: controller.signal, responseConstraint: schema })
     } finally {
       session.destroy()
     }
@@ -85,20 +84,105 @@ export async function suggestName(tabs: Pick<TabLike, 'title' | 'url' | 'pending
   }
 }
 
+/** Asks the on-device model for a group name. Null when the model isn't available or anything goes wrong. */
+export async function suggestName(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[]): Promise<string | null> {
+  if (!tabs.length) return null
+  const result = await promptModel(
+    SYSTEM_PROMPT,
+    describeTabs(tabs),
+    { type: 'object', properties: { name: { type: 'string' } }, required: ['name'] },
+    TIMEOUT_MS
+  )
+  const name = result && cleanName(result)
+  return name ? translateName(name) : null
+}
+
+const CLUSTER_PROMPT = `You sort browser tabs into groups, one group per task or project the user is working on.
+Tabs from different websites belong together when they serve the same task, e.g. a moodboard, framework docs and a hosting dashboard for one new website.
+Give each group a short name (1 to 3 words) for the task. Every tab number appears in at most one group. Leave out tabs that fit no group.`
+
+const MAX_CLUSTER_TABS = 40
+
+/** Numbered lines, so the model can refer to tabs by number. */
+export function numberTabs(tabs: Pick<TabLike, 'title' | 'url' | 'pendingUrl'>[]): string {
+  return describeTabs(tabs, MAX_CLUSTER_TABS)
+    .split('\n')
+    .map((line, i) => `${i + 1}. ${line.slice(2)}`)
+    .join('\n')
+}
+
+/** Reads the model's {groups: [{name, tabs: [numbers]}]} answer back into tab ids. */
+export function parseClusters(raw: string, tabIds: number[]): { name: string; tabIds: number[] }[] {
+  try {
+    const groups = JSON.parse(raw)?.groups
+    if (!Array.isArray(groups)) return []
+    return groups
+      .filter((g) => typeof g?.name === 'string' && Array.isArray(g?.tabs))
+      .map((g) => ({
+        name: cleanName(g.name),
+        tabIds: g.tabs
+          .filter((n: unknown) => Number.isInteger(n) && (n as number) >= 1 && (n as number) <= tabIds.length)
+          .map((n: number) => tabIds[n - 1]),
+      }))
+      .filter((g) => g.name)
+  } catch {
+    return []
+  }
+}
+
+/** Groups tabs by task with the on-device model. Null when the model isn't available. */
+export async function suggestClusters(
+  tabs: (Pick<TabLike, 'title' | 'url' | 'pendingUrl'> & { id?: number })[]
+): Promise<{ name: string; tabIds: number[] }[] | null> {
+  const listed = tabs.slice(0, MAX_CLUSTER_TABS)
+  const schema = {
+    type: 'object',
+    properties: {
+      groups: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: { name: { type: 'string' }, tabs: { type: 'array', items: { type: 'integer' } } },
+          required: ['name', 'tabs'],
+        },
+      },
+    },
+    required: ['groups'],
+  }
+  const result = await promptModel(CLUSTER_PROMPT, numberTabs(listed), schema, CLUSTER_TIMEOUT_MS)
+  if (!result) return null
+  const clusters = parseClusters(
+    result,
+    listed.map((tab) => tab.id!)
+  )
+  return Promise.all(clusters.map(async (c) => ({ ...c, name: await translateName(c.name) })))
+}
+
 /** The model only writes English (and a few other languages), so Chinese UIs get the name translated when possible. */
-async function translateName(name: string, signal: AbortSignal): Promise<string> {
+export async function translateName(name: string): Promise<string> {
   const target = translationTarget(uiLanguage())
   const api = globalThis.Translator
   if (!target || !api) return name
   try {
     if ((await api.availability({ sourceLanguage: 'en', targetLanguage: target })) !== 'available') return name
-    const translator = await api.create({ sourceLanguage: 'en', targetLanguage: target, signal })
+    const translator = await api.create({ sourceLanguage: 'en', targetLanguage: target })
     try {
-      return cleanName(await translator.translate(name, { signal })) || name
+      return cleanName(await translator.translate(name)) || name
     } finally {
       translator.destroy()
     }
   } catch {
     return name
+  }
+}
+
+/** Whether Chrome's on-device model can be used here, for the settings page. */
+export async function aiStatus(): Promise<'available' | 'downloadable' | 'unavailable'> {
+  try {
+    const status = await globalThis.LanguageModel?.availability(ENGLISH)
+    if (status === 'available') return 'available'
+    return status === 'downloadable' || status === 'downloading' ? 'downloadable' : 'unavailable'
+  } catch {
+    return 'unavailable'
   }
 }

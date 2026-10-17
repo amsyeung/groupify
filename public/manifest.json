@@ -5,8 +5,18 @@
   "description": "__MSG_appDescription__",
   "default_locale": "en",
   "action": {
-    "default_popup": "index.html",
     "default_title": "__MSG_appName__"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   },
   "commands": {
     "_execute_action": {
@@ -22,5 +32,5 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "permissions": ["tabs", "tabGroups", "storage"]
+  "permissions": ["tabs", "tabGroups", "storage", "sidePanel"]
 }

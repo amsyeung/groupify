@@ -42,3 +42,14 @@ describe('translationTarget', () => {
     expect(translationTarget('en-US')).toBeNull()
   })
 })
+
+describe('clusters from the model', () => {
+  it('numbers tabs and maps numbers back to tab ids', async () => {
+    const { numberTabs, parseClusters } = await import('../src/lib/naming')
+    expect(numberTabs([{ title: 'Pins', url: 'https://www.pinterest.com' }])).toBe('1. Pins (pinterest.com)')
+    expect(parseClusters('{"groups":[{"name":"New site","tabs":[1,2,7]},{"name":"","tabs":[3]}]}', [10, 20, 30])).toEqual([
+      { name: 'New site', tabIds: [10, 20] },
+    ])
+    expect(parseClusters('not json', [1])).toEqual([])
+  })
+})

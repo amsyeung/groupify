@@ -3,10 +3,10 @@
     "message": "Groupify"
   },
   "appDescription": {
-    "message": "搜尋、分組和整理分頁：一鍵按網站分組、關閉重複分頁，在同一個視窗管理所有分頁群組。"
+    "message": "在側邊欄按工作、用途或網站整理分頁，鎖定群組、重開已關閉的群組，並快速搜尋所有分頁。"
   },
   "commandOpen": {
-    "message": "開啟 Groupify"
+    "message": "開啟 Groupify 側邊欄"
   },
   "searchPlaceholder": {
     "message": "按標題或網址搜尋分頁…"
@@ -33,15 +33,6 @@
   },
   "selectAll": {
     "message": "全選"
-  },
-  "groupBySite": {
-    "message": "按網站分組"
-  },
-  "groupBySiteTitle": {
-    "message": "把同一網站的未分組分頁各自放進一個群組"
-  },
-  "groupBySiteNone": {
-    "message": "沒有網站有兩個或以上未分組的分頁"
   },
   "closeDuplicates": {
     "message": "關閉 $VALUE$ 個重複分頁",
@@ -73,17 +64,6 @@
   },
   "closedTabsOne": {
     "message": "已關閉 1 個分頁"
-  },
-  "groupedTabs": {
-    "message": "已建立 $VALUE$ 個群組",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "groupedTabsOne": {
-    "message": "已建立 1 個群組"
   },
   "noResults": {
     "message": "沒有分頁符合「$VALUE$」",
@@ -239,5 +219,185 @@
         "content": "$1"
       }
     }
+  },
+  "catMail": {
+    "message": "郵件與會議"
+  },
+  "catAi": {
+    "message": "AI 工具"
+  },
+  "catDocs": {
+    "message": "文件與筆記"
+  },
+  "catDev": {
+    "message": "開發"
+  },
+  "catDesign": {
+    "message": "設計靈感"
+  },
+  "catMedia": {
+    "message": "影音"
+  },
+  "catSocial": {
+    "message": "社交"
+  },
+  "catShopping": {
+    "message": "購物"
+  },
+  "catNews": {
+    "message": "新聞與閱讀"
+  },
+  "catOther": {
+    "message": "其他"
+  },
+  "recToday": {
+    "message": "今天"
+  },
+  "recWeek": {
+    "message": "本週"
+  },
+  "recOlder": {
+    "message": "較舊"
+  },
+  "reclassify": {
+    "message": "重新分類"
+  },
+  "reclassifyTitle": {
+    "message": "把所有未鎖定的群組和未分組的分頁重新分類"
+  },
+  "modeProject": {
+    "message": "按工作／專案"
+  },
+  "modeProjectDesc": {
+    "message": "本機 AI 找出屬於同一件事的分頁；沒有 AI 時，一起開啟的分頁會放在一起。"
+  },
+  "modeCategory": {
+    "message": "按用途"
+  },
+  "modeCategoryDesc": {
+    "message": "開發、設計、文件、AI、影音、社交、購物、新聞等"
+  },
+  "modeSite": {
+    "message": "按網站"
+  },
+  "modeSiteDesc": {
+    "message": "每個網站一個群組"
+  },
+  "modeRecency": {
+    "message": "按最後使用時間"
+  },
+  "modeRecencyDesc": {
+    "message": "今天、本週和較舊，方便找出可以關掉的分頁"
+  },
+  "defaultMode": {
+    "message": "預設"
+  },
+  "reclassifying": {
+    "message": "正在分類…"
+  },
+  "reclassified": {
+    "message": "已分成 $VALUE$ 個群組",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "reclassifiedOne": {
+    "message": "已分成 1 個群組"
+  },
+  "reclassifyNothing": {
+    "message": "沒有可以分在一起的分頁"
+  },
+  "projectNoAi": {
+    "message": "沒有本機 AI，已按開啟時間分組"
+  },
+  "lockGroup": {
+    "message": "鎖定"
+  },
+  "unlockGroup": {
+    "message": "解鎖"
+  },
+  "lockTitle": {
+    "message": "重新分類時不會改動鎖定的群組"
+  },
+  "lockNeedsName": {
+    "message": "先為群組命名才能鎖定"
+  },
+  "locked": {
+    "message": "已鎖定"
+  },
+  "moreActions": {
+    "message": "更多操作"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "selectedCount": {
+    "message": "已選 $VALUE$ 個",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupThem": {
+    "message": "分組"
+  },
+  "clearSelection": {
+    "message": "取消"
+  },
+  "recentlyClosed": {
+    "message": "最近關閉"
+  },
+  "keepGroup": {
+    "message": "保留"
+  },
+  "keepGroupTitle": {
+    "message": "移到「已儲存」，不會隨舊的關閉記錄被清除"
+  },
+  "optionsTitle": {
+    "message": "Groupify 設定"
+  },
+  "optDefaultMode": {
+    "message": "預設的重新分類方式"
+  },
+  "optAiNaming": {
+    "message": "使用本機 AI"
+  },
+  "optAiNamingDesc": {
+    "message": "用 Chrome 內建、在這部電腦上執行的 AI 模型（如已安裝）為新群組命名和按工作分類。否則以日期命名，並把一起開啟的分頁放在一起。"
+  },
+  "optAiStatus": {
+    "message": "這部電腦的本機 AI：$VALUE$",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "aiAvailable": {
+    "message": "可以使用"
+  },
+  "aiDownloadable": {
+    "message": "支援，但尚未下載"
+  },
+  "aiUnavailable": {
+    "message": "不支援"
+  },
+  "optRememberClosed": {
+    "message": "記住關閉的群組"
+  },
+  "optRememberClosedDesc": {
+    "message": "把最近關閉的 20 個群組放在「最近關閉」，方便重新開啟。"
+  },
+  "optShortcut": {
+    "message": "鍵盤快捷鍵"
+  },
+  "optShortcutDesc": {
+    "message": "Alt+Shift+G 開啟側邊欄。"
+  },
+  "openShortcuts": {
+    "message": "更改快捷鍵"
   }
 }

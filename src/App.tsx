@@ -1,21 +1,30 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import GroupSection from './components/GroupSection'
+import Menu from './components/Menu'
 import NavPill from './components/NavPill'
+import ReclassifyMenu from './components/ReclassifyMenu'
 import SavedSection from './components/SavedSection'
 import TabRow from './components/TabRow'
-import { deleteSaved, openSaved, restoreDeleted, useSavedGroups } from './hooks/useSavedGroups'
+import { deleteSaved, keepClosed, openSaved, restoreDeleted, useSavedGroups } from './hooks/useSavedGroups'
+import { useLocks, useSettings } from './hooks/useSynced'
 import { useWindowTabs } from './hooks/useWindowTabs'
+import { isLocked, type ReclassifyMode } from './lib/classify'
 import { t, tn } from './lib/i18n'
 import { dateName, suggestName } from './lib/naming'
+import { reclassify } from './lib/reclassify'
 import { savedMatchesQuery, type ListedGroup } from './lib/saved'
-import { currentGroupId, findDuplicates, groupable, matchesQuery, pickColor, planGroupBySite, tabUrl } from './lib/tabs'
+import { renameLock, toggleLock } from './lib/settings'
+import { currentGroupId, findDuplicates, groupable, matchesQuery, pickColor, tabUrl } from './lib/tabs'
 
 const UNGROUPED = 'ungrouped'
 const SAVED = 'saved'
+const CLOSED = 'closed'
 
 interface Toast {
   message: string
   undo?: () => void
+  /** Stays until replaced, e.g. while a reclassify is running. */
+  sticky?: boolean
 }
 
 type TabIds = [number, ...number[]]
@@ -24,11 +33,15 @@ const asTabIds = (ids: number[]) => ids as TabIds
 export default function App() {
   const { tabs, groups } = useWindowTabs()
   const saved = useSavedGroups()
+  const [settings] = useSettings()
+  const [locks, setLocks] = useLocks()
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [newGroupName, setNewGroupName] = useState('')
-  const [openIds, setOpenIds] = useState<Set<string>>(new Set([UNGROUPED, SAVED]))
+  // Null until the user opens or closes a section: until then, only the current group (and Ungrouped) is open.
+  const [openIds, setOpenIds] = useState<Set<string> | null>(null)
   const [dragging, setDragging] = useState(false)
+  const [busy, setBusy] = useState(false)
   const [toast, setToast] = useState<Toast | null>(null)
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -38,9 +51,11 @@ export default function App() {
   const selectable = ungrouped.filter(groupable)
   const selectedVisible = selectable.filter((tab) => selected.has(tab.id!)).map((tab) => tab.id!)
   const duplicates = useMemo(() => findDuplicates(tabs), [tabs])
-  const sitePlan = useMemo(() => planGroupBySite(tabs, groups), [tabs, groups])
   const visibleSaved = useMemo(() => saved.filter((g) => savedMatchesQuery(g, query)), [saved, query])
-  const currentGroup = groups.find((g) => g.id === currentGroupId(tabs))
+  const keptGroups = visibleSaved.filter((g) => g.closedAt === undefined)
+  const closedGroups = visibleSaved.filter((g) => g.closedAt !== undefined).sort((a, b) => (b.closedAt ?? 0) - (a.closedAt ?? 0))
+  const currentId = currentGroupId(tabs)
+  const currentGroup = groups.find((g) => g.id === currentId)
 
   useEffect(() => {
     const start = () => setDragging(true)
@@ -56,23 +71,24 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!toast) return
+    if (!toast || toast.sticky) return
     const timer = setTimeout(() => setToast(null), 6000)
     return () => clearTimeout(timer)
   }, [toast])
 
+  const defaultOpen = useMemo(() => new Set([UNGROUPED, SAVED, String(currentId)]), [currentId])
+  const effectiveOpen = openIds ?? defaultOpen
   // While searching, every section with a match is open; otherwise the user decides.
-  const isOpen = (id: string) => searching || openIds.has(id)
-  const toggle = (id: string) =>
-    setOpenIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+  const isOpen = (id: string) => searching || effectiveOpen.has(id)
+  const toggle = (id: string) => {
+    const next = new Set(effectiveOpen)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setOpenIds(next)
+  }
 
   const jumpTo = (id: string) => {
-    setOpenIds((prev) => new Set(prev).add(id))
+    setOpenIds(new Set(effectiveOpen).add(id))
     requestAnimationFrame(() => document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
   }
 
@@ -94,7 +110,7 @@ export default function App() {
     setNewGroupName('')
     setSelected(new Set())
     setToast({ message: t('madeGroup'), undo: () => chrome.tabs.ungroup(asTabIds(ids)).catch(() => {}) })
-    if (typed) return
+    if (typed || !settings.useAi) return
     const suggested = await suggestName(tabs.filter((tab) => ids.includes(tab.id!)))
     if (!suggested) return
     // Keep a name the user has typed in the meantime.
@@ -112,24 +128,19 @@ export default function App() {
     })
   }
 
-  const groupBySite = async () => {
-    if (!sitePlan.length) return setToast({ message: t('groupBySiteNone') })
-    const used = groups.map((g) => g.color as string)
-    for (const plan of sitePlan) {
-      if (plan.existingGroupId !== undefined) {
-        await chrome.tabs.group({ tabIds: asTabIds(plan.tabIds), groupId: plan.existingGroupId })
-      } else {
-        const color = pickColor(used)
-        used.push(color)
-        const groupId = await chrome.tabs.group({ tabIds: asTabIds(plan.tabIds) })
-        await chrome.tabGroups.update(groupId, { title: plan.site, color })
-      }
+  const runReclassify = async (mode: ReclassifyMode) => {
+    setBusy(true)
+    setToast({ message: t('reclassifying'), sticky: true })
+    try {
+      const result = await reclassify(mode, tabs, groups, locks, settings.useAi)
+      if (!result) return setToast({ message: t('reclassifyNothing') })
+      setOpenIds(null)
+      setToast({ message: result.usedFallback ? t('projectNoAi') : tn('reclassified', result.groups), undo: () => result.undo().catch(() => {}) })
+    } catch {
+      setToast(null)
+    } finally {
+      setBusy(false)
     }
-    const moved = sitePlan.flatMap((plan) => plan.tabIds)
-    setToast({
-      message: tn('groupedTabs', sitePlan.length),
-      undo: () => chrome.tabs.ungroup(asTabIds(moved)).catch(() => {}),
-    })
   }
 
   const closeDuplicates = async () => {
@@ -168,70 +179,99 @@ export default function App() {
       e.preventDefault()
       rows[0].click()
     } else if (e.key === 'Escape' && query) {
-      // Without this, Esc closes the popup.
       e.preventDefault()
       setQuery('')
       searchRef.current?.focus()
     }
   }
 
-  const secondaryLink =
-    'underline-offset-2 hover:text-slate-900 hover:underline disabled:opacity-50 disabled:hover:no-underline disabled:hover:text-inherit dark:hover:text-white'
-
-  const ungroupedToolbar = selectable.length > 0 && (
-    <div className="mx-2 mb-2 space-y-2 rounded-md bg-slate-50 p-2 dark:bg-slate-800/60">
-      <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          aria-label={t('selectAll')}
-          title={t('selectAll')}
-          checked={selectedVisible.length === selectable.length}
-          ref={(el) => {
-            if (el) el.indeterminate = selectedVisible.length > 0 && selectedVisible.length < selectable.length
-          }}
-          onChange={() => setSelected(selectedVisible.length === selectable.length ? new Set() : new Set(selectable.map((tab) => tab.id!)))}
-          className="h-3.5 w-3.5 shrink-0 accent-slate-900 dark:accent-slate-100"
-        />
-        <input
-          type="text"
-          placeholder={t('newGroupPlaceholder')}
-          spellCheck={false}
-          value={newGroupName}
-          onChange={(e) => setNewGroupName(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && createGroup(selectedVisible.length ? selectedVisible : selectable.map((tab) => tab.id!))}
-          className="min-w-0 flex-1 rounded bg-white px-2 py-1 text-xs ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-900 dark:ring-slate-700"
-        />
-      </div>
-      <div className="flex gap-2">
-        <button
-          type="button"
-          disabled={selectedVisible.length === 0}
-          onClick={() => createGroup(selectedVisible)}
-          className="flex-1 rounded bg-white py-1.5 text-[11px] font-semibold ring-1 ring-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white dark:bg-slate-900 dark:ring-slate-700 dark:hover:bg-slate-800"
-        >
-          {t('groupSelected', selectedVisible.length)}
-        </button>
-      </div>
+  const selectionBar = selectedVisible.length > 0 && (
+    <div className="mx-2 mb-2 flex items-center gap-2 rounded-md bg-slate-900 p-1.5 pl-2.5 text-white dark:bg-white dark:text-slate-900">
+      <span className="shrink-0 text-[11px] font-semibold">{t('selectedCount', selectedVisible.length)}</span>
+      <input
+        type="text"
+        placeholder={t('newGroupPlaceholder')}
+        spellCheck={false}
+        value={newGroupName}
+        onChange={(e) => setNewGroupName(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && createGroup(selectedVisible)}
+        className="min-w-0 flex-1 rounded bg-white/10 px-2 py-1 text-xs text-white outline-none placeholder:text-white/50 focus:bg-white/20 dark:bg-slate-900/10 dark:text-slate-900 dark:placeholder:text-slate-500"
+      />
+      <button
+        type="button"
+        onClick={() => createGroup(selectedVisible)}
+        className="shrink-0 rounded bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-700"
+      >
+        {t('groupThem')}
+      </button>
+      <button
+        type="button"
+        onClick={() => setSelected(new Set())}
+        title={t('clearSelection')}
+        aria-label={t('clearSelection')}
+        className="shrink-0 rounded px-1.5 text-sm leading-none opacity-70 hover:opacity-100"
+      >
+        ×
+      </button>
     </div>
   )
 
   const showUngrouped = ungrouped.length > 0 || (dragging && !searching)
   const visibleGroups = groups.filter((g) => !searching || visibleTabs.some((tab) => tab.groupId === g.id))
+  const menuItem =
+    'block w-full rounded-md px-3 py-2 text-left text-xs font-medium hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-transparent dark:hover:bg-slate-800'
 
   return (
-    <div onKeyDown={onKeyDown} className="flex min-h-[200px] flex-col">
-      <header className="sticky top-0 z-20 space-y-2.5 bg-slate-50/90 px-3 pt-3 pb-2.5 backdrop-blur-md dark:bg-slate-950/90">
-        <input
-          ref={searchRef}
-          type="search"
-          placeholder={t('searchPlaceholder')}
-          title={t('searchHint')}
-          autoFocus
-          spellCheck={false}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full rounded-lg bg-white px-3 py-2.5 text-sm font-medium shadow-sm ring-1 ring-slate-200 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-900 dark:bg-slate-900 dark:ring-slate-700 dark:focus:ring-slate-300"
-        />
+    <div onKeyDown={onKeyDown} className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-20 space-y-2 bg-slate-50/90 px-3 pt-3 pb-2 backdrop-blur-md dark:bg-slate-950/90">
+        <div className="flex gap-2">
+          <input
+            ref={searchRef}
+            type="search"
+            placeholder={t('searchPlaceholder')}
+            title={t('searchHint')}
+            autoFocus
+            spellCheck={false}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="min-w-0 flex-1 rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-sm ring-1 ring-slate-200 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-900 dark:bg-slate-900 dark:ring-slate-700 dark:focus:ring-slate-300"
+          />
+          <Menu
+            label="⋯"
+            title={t('moreActions')}
+            align="right"
+            buttonClassName="h-full rounded-lg bg-white px-3 text-base leading-none text-slate-500 shadow-sm ring-1 ring-slate-200 hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-400 dark:ring-slate-700 dark:hover:bg-slate-800"
+          >
+            {(close) => (
+              <>
+                <button
+                  type="button"
+                  role="menuitem"
+                  disabled={!duplicates.length}
+                  title={t('closeDuplicatesTitle')}
+                  onClick={() => {
+                    close()
+                    closeDuplicates()
+                  }}
+                  className={menuItem}
+                >
+                  {duplicates.length ? tn('closeDuplicates', duplicates.length) : t('noDuplicates')}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    close()
+                    chrome.runtime.openOptionsPage()
+                  }}
+                  className={menuItem}
+                >
+                  {t('settings')}
+                </button>
+              </>
+            )}
+          </Menu>
+        </div>
         <div className="flex gap-2">
           <button
             type="button"
@@ -242,33 +282,26 @@ export default function App() {
           >
             {t('groupSeries', selectable.length)}
           </button>
-          {currentGroup && selectable.length > 0 && (
-            <button
-              type="button"
-              onClick={addToCurrentGroup}
-              title={t('addToCurrentTitle')}
-              className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-semibold shadow-sm ring-1 ring-slate-200 hover:bg-slate-100 dark:bg-slate-900 dark:ring-slate-700 dark:hover:bg-slate-800"
-            >
-              <span aria-hidden className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: `var(--group-${currentGroup.color})` }} />
-              <span className="truncate">{t('addToCurrent', currentGroup.title || t('untitledGroup'))}</span>
-            </button>
-          )}
+          <ReclassifyMenu defaultMode={settings.reclassifyMode} busy={busy} onPick={runReclassify} />
         </div>
-        <div className="flex gap-3 text-[11px] font-medium text-slate-500 dark:text-slate-400">
-          <button type="button" onClick={groupBySite} title={t('groupBySiteTitle')} className={secondaryLink}>
-            {t('groupBySite')}
+        {currentGroup && selectable.length > 0 && (
+          <button
+            type="button"
+            onClick={addToCurrentGroup}
+            title={t('addToCurrentTitle')}
+            className="flex w-full min-w-0 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold ring-1 ring-slate-200 ring-inset hover:bg-white dark:ring-slate-700 dark:hover:bg-slate-900"
+          >
+            <span aria-hidden className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: `var(--group-${currentGroup.color})` }} />
+            <span className="truncate">{t('addToCurrent', currentGroup.title || t('untitledGroup'))}</span>
           </button>
-          <button type="button" onClick={closeDuplicates} disabled={!duplicates.length} title={t('closeDuplicatesTitle')} className={secondaryLink}>
-            {duplicates.length ? tn('closeDuplicates', duplicates.length) : t('noDuplicates')}
-          </button>
-        </div>
+        )}
         {groups.length > 0 && (
-          <nav className="no-scrollbar flex max-h-[68px] flex-wrap gap-1.5 overflow-y-auto">
+          <nav className="no-scrollbar -mx-3 flex gap-1.5 overflow-x-auto px-3">
             <NavPill title={t('ungrouped')} onClick={() => jumpTo(UNGROUPED)} onDropTab={(id) => moveTab(id, null)} />
             {groups.map((g) => (
               <NavPill
                 key={g.id}
-                title={g.title || t('untitledGroup')}
+                title={`${isLocked(g, locks) ? '🔒 ' : ''}${g.title || t('untitledGroup')}`}
                 color={g.color}
                 onClick={() => jumpTo(String(g.id))}
                 onDropTab={(id) => moveTab(id, g.id)}
@@ -288,7 +321,8 @@ export default function App() {
             open={isOpen(UNGROUPED) || dragging}
             onToggle={() => toggle(UNGROUPED)}
             onDropTab={(id) => moveTab(id, null)}
-            toolbar={ungroupedToolbar}
+            icons={ungrouped.map((tab) => ({ src: tab.favIconUrl, label: tab.title ?? '' }))}
+            toolbar={selectionBar}
           >
             {ungrouped.map((tab) => (
               <TabRow
@@ -324,6 +358,10 @@ export default function App() {
               onToggle={() => toggle(String(g.id))}
               onDropTab={(id) => moveTab(id, g.id)}
               group={g}
+              locked={isLocked(g, locks)}
+              onToggleLock={() => setLocks(toggleLock(locks, g.title ?? ''))}
+              onRenamed={(from, to) => setLocks(renameLock(locks, from, to))}
+              icons={groupTabs.map((tab) => ({ src: tab.favIconUrl, label: tab.title ?? '' }))}
             >
               {groupTabs.map((tab) => (
                 <TabRow key={tab.id} tab={tab} query={query} />
@@ -332,14 +370,30 @@ export default function App() {
           )
         })}
 
-        {visibleSaved.length > 0 && (
+        {keptGroups.length > 0 && (
           <SavedSection
-            saved={visibleSaved}
+            id={SAVED}
+            title={t('saved')}
+            saved={keptGroups}
             query={query}
             open={isOpen(SAVED)}
             onToggle={() => toggle(SAVED)}
             onOpenGroup={openSavedGroup}
             onDelete={deleteSavedGroup}
+          />
+        )}
+
+        {closedGroups.length > 0 && (
+          <SavedSection
+            id={CLOSED}
+            title={t('recentlyClosed')}
+            saved={closedGroups}
+            query={query}
+            open={isOpen(CLOSED)}
+            onToggle={() => toggle(CLOSED)}
+            onOpenGroup={openSavedGroup}
+            onDelete={deleteSavedGroup}
+            onKeep={(g) => keepClosed(g)}
           />
         )}
 

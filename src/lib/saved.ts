@@ -9,11 +9,13 @@ export interface SavedGroup {
   urls: string[]
   /** Milliseconds since the epoch. */
   savedAt: number
+  /** Set on groups remembered automatically when they were closed (listed under "Recently closed"). */
+  closedAt?: number
 }
 
 export type StorageArea = 'sync' | 'local'
 
-/** A saved group as listed in the popup, with the storage area it was found in. */
+/** A saved group as listed in the panel, with the storage area it was found in. */
 export interface ListedGroup extends SavedGroup {
   area: StorageArea
 }
@@ -62,7 +64,8 @@ function isSavedGroup(value: unknown): value is SavedGroup {
     Array.isArray(g.urls) &&
     g.urls.length > 0 &&
     g.urls.every((u) => typeof u === 'string') &&
-    typeof g.savedAt === 'number'
+    typeof g.savedAt === 'number' &&
+    (g.closedAt === undefined || typeof g.closedAt === 'number')
   )
 }
 
@@ -87,4 +90,20 @@ export function savedMatchesQuery(group: SavedGroup, query: string): boolean {
   const q = query.trim().toLowerCase()
   if (!q) return true
   return group.title.toLowerCase().includes(q) || group.urls.some((u) => u.toLowerCase().includes(q))
+}
+
+/** How many recently closed groups are kept; older ones are dropped. */
+export const MAX_CLOSED = 20
+
+/**
+ * What to change when a group is closed: the entry to write, and the ids of entries to remove
+ * (an older closed entry with the same name, and anything beyond MAX_CLOSED).
+ */
+export function planClosed(existing: SavedGroup[], closed: SavedGroup): { write: SavedGroup; remove: string[] } {
+  const title = closed.title.trim().toLowerCase()
+  const previous = existing.filter((g) => g.closedAt !== undefined)
+  const replaced = title ? previous.filter((g) => g.title.trim().toLowerCase() === title).map((g) => g.id) : []
+  const kept = previous.filter((g) => !replaced.includes(g.id)).sort((a, b) => (b.closedAt ?? 0) - (a.closedAt ?? 0))
+  const overflow = kept.slice(MAX_CLOSED - 1).map((g) => g.id)
+  return { write: closed, remove: [...replaced, ...overflow] }
 }

@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-/* Chrome's own tab group colours, light and dark, so the popup matches the tab bar. */
+/* Chrome's own tab group colours, light and dark, so the panel matches the tab bar. */
 :root {
   color-scheme: light dark;
   --group-grey: #5f6368;
@@ -29,7 +29,7 @@
 }
 
 body {
-  @apply m-0 w-[400px] bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100;
+  @apply m-0 min-w-[280px] bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100;
   font-family:
     system-ui,
     -apple-system,

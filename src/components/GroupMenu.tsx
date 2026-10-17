@@ -5,17 +5,24 @@ import { GROUP_COLORS } from '../lib/tabs'
 
 interface Props {
   group: chrome.tabGroups.TabGroup
+  locked: boolean
+  onToggleLock: () => void
+  /** Called after a rename from here, so a lock can follow the new name. */
+  onRenamed: (from: string, to: string) => void
 }
 
 const colorName = (c: string) => t(`color${c[0].toUpperCase()}${c.slice(1)}` as MessageKey)
 
-/** Rename, recolour, collapse, save, ungroup or close one tab group. */
-export default function GroupMenu({ group }: Props) {
+/** Rename, recolour, lock, collapse, save, ungroup or close one tab group. */
+export default function GroupMenu({ group, locked, onToggleLock, onRenamed }: Props) {
   const [title, setTitle] = useState(group.title ?? '')
   const [saveResult, setSaveResult] = useState<'saved' | 'nothing' | null>(null)
 
   const saveTitle = () => {
-    if (title !== (group.title ?? '')) chrome.tabGroups.update(group.id, { title })
+    const from = group.title ?? ''
+    if (title === from) return
+    chrome.tabGroups.update(group.id, { title })
+    onRenamed(from, title)
   }
 
   const ungroup = async () => {
@@ -68,6 +75,16 @@ export default function GroupMenu({ group }: Props) {
         </div>
       </div>
       <div className="flex flex-wrap gap-1.5 pt-1">
+        <button
+          type="button"
+          onClick={onToggleLock}
+          disabled={!locked && !(group.title ?? '').trim()}
+          title={!locked && !(group.title ?? '').trim() ? t('lockNeedsName') : t('lockTitle')}
+          aria-pressed={locked}
+          className={`${button} disabled:opacity-40 ${locked ? 'bg-slate-900 text-white ring-slate-900 hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:ring-white' : ''}`}
+        >
+          {locked ? `🔒 ${t('unlockGroup')}` : t('lockGroup')}
+        </button>
         <button type="button" className={button} onClick={() => chrome.tabGroups.update(group.id, { collapsed: !group.collapsed })}>
           {group.collapsed ? t('expandInChrome') : t('collapseInChrome')}
         </button>

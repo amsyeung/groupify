@@ -16,7 +16,6 @@ function activate(tab: chrome.tabs.Tab) {
   if (tab.id === undefined) return
   chrome.tabs.update(tab.id, { active: true })
   chrome.windows.update(tab.windowId, { focused: true })
-  window.close()
 }
 
 export default function TabRow({ tab, query, selectable, selected, onToggle }: Props) {
@@ -27,7 +26,7 @@ export default function TabRow({ tab, query, selectable, selected, onToggle }: P
     <div
       draggable={tab.id !== undefined}
       onDragStart={(e) => tab.id !== undefined && setDraggedTab(e, tab.id)}
-      className="group flex items-center gap-2 rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800"
+      className={`group flex items-center gap-2 rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 ${tab.discarded ? 'opacity-60' : ''}`}
     >
       {selectable && (
         <input
@@ -56,6 +55,11 @@ export default function TabRow({ tab, query, selectable, selected, onToggle }: P
             </span>
           )}
         </span>
+        {tab.audible && (
+          <span className="shrink-0 text-[10px]" aria-hidden>
+            🔊
+          </span>
+        )}
         {tab.pinned && (
           <span title={t('pinned')} className="shrink-0 text-[10px] text-slate-400">
             📌
