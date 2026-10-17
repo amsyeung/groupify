@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { clusterPrompt, extractJson, HttpError, namePrompt, parseClusters, parseName, parseRequest } from '../server/ai-proxy/src/prompts'
-import { cloudLang, cloudTabs } from '../src/lib/cloud'
+import {
+  clusterPrompt,
+  extractJson,
+  hasBrokenText,
+  HttpError,
+  namePrompt,
+  parseClusters,
+  parseName,
+  parseRequest,
+} from '../server/ai-proxy/src/prompts'
+import { cloudLang, cloudTabs, stripBroken } from '../src/lib/cloud'
 
 describe('proxy requests', () => {
   it('keep titles and hostnames only, at most 40 tabs', () => {
@@ -26,6 +35,12 @@ describe('model answers', () => {
   it('find JSON after a think block or prose', () => {
     expect(extractJson('<think>hmm {"x":1}</think>Here: {"name": "新網站"} done')).toEqual({ name: '新網站' })
     expect(extractJson('no json')).toBeNull()
+  })
+  it('drop half-finished characters and spot answers worth retrying', () => {
+    expect(parseName('{"name": "Next.js �專案"}')).toBe('Next.js 專案')
+    expect(hasBrokenText({ response: 'Next.js �' })).toBe(true)
+    expect(hasBrokenText('{"name":"網站開發"}')).toBe(false)
+    expect(stripBroken('Next.js �專案')).toBe('Next.js 專案')
   })
   it('clean names', () => {
     expect(parseName('{"name": "「新專案」。"}')).toBe('新專案')

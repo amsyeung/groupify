@@ -89,9 +89,13 @@ export function extractJson(text: string): unknown {
   }
 }
 
+/** True when the answer has a character the model didn't finish (U+FFFD), so it's worth asking again. */
+export const hasBrokenText = (answer: unknown) => /\uFFFD/.test(typeof answer === 'string' ? answer : JSON.stringify(answer ?? ''))
+
 export function cleanName(raw: unknown): string {
   if (typeof raw !== 'string') return ''
   return raw
+    .replace(/[\uFFFD\uD800-\uDFFF]/g, '')
     .replace(/^["'“”「」『』\s]+|["'“”「」『』.。!！\s]+$/g, '')
     .replace(/\s+/g, ' ')
     .slice(0, MAX_NAME)

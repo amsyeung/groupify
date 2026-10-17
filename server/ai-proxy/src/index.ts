@@ -1,7 +1,7 @@
 // Groupify's shared AI proxy: a Cloudflare Worker that names tab groups and sorts tabs by task
 // with Workers AI, so the extension needs no API key. Text is never logged or stored.
 
-import { clusterPrompt, HttpError, namePrompt, parseClusters, parseName, parseRequest } from './prompts'
+import { clusterPrompt, hasBrokenText, HttpError, namePrompt, parseClusters, parseName, parseRequest } from './prompts'
 
 interface Env {
   AI: { run(model: string, input: object): Promise<{ response?: unknown }> }
@@ -48,11 +48,12 @@ export default {
       if (!(await env.LIMITER.limit({ key: ip })).success) throw new HttpError(429, 'rate_limited', 'Too many requests, try again in a minute')
 
       const naming = url.pathname === '/v1/name'
+      const input = { messages: naming ? namePrompt(req) : clusterPrompt(req), max_tokens: naming ? 60 : 600, temperature: 0.2 }
       let answer: unknown
       try {
-        answer = (
-          await env.AI.run(env.MODEL, { messages: naming ? namePrompt(req) : clusterPrompt(req), max_tokens: naming ? 60 : 600, temperature: 0.2 })
-        ).response
+        answer = (await env.AI.run(env.MODEL, input)).response
+        // Qwen now and then cuts a Chinese character in half; one retry usually fixes it.
+        if (hasBrokenText(answer)) answer = (await env.AI.run(env.MODEL, input)).response
       } catch {
         // Includes the free daily allocation running out: the extension falls back to naming by date.
         throw new HttpError(503, 'ai_unavailable', 'The AI model is unavailable right now')
