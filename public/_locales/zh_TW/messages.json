@@ -57,6 +57,9 @@
       }
     }
   },
+  "closeDuplicatesOne": {
+    "message": "關閉 1 個重複分頁"
+  },
   "closeDuplicatesTitle": {
     "message": "關閉與其他分頁相同的頁面，每個頁面保留一個"
   },
@@ -74,6 +77,9 @@
       }
     }
   },
+  "closedTabsOne": {
+    "message": "已關閉 1 個分頁"
+  },
   "groupedTabs": {
     "message": "已建立 $VALUE$ 個群組",
     "placeholders": {
@@ -81,6 +87,9 @@
         "content": "$1"
       }
     }
+  },
+  "groupedTabsOne": {
+    "message": "已建立 1 個群組"
   },
   "noResults": {
     "message": "沒有分頁符合「$VALUE$」",
@@ -118,6 +127,9 @@
         "content": "$1"
       }
     }
+  },
+  "closeGroupConfirmOne": {
+    "message": "關閉 1 個分頁？"
   },
   "closeTab": {
     "message": "關閉分頁"

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { saveGroup } from '../hooks/useSavedGroups'
-import { t, type MessageKey } from '../lib/i18n'
+import { t, tn, type MessageKey } from '../lib/i18n'
 import { GROUP_COLORS } from '../lib/tabs'
 
 interface Props {
@@ -86,7 +86,7 @@ export default function GroupMenu({ group, tabCount }: Props) {
           onBlur={() => setConfirmClose(false)}
           className={`${button} ${confirmClose ? 'bg-red-600 text-white ring-red-600 hover:bg-red-700' : 'text-red-600 dark:text-red-400'}`}
         >
-          {confirmClose ? t('closeGroupConfirm', tabCount) : t('closeGroup')}
+          {confirmClose ? tn('closeGroupConfirm', tabCount) : t('closeGroup')}
         </button>
       </div>
     </div>

@@ -5,7 +5,7 @@ import SavedSection from './components/SavedSection'
 import TabRow from './components/TabRow'
 import { deleteSaved, openSaved, restoreDeleted, useSavedGroups } from './hooks/useSavedGroups'
 import { useWindowTabs } from './hooks/useWindowTabs'
-import { t } from './lib/i18n'
+import { t, tn } from './lib/i18n'
 import { savedMatchesQuery, type ListedGroup } from './lib/saved'
 import { findDuplicates, groupable, matchesQuery, pickColor, planGroupBySite, tabUrl } from './lib/tabs'
 
@@ -102,7 +102,7 @@ export default function App() {
     }
     const moved = sitePlan.flatMap((plan) => plan.tabIds)
     setToast({
-      message: t('groupedTabs', sitePlan.length),
+      message: tn('groupedTabs', sitePlan.length),
       undo: () => chrome.tabs.ungroup(asTabIds(moved)).catch(() => {}),
     })
   }
@@ -111,7 +111,7 @@ export default function App() {
     const closing = tabs.filter((tab) => duplicates.includes(tab.id!))
     await chrome.tabs.remove(duplicates)
     setToast({
-      message: t('closedTabs', closing.length),
+      message: tn('closedTabs', closing.length),
       undo: () => {
         for (const tab of closing) chrome.tabs.create({ url: tabUrl(tab), index: tab.index, pinned: tab.pinned, active: false })
       },
@@ -219,7 +219,7 @@ export default function App() {
             {t('groupBySite')}
           </button>
           <button type="button" onClick={closeDuplicates} disabled={!duplicates.length} title={t('closeDuplicatesTitle')} className={toolButton}>
-            {duplicates.length ? t('closeDuplicates', duplicates.length) : t('noDuplicates')}
+            {duplicates.length ? tn('closeDuplicates', duplicates.length) : t('noDuplicates')}
           </button>
         </div>
         {groups.length > 0 && (

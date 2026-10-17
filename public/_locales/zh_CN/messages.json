@@ -57,6 +57,9 @@
       }
     }
   },
+  "closeDuplicatesOne": {
+    "message": "关闭 1 个重复标签页"
+  },
   "closeDuplicatesTitle": {
     "message": "关闭与其他标签页相同的页面，每个页面保留一个"
   },
@@ -74,6 +77,9 @@
       }
     }
   },
+  "closedTabsOne": {
+    "message": "已关闭 1 个标签页"
+  },
   "groupedTabs": {
     "message": "已创建 $VALUE$ 个组",
     "placeholders": {
@@ -81,6 +87,9 @@
         "content": "$1"
       }
     }
+  },
+  "groupedTabsOne": {
+    "message": "已创建 1 个组"
   },
   "noResults": {
     "message": "没有标签页匹配“$VALUE$”",
@@ -118,6 +127,9 @@
         "content": "$1"
       }
     }
+  },
+  "closeGroupConfirmOne": {
+    "message": "关闭 1 个标签页？"
   },
   "closeTab": {
     "message": "关闭标签页"
