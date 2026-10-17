@@ -58,7 +58,9 @@ export async function reclassify(
   tabs: chrome.tabs.Tab[],
   groups: chrome.tabGroups.TabGroup[],
   locks: string[],
-  ai: AiChoice
+  ai: AiChoice,
+  /** Called once the plan is ready and just before any tab moves, e.g. to save the layout for history. */
+  beforeChange?: () => Promise<unknown>
 ): Promise<ReclassifyResult | null> {
   const movable = movableTabs(tabs, groups, locks)
   const { buckets, usedFallback } = await planFor(mode, movable, ai)
@@ -75,6 +77,7 @@ export async function reclassify(
     .filter((g) => g.tabIds.length)
   const movableIds = movable.map((tab) => tab.id!)
 
+  await beforeChange?.()
   const grouped = movable.filter((tab) => tab.groupId !== -1).map((tab) => tab.id!)
   if (grouped.length) await chrome.tabs.ungroup(grouped as TabIds)
   const used = groups.filter((g) => !before.some((b) => b.title === (g.title ?? '') && b.color === g.color)).map((g) => g.color as string)

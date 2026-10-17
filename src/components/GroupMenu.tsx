@@ -1,6 +1,7 @@
 import { ArrowsPointingInIcon, ArrowsPointingOutIcon, BookmarkIcon, LinkSlashIcon, LockOpenIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { BookmarkIcon as BookmarkSolid, LockClosedIcon as LockClosedSolid } from '@heroicons/react/24/solid'
 import { useState, type ReactNode } from 'react'
+import { recordHistory } from '../hooks/useHistory'
 import { saveGroup } from '../hooks/useSavedGroups'
 import { t, type MessageKey } from '../lib/i18n'
 import { GROUP_COLORS } from '../lib/tabs'
@@ -66,7 +67,9 @@ export default function GroupMenu({ group, locked, onToggleLock, onRenamed }: Pr
   const ungroup = async () => {
     const tabs = await chrome.tabs.query({ groupId: group.id })
     const ids = tabs.map((tab) => tab.id).filter((id): id is number => id !== undefined)
-    if (ids.length) await chrome.tabs.ungroup(ids as [number, ...number[]])
+    if (!ids.length) return
+    await recordHistory('histUngroup', group.title || undefined)
+    await chrome.tabs.ungroup(ids as [number, ...number[]])
   }
 
   const save = async () => {

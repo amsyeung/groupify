@@ -463,5 +463,88 @@
   },
   "optSource": {
     "message": "Source code"
+  },
+  "undoLast": {
+    "message": "Undo last change"
+  },
+  "historyOpen": {
+    "message": "History ($VALUE$)",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "history": {
+    "message": "History"
+  },
+  "historyHint": {
+    "message": "Changes made in this window, kept until you close the browser"
+  },
+  "historyEmpty": {
+    "message": "Nothing yet. Every change Groupify makes to your groups is saved here, so you can go back more than one step."
+  },
+  "historyBefore": {
+    "message": "Before: $VALUE$",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "historyGroups": {
+    "message": "$VALUE$ groups",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "restore": {
+    "message": "Restore"
+  },
+  "restoreTitle": {
+    "message": "Put every group back the way it was before this change. Tabs opened later stay ungrouped."
+  },
+  "restored": {
+    "message": "Groups restored"
+  },
+  "ungroupAll": {
+    "message": "Ungroup all"
+  },
+  "ungroupAllTitle": {
+    "message": "Remove every group in this window. Tabs stay open, and History can bring the groups back."
+  },
+  "ungroupedAll": {
+    "message": "Ungrouped $VALUE$ groups",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "ungroupedAllOne": {
+    "message": "Ungrouped 1 group"
+  },
+  "histMove": {
+    "message": "Move a tab"
+  },
+  "histGroup": {
+    "message": "Make a group"
+  },
+  "histAddTo": {
+    "message": "Add to group"
+  },
+  "histReclassify": {
+    "message": "Reclassify"
+  },
+  "histUngroupAll": {
+    "message": "Ungroup all"
+  },
+  "histUngroup": {
+    "message": "Ungroup"
+  },
+  "histRestore": {
+    "message": "Restore"
   }
 }
