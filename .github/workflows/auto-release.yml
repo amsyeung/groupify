@@ -1,0 +1,119 @@
+name: Auto Release
+
+# On every push to main:
+#   1. release-it bumps the version from the conventional commits, updates
+#      CHANGELOG.md and manifest.json, then commits and tags (skipped when there's
+#      nothing releasable, e.g. only docs/chore commits)
+#   2. build the zip and attach it to a GitHub release
+#   3. upload to the Chrome Web Store and submit it for review (only once the
+#      repository variables from docs/PUBLISHING.md are set)
+# Everything runs in this one workflow because tags pushed with GITHUB_TOKEN don't
+# trigger other workflows.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Quoted on purpose: an unquoted value containing ": " is invalid YAML.
+    if: "!startsWith(github.event.head_commit.message, 'chore: release v')"
+    runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.bump.outputs.released }}
+      version: ${{ steps.bump.outputs.version }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js v24 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version, update changelog, tag & push
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          before=$(node -p "require('./package.json').version")
+          pnpm release --ci
+          after=$(node -p "require('./package.json').version")
+          echo "version=$after" >> "$GITHUB_OUTPUT"
+          if [ "$before" != "$after" ]; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            echo "Released v$after"
+          else
+            echo "No releasable commits since v$before; nothing to publish."
+          fi
+
+  github-release:
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the release tag
+        uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.release.outputs.version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js v24 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Build and zip
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build
+          cd dist && zip -qr ../groupify-v${{ needs.release.outputs.version }}.zip .
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.release.outputs.version }}
+          name: Release v${{ needs.release.outputs.version }}
+          files: groupify-v${{ needs.release.outputs.version }}.zip
+          generate_release_notes: true
+
+  chrome-web-store:
+    needs: [release, github-release]
+    # Skipped (not failed) until the store credentials are configured.
+    if: needs.release.outputs.released == 'true' && vars.CWS_EXTENSION_ID != ''
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/cws-publish.yml
+    with:
+      ref: v${{ needs.release.outputs.version }}
+      mode: publish

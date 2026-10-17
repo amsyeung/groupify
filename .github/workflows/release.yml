@@ -1,0 +1,61 @@
+name: Build & Create Release with Dist Zip
+
+# Manual fallback: rebuild a tag and (re)attach its zip to a GitHub release.
+# Normal releases are created by auto-release.yml.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      target_ref:
+        description: Target git tag/branch to build
+        required: true
+        default: main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    env:
+      # On a manual run github.ref_name is the branch the run started from, not the input.
+      TARGET: ${{ github.event.inputs.target_ref || github.ref_name }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js v24 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build extension (generate dist/)
+        run: pnpm run build
+
+      - name: Zip dist folder
+        run: |
+          cd dist
+          zip -qr "../groupify-$TARGET.zip" .
+
+      - name: Create GitHub Release & Upload zip asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TARGET }}
+          files: groupify-${{ env.TARGET }}.zip
+          name: Release ${{ env.TARGET }}
+          generate_release_notes: true
+          overwrite: true
