@@ -17,14 +17,11 @@
   "ungrouped": {
     "message": "Ungrouped"
   },
-  "newGroup": {
-    "message": "New group"
-  },
   "untitledGroup": {
     "message": "Untitled group"
   },
   "newGroupPlaceholder": {
-    "message": "New group name…"
+    "message": "Group name (leave blank to name it for you)"
   },
   "groupSelected": {
     "message": "Group selected ($VALUE$)",
@@ -33,9 +30,6 @@
         "content": "$1"
       }
     }
-  },
-  "groupAll": {
-    "message": "Group all"
   },
   "selectAll": {
     "message": "Select all"
@@ -155,6 +149,39 @@
   },
   "colorOrange": {
     "message": "Orange"
+  },
+  "groupSeries": {
+    "message": "Group as a series ($VALUE$)",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupSeriesTitle": {
+    "message": "Put every ungrouped tab into one new group and name it for you"
+  },
+  "addToCurrent": {
+    "message": "Add to “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "addToCurrentTitle": {
+    "message": "Add the ungrouped tabs to the group you are working in"
+  },
+  "addedToGroup": {
+    "message": "Added to “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "madeGroup": {
+    "message": "Made a new group"
   },
   "saved": {
     "message": "Saved"

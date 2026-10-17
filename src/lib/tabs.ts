@@ -13,9 +13,10 @@ export interface TabLike {
   pinned: boolean
   active: boolean
   groupId: number
+  lastAccessed?: number
 }
 
-export const tabUrl = (tab: TabLike) => tab.url || tab.pendingUrl || ''
+export const tabUrl = (tab: Pick<TabLike, 'url' | 'pendingUrl'>) => tab.url || tab.pendingUrl || ''
 
 /** "www.github.com" → "github.com"; '' for URLs without a web host (chrome://, file://, about:blank…). */
 export function siteOf(url: string): string {
@@ -118,4 +119,18 @@ export function findDuplicates(tabs: TabLike[]): number[] {
     close.push(...rest.map((t) => t.id!))
   }
   return close
+}
+
+/**
+ * The group the user is working in: the active tab's group, otherwise the group of the grouped
+ * tab they used most recently. Null when there is no such group.
+ */
+export function currentGroupId(tabs: TabLike[]): number | null {
+  const active = tabs.find((tab) => tab.active)
+  if (active && active.groupId !== -1) return active.groupId
+  let latest: TabLike | undefined
+  for (const tab of tabs) {
+    if (tab.groupId !== -1 && tab.lastAccessed !== undefined && tab.lastAccessed > (latest?.lastAccessed ?? -Infinity)) latest = tab
+  }
+  return latest ? latest.groupId : null
 }

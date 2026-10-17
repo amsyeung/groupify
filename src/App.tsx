@@ -6,8 +6,9 @@ import TabRow from './components/TabRow'
 import { deleteSaved, openSaved, restoreDeleted, useSavedGroups } from './hooks/useSavedGroups'
 import { useWindowTabs } from './hooks/useWindowTabs'
 import { t, tn } from './lib/i18n'
+import { dateName, suggestName } from './lib/naming'
 import { savedMatchesQuery, type ListedGroup } from './lib/saved'
-import { findDuplicates, groupable, matchesQuery, pickColor, planGroupBySite, tabUrl } from './lib/tabs'
+import { currentGroupId, findDuplicates, groupable, matchesQuery, pickColor, planGroupBySite, tabUrl } from './lib/tabs'
 
 const UNGROUPED = 'ungrouped'
 const SAVED = 'saved'
@@ -39,6 +40,7 @@ export default function App() {
   const duplicates = useMemo(() => findDuplicates(tabs), [tabs])
   const sitePlan = useMemo(() => planGroupBySite(tabs, groups), [tabs, groups])
   const visibleSaved = useMemo(() => saved.filter((g) => savedMatchesQuery(g, query)), [saved, query])
+  const currentGroup = groups.find((g) => g.id === currentGroupId(tabs))
 
   useEffect(() => {
     const start = () => setDragging(true)
@@ -79,12 +81,35 @@ export default function App() {
     else await chrome.tabs.group({ tabIds: tabId, groupId })
   }
 
+  /**
+   * Groups the tabs under the typed name. Without one, the group starts out named after today's
+   * date and is renamed when the on-device model suggests something better.
+   */
   const createGroup = async (ids: number[]) => {
     if (!ids.length) return
+    const typed = newGroupName.trim()
+    const placeholder = typed || dateName()
     const groupId = await chrome.tabs.group({ tabIds: asTabIds(ids) })
-    await chrome.tabGroups.update(groupId, { title: newGroupName.trim() || t('newGroup'), color: pickColor(groups.map((g) => g.color)) })
+    await chrome.tabGroups.update(groupId, { title: placeholder, color: pickColor(groups.map((g) => g.color)) })
     setNewGroupName('')
     setSelected(new Set())
+    setToast({ message: t('madeGroup'), undo: () => chrome.tabs.ungroup(asTabIds(ids)).catch(() => {}) })
+    if (typed) return
+    const suggested = await suggestName(tabs.filter((tab) => ids.includes(tab.id!)))
+    if (!suggested) return
+    // Keep a name the user has typed in the meantime.
+    const group = await chrome.tabGroups.get(groupId).catch(() => null)
+    if (group?.title === placeholder) await chrome.tabGroups.update(groupId, { title: suggested })
+  }
+
+  const addToCurrentGroup = async () => {
+    if (!currentGroup || !selectable.length) return
+    const ids = selectable.map((tab) => tab.id!)
+    await chrome.tabs.group({ tabIds: asTabIds(ids), groupId: currentGroup.id })
+    setToast({
+      message: t('addedToGroup', currentGroup.title || t('untitledGroup')),
+      undo: () => chrome.tabs.ungroup(asTabIds(ids)).catch(() => {}),
+    })
   }
 
   const groupBySite = async () => {
@@ -150,8 +175,8 @@ export default function App() {
     }
   }
 
-  const toolButton =
-    'rounded-md px-2.5 py-1.5 text-[11px] font-semibold ring-1 ring-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white dark:bg-slate-900 dark:ring-slate-700 dark:hover:bg-slate-800 dark:disabled:hover:bg-slate-900'
+  const secondaryLink =
+    'underline-offset-2 hover:text-slate-900 hover:underline disabled:opacity-50 disabled:hover:no-underline disabled:hover:text-inherit dark:hover:text-white'
 
   const ungroupedToolbar = selectable.length > 0 && (
     <div className="mx-2 mb-2 space-y-2 rounded-md bg-slate-50 p-2 dark:bg-slate-800/60">
@@ -182,16 +207,9 @@ export default function App() {
           type="button"
           disabled={selectedVisible.length === 0}
           onClick={() => createGroup(selectedVisible)}
-          className="flex-1 rounded bg-slate-900 py-1.5 text-[11px] font-semibold text-white hover:bg-slate-700 disabled:opacity-30 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+          className="flex-1 rounded bg-white py-1.5 text-[11px] font-semibold ring-1 ring-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white dark:bg-slate-900 dark:ring-slate-700 dark:hover:bg-slate-800"
         >
           {t('groupSelected', selectedVisible.length)}
-        </button>
-        <button
-          type="button"
-          onClick={() => createGroup(selectable.map((tab) => tab.id!))}
-          className="flex-1 rounded bg-blue-600 py-1.5 text-[11px] font-semibold text-white hover:bg-blue-700"
-        >
-          {t('groupAll')}
         </button>
       </div>
     </div>
@@ -215,10 +233,32 @@ export default function App() {
           className="w-full rounded-lg bg-white px-3 py-2.5 text-sm font-medium shadow-sm ring-1 ring-slate-200 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-900 dark:bg-slate-900 dark:ring-slate-700 dark:focus:ring-slate-300"
         />
         <div className="flex gap-2">
-          <button type="button" onClick={groupBySite} title={t('groupBySiteTitle')} className={toolButton}>
+          <button
+            type="button"
+            onClick={() => createGroup(selectable.map((tab) => tab.id!))}
+            disabled={!selectable.length}
+            title={t('groupSeriesTitle')}
+            className="flex-1 rounded-md bg-slate-900 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-slate-900 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 dark:disabled:hover:bg-white"
+          >
+            {t('groupSeries', selectable.length)}
+          </button>
+          {currentGroup && selectable.length > 0 && (
+            <button
+              type="button"
+              onClick={addToCurrentGroup}
+              title={t('addToCurrentTitle')}
+              className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-semibold shadow-sm ring-1 ring-slate-200 hover:bg-slate-100 dark:bg-slate-900 dark:ring-slate-700 dark:hover:bg-slate-800"
+            >
+              <span aria-hidden className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: `var(--group-${currentGroup.color})` }} />
+              <span className="truncate">{t('addToCurrent', currentGroup.title || t('untitledGroup'))}</span>
+            </button>
+          )}
+        </div>
+        <div className="flex gap-3 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          <button type="button" onClick={groupBySite} title={t('groupBySiteTitle')} className={secondaryLink}>
             {t('groupBySite')}
           </button>
-          <button type="button" onClick={closeDuplicates} disabled={!duplicates.length} title={t('closeDuplicatesTitle')} className={toolButton}>
+          <button type="button" onClick={closeDuplicates} disabled={!duplicates.length} title={t('closeDuplicatesTitle')} className={secondaryLink}>
             {duplicates.length ? tn('closeDuplicates', duplicates.length) : t('noDuplicates')}
           </button>
         </div>
