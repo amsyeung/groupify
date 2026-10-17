@@ -310,7 +310,7 @@
     "message": "Nothing to sort: no tabs fit together"
   },
   "projectNoAi": {
-    "message": "On-device AI isn’t available, so tabs were grouped by when they were opened"
+    "message": "AI isn’t available right now, so tabs were grouped by when they were opened"
   },
   "lockGroup": {
     "message": "Lock"
@@ -399,5 +399,14 @@
   },
   "openShortcuts": {
     "message": "Change shortcut"
+  },
+  "optCloudAi": {
+    "message": "Use Groupify’s cloud AI when on-device AI isn’t available"
+  },
+  "optCloudAiDesc": {
+    "message": "Sends the titles and site names of the tabs being grouped (never full addresses) to Groupify’s server on Cloudflare, which asks an AI model and keeps nothing. Free, shared by everyone, with a daily limit: when it runs out, groups are named after the date."
+  },
+  "projectNoAiHint": {
+    "message": "No AI available, so tabs were grouped by when they were opened. You can turn on cloud AI in Settings."
   }
 }

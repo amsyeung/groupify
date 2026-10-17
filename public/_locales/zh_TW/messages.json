@@ -310,7 +310,7 @@
     "message": "沒有可以分在一起的分頁"
   },
   "projectNoAi": {
-    "message": "沒有本機 AI，已按開啟時間分組"
+    "message": "AI 暫時無法使用，已按開啟時間分組"
   },
   "lockGroup": {
     "message": "鎖定"
@@ -399,5 +399,14 @@
   },
   "openShortcuts": {
     "message": "更改快捷鍵"
+  },
+  "optCloudAi": {
+    "message": "沒有本機 AI 時，使用 Groupify 的雲端 AI"
+  },
+  "optCloudAiDesc": {
+    "message": "把要分組的分頁標題和網站名稱（不含完整網址）傳到 Groupify 在 Cloudflare 上的伺服器，由 AI 模型處理，伺服器不會保留任何資料。免費、所有人共用，每日有上限；用完時改以日期命名。"
+  },
+  "projectNoAiHint": {
+    "message": "沒有可用的 AI，已按開啟時間分組。可在「設定」開啟雲端 AI。"
   }
 }

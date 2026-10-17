@@ -310,7 +310,7 @@
     "message": "没有可以分在一起的标签页"
   },
   "projectNoAi": {
-    "message": "没有本机 AI，已按打开时间分组"
+    "message": "AI 暂时无法使用，已按打开时间分组"
   },
   "lockGroup": {
     "message": "锁定"
@@ -399,5 +399,14 @@
   },
   "openShortcuts": {
     "message": "更改快捷键"
+  },
+  "optCloudAi": {
+    "message": "没有本机 AI 时，使用 Groupify 的云端 AI"
+  },
+  "optCloudAiDesc": {
+    "message": "把要分组的标签页标题和网站名称（不含完整网址）传到 Groupify 在 Cloudflare 上的服务器，由 AI 模型处理，服务器不会保留任何数据。免费、所有人共用，每日有上限；用完时改以日期命名。"
+  },
+  "projectNoAiHint": {
+    "message": "没有可用的 AI，已按打开时间分组。可在“设置”开启云端 AI。"
   }
 }

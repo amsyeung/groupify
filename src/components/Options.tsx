@@ -74,6 +74,12 @@ export default function Options() {
           </p>
         )}
         <Toggle
+          label={t('optCloudAi')}
+          description={t('optCloudAiDesc')}
+          checked={settings.cloudAi}
+          onChange={(cloudAi) => save({ ...settings, cloudAi })}
+        />
+        <Toggle
           label={t('optRememberClosed')}
           description={t('optRememberClosedDesc')}
           checked={settings.rememberClosed}

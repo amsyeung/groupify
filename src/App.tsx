@@ -54,6 +54,7 @@ export default function App() {
   const visibleSaved = useMemo(() => saved.filter((g) => savedMatchesQuery(g, query)), [saved, query])
   const keptGroups = visibleSaved.filter((g) => g.closedAt === undefined)
   const closedGroups = visibleSaved.filter((g) => g.closedAt !== undefined).sort((a, b) => (b.closedAt ?? 0) - (a.closedAt ?? 0))
+  const ai = { onDevice: settings.useAi, cloud: settings.cloudAi }
   const currentId = currentGroupId(tabs)
   const currentGroup = groups.find((g) => g.id === currentId)
 
@@ -110,8 +111,11 @@ export default function App() {
     setNewGroupName('')
     setSelected(new Set())
     setToast({ message: t('madeGroup'), undo: () => chrome.tabs.ungroup(asTabIds(ids)).catch(() => {}) })
-    if (typed || !settings.useAi) return
-    const suggested = await suggestName(tabs.filter((tab) => ids.includes(tab.id!)))
+    if (typed) return
+    const suggested = await suggestName(
+      tabs.filter((tab) => ids.includes(tab.id!)),
+      ai
+    )
     if (!suggested) return
     // Keep a name the user has typed in the meantime.
     const group = await chrome.tabGroups.get(groupId).catch(() => null)
@@ -132,10 +136,11 @@ export default function App() {
     setBusy(true)
     setToast({ message: t('reclassifying'), sticky: true })
     try {
-      const result = await reclassify(mode, tabs, groups, locks, settings.useAi)
+      const result = await reclassify(mode, tabs, groups, locks, ai)
       if (!result) return setToast({ message: t('reclassifyNothing') })
       setOpenIds(null)
-      setToast({ message: result.usedFallback ? t('projectNoAi') : tn('reclassified', result.groups), undo: () => result.undo().catch(() => {}) })
+      const fallback = settings.cloudAi ? t('projectNoAi') : t('projectNoAiHint')
+      setToast({ message: result.usedFallback ? fallback : tn('reclassified', result.groups), undo: () => result.undo().catch(() => {}) })
     } catch {
       setToast(null)
     } finally {
