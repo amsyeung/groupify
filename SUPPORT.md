@@ -1,16 +1,29 @@
-# ❓ Frequently Asked Questions
+# Frequently asked questions
 
 ## How do I move a tab into a group?
-You have two ways! You can drag a tab and drop it directly onto a Group Section in the list, or drop it onto one of the Quick-Nav pills at the top of the popup for instant moving without scrolling.
 
-## Can I change the color of a new group?
-The extension automatically picks a "random and unique" color for every new group to ensure your sidebar stays organized. You can always change this color later by right-clicking the group header in Chrome’s native tab bar.
+Drag the tab and drop it on a group in the list, or on one of the group shortcuts at the top of the popup so you don't have to scroll.
 
-## Does this extension see my browsing history?
-No. While the extension requires the tabs permission to show you your open pages, it does not record, track, or store your browsing history. Everything happens locally in your browser.
+## How do I open Groupify from the keyboard?
 
-## What happens if I have many groups?
-The Quick-Nav bar at the top is designed to wrap up to multiple lines, ensuring all your groups are accessible without covering the entire screen. You can click any pill to instantly scroll to that group.
+Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>. To use another shortcut, go to `chrome://extensions/shortcuts`.
 
-## Does "Close Tab" delete my data?
-No, the "X" button simply closes the browser tab. If you have unsaved work on that website, the browser may prompt you to confirm before closing, just like clicking the standard Chrome close button.
+## Can I change a group's color or name?
+
+Yes. Click the ⋯ button on the group to rename it, pick a color, collapse it in the tab bar, ungroup it or close it.
+
+## What does "Group by site" do?
+
+It looks at the tabs that aren't in a group yet. Every site with two or more of them gets its own group named after the site, such as `github.com`. If a group with that name already exists, the tabs join it instead. Pinned tabs are left alone, because Chrome doesn't allow pinned tabs in groups.
+
+## Which tabs count as duplicates?
+
+Tabs with the same address, ignoring the part after `#`. One of each is kept: the tab you're on, otherwise a pinned one, otherwise the leftmost. Click **Undo** in the message that appears to reopen the closed tabs.
+
+## Does Groupify see my browsing history?
+
+No. It reads the tabs that are open right now, only to show them to you. It doesn't store anything or send anything anywhere.
+
+## Why do I only see the tabs of one window?
+
+Groupify shows the window you opened it from, because tab groups belong to a single window.
