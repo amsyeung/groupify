@@ -16,6 +16,21 @@ import { savedMatchesQuery, type ListedGroup } from './lib/saved'
 import { renameLock, toggleLock } from './lib/settings'
 import { currentGroupId, findDuplicates, groupable, matchesQuery, pickColor, tabUrl } from './lib/tabs'
 
+/**
+ * Opens the settings page in a tab, or switches to it if it's already open. Not
+ * chrome.runtime.openOptionsPage(): from a side panel it fails with "Could not create an options page".
+ */
+async function openSettings() {
+  const url = chrome.runtime.getURL('options.html')
+  const [open] = await chrome.tabs.query({ url })
+  if (open?.id !== undefined) {
+    await chrome.tabs.update(open.id, { active: true })
+    await chrome.windows.update(open.windowId, { focused: true })
+  } else {
+    await chrome.tabs.create({ url })
+  }
+}
+
 const UNGROUPED = 'ungrouped'
 const SAVED = 'saved'
 const CLOSED = 'closed'
@@ -262,7 +277,7 @@ export default function App() {
                   role="menuitem"
                   onClick={() => {
                     close()
-                    chrome.runtime.openOptionsPage()
+                    openSettings()
                   }}
                   className={menuItem}
                 >
