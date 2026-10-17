@@ -1,0 +1,158 @@
+{
+  "appName": {
+    "message": "Groupify"
+  },
+  "appDescription": {
+    "message": "Search, group and tidy your tabs: group by site, close duplicates and manage tab groups from one popup."
+  },
+  "commandOpen": {
+    "message": "Open Groupify"
+  },
+  "searchPlaceholder": {
+    "message": "Search tabs by title or URL…"
+  },
+  "searchHint": {
+    "message": "↑ ↓ to move, Enter to open, Esc to clear"
+  },
+  "ungrouped": {
+    "message": "Ungrouped"
+  },
+  "newGroup": {
+    "message": "New group"
+  },
+  "untitledGroup": {
+    "message": "Untitled group"
+  },
+  "newGroupPlaceholder": {
+    "message": "New group name…"
+  },
+  "groupSelected": {
+    "message": "Group selected ($VALUE$)",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupAll": {
+    "message": "Group all"
+  },
+  "selectAll": {
+    "message": "Select all"
+  },
+  "groupBySite": {
+    "message": "Group by site"
+  },
+  "groupBySiteTitle": {
+    "message": "Put ungrouped tabs from the same site into one group each"
+  },
+  "groupBySiteNone": {
+    "message": "No site has two or more ungrouped tabs"
+  },
+  "closeDuplicates": {
+    "message": "Close $VALUE$ duplicates",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "closeDuplicatesTitle": {
+    "message": "Close tabs that show the same page as another tab, keeping one of each"
+  },
+  "noDuplicates": {
+    "message": "No duplicates"
+  },
+  "undo": {
+    "message": "Undo"
+  },
+  "closedTabs": {
+    "message": "Closed $VALUE$ tabs",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupedTabs": {
+    "message": "Made $VALUE$ groups",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "noResults": {
+    "message": "No tabs match “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupActions": {
+    "message": "Group actions"
+  },
+  "rename": {
+    "message": "Name"
+  },
+  "color": {
+    "message": "Color"
+  },
+  "collapseInChrome": {
+    "message": "Collapse in tab bar"
+  },
+  "expandInChrome": {
+    "message": "Expand in tab bar"
+  },
+  "ungroup": {
+    "message": "Ungroup"
+  },
+  "closeGroup": {
+    "message": "Close group"
+  },
+  "closeGroupConfirm": {
+    "message": "Close $VALUE$ tabs?",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "closeTab": {
+    "message": "Close tab"
+  },
+  "pinned": {
+    "message": "Pinned"
+  },
+  "dropHere": {
+    "message": "Drop a tab here"
+  },
+  "colorGrey": {
+    "message": "Grey"
+  },
+  "colorBlue": {
+    "message": "Blue"
+  },
+  "colorRed": {
+    "message": "Red"
+  },
+  "colorYellow": {
+    "message": "Yellow"
+  },
+  "colorGreen": {
+    "message": "Green"
+  },
+  "colorPink": {
+    "message": "Pink"
+  },
+  "colorPurple": {
+    "message": "Purple"
+  },
+  "colorCyan": {
+    "message": "Cyan"
+  },
+  "colorOrange": {
+    "message": "Orange"
+  }
+}

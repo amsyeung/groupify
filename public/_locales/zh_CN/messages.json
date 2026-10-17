@@ -1,0 +1,158 @@
+{
+  "appName": {
+    "message": "Groupify"
+  },
+  "appDescription": {
+    "message": "搜索、分组和整理标签页：一键按网站分组、关闭重复标签页，在同一个窗口管理所有标签页组。"
+  },
+  "commandOpen": {
+    "message": "打开 Groupify"
+  },
+  "searchPlaceholder": {
+    "message": "按标题或网址搜索标签页…"
+  },
+  "searchHint": {
+    "message": "↑ ↓ 移动，Enter 打开，Esc 清除"
+  },
+  "ungrouped": {
+    "message": "未分组"
+  },
+  "newGroup": {
+    "message": "新组"
+  },
+  "untitledGroup": {
+    "message": "未命名组"
+  },
+  "newGroupPlaceholder": {
+    "message": "新组名称…"
+  },
+  "groupSelected": {
+    "message": "将所选标签页分组（$VALUE$）",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupAll": {
+    "message": "全部分组"
+  },
+  "selectAll": {
+    "message": "全选"
+  },
+  "groupBySite": {
+    "message": "按网站分组"
+  },
+  "groupBySiteTitle": {
+    "message": "把同一网站的未分组标签页各自放进一个组"
+  },
+  "groupBySiteNone": {
+    "message": "没有网站有两个或以上未分组的标签页"
+  },
+  "closeDuplicates": {
+    "message": "关闭 $VALUE$ 个重复标签页",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "closeDuplicatesTitle": {
+    "message": "关闭与其他标签页相同的页面，每个页面保留一个"
+  },
+  "noDuplicates": {
+    "message": "没有重复标签页"
+  },
+  "undo": {
+    "message": "撤销"
+  },
+  "closedTabs": {
+    "message": "已关闭 $VALUE$ 个标签页",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupedTabs": {
+    "message": "已创建 $VALUE$ 个组",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "noResults": {
+    "message": "没有标签页匹配“$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupActions": {
+    "message": "组操作"
+  },
+  "rename": {
+    "message": "名称"
+  },
+  "color": {
+    "message": "颜色"
+  },
+  "collapseInChrome": {
+    "message": "在标签栏折叠"
+  },
+  "expandInChrome": {
+    "message": "在标签栏展开"
+  },
+  "ungroup": {
+    "message": "取消分组"
+  },
+  "closeGroup": {
+    "message": "关闭组"
+  },
+  "closeGroupConfirm": {
+    "message": "关闭 $VALUE$ 个标签页？",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "closeTab": {
+    "message": "关闭标签页"
+  },
+  "pinned": {
+    "message": "已固定"
+  },
+  "dropHere": {
+    "message": "把标签页拖放到这里"
+  },
+  "colorGrey": {
+    "message": "灰色"
+  },
+  "colorBlue": {
+    "message": "蓝色"
+  },
+  "colorRed": {
+    "message": "红色"
+  },
+  "colorYellow": {
+    "message": "黄色"
+  },
+  "colorGreen": {
+    "message": "绿色"
+  },
+  "colorPink": {
+    "message": "粉色"
+  },
+  "colorPurple": {
+    "message": "紫色"
+  },
+  "colorCyan": {
+    "message": "青色"
+  },
+  "colorOrange": {
+    "message": "橙色"
+  }
+}
