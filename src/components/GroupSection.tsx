@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { t } from '../lib/i18n'
 import { getDraggedTab, isTabDrag } from '../lib/drag'
+import Favicon from './Favicon'
 import GroupMenu from './GroupMenu'
 import Highlight from './Highlight'
 
@@ -16,12 +17,33 @@ interface Props {
   onDropTab: (tabId: number) => void
   /** The group itself, to show the rename/colour/close menu. */
   group?: chrome.tabGroups.TabGroup
-  /** Extra controls above the tab list (the ungrouped section's grouping tools). */
+  locked?: boolean
+  onToggleLock?: () => void
+  onRenamed?: (from: string, to: string) => void
+  /** Favicons shown in the header while the section is collapsed. */
+  icons?: { src?: string; label: string }[]
+  /** Extra controls above the tab list (the ungrouped section's selection bar). */
   toolbar?: ReactNode
   children: ReactNode
 }
 
-export default function GroupSection({ id, title, color, count, query, open, onToggle, onDropTab, group, toolbar, children }: Props) {
+export default function GroupSection({
+  id,
+  title,
+  color,
+  count,
+  query,
+  open,
+  onToggle,
+  onDropTab,
+  group,
+  locked = false,
+  onToggleLock,
+  onRenamed,
+  icons = [],
+  toolbar,
+  children,
+}: Props) {
   const [dropping, setDropping] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const accent = color ? `var(--group-${color})` : 'var(--color-slate-400)'
@@ -57,9 +79,23 @@ export default function GroupSection({ id, title, color, count, query, open, onT
           <span className="truncate text-sm font-semibold" style={color ? { color: accent } : undefined}>
             <Highlight text={title} query={query} />
           </span>
+          {locked && (
+            <span title={t('locked')} className="shrink-0 text-[11px]">
+              🔒
+            </span>
+          )}
           <span className="shrink-0 rounded-full bg-slate-100 px-1.5 text-[10px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
             {count}
           </span>
+          {!open && icons.length > 0 && (
+            <span className="flex shrink-0 -space-x-1" aria-hidden>
+              {icons.slice(0, 4).map((icon, i) => (
+                <span key={i} className="rounded-sm bg-white ring-2 ring-white dark:bg-slate-900 dark:ring-slate-900">
+                  <Favicon src={icon.src} label={icon.label} />
+                </span>
+              ))}
+            </span>
+          )}
           <span className={`ml-auto text-[10px] text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden>
             ▼
           </span>
@@ -77,7 +113,9 @@ export default function GroupSection({ id, title, color, count, query, open, onT
           </button>
         )}
       </div>
-      {group && menuOpen && <GroupMenu group={group} />}
+      {group && menuOpen && (
+        <GroupMenu group={group} locked={locked} onToggleLock={() => onToggleLock?.()} onRenamed={(from, to) => onRenamed?.(from, to)} />
+      )}
       {open && toolbar}
       {open && (
         <div className="space-y-px px-1.5 pb-1.5">

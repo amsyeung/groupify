@@ -6,7 +6,7 @@ export interface WindowTabs {
   refresh: () => Promise<void>
 }
 
-/** Tabs and tab groups of the popup's window, kept in sync with changes made anywhere in Chrome. */
+/** Tabs and tab groups of the panel's window, kept in sync with changes made anywhere in Chrome. */
 export function useWindowTabs(): WindowTabs {
   const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([])
   const [groups, setGroups] = useState<chrome.tabGroups.TabGroup[]>([])

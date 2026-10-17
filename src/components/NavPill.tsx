@@ -31,7 +31,7 @@ export default function NavPill({ title, color, onClick, onDropTab }: Props) {
           onDropTab(tabId)
         }
       }}
-      className={`max-w-[160px] truncate rounded-full px-2.5 py-1 text-[11px] font-semibold whitespace-nowrap transition select-none ${
+      className={`max-w-[160px] shrink-0 truncate rounded-full px-2.5 py-1 text-[11px] font-semibold whitespace-nowrap transition select-none ${
         over ? 'scale-110 shadow-md' : 'hover:brightness-95'
       }`}
       style={{

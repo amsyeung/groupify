@@ -3,19 +3,23 @@ import type { ListedGroup } from '../lib/saved'
 import Highlight from './Highlight'
 
 interface Props {
+  id: string
+  title: string
   saved: ListedGroup[]
   query: string
   open: boolean
   onToggle: () => void
   onOpenGroup: (group: ListedGroup) => void
   onDelete: (group: ListedGroup) => void
+  /** Recently closed groups can be moved to Saved. */
+  onKeep?: (group: ListedGroup) => void
 }
 
-/** Saved tab groups, each one reopenable as a new group in this window. */
-export default function SavedSection({ saved, query, open, onToggle, onOpenGroup, onDelete }: Props) {
+/** Saved (or recently closed) tab groups, each one reopenable as a new group in this window. */
+export default function SavedSection({ id, title, saved, query, open, onToggle, onOpenGroup, onDelete, onKeep }: Props) {
   return (
     <section
-      id="section-saved"
+      id={`section-${id}`}
       className="scroll-mt-28 overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200/70 dark:bg-slate-900 dark:ring-slate-800"
     >
       <button
@@ -24,7 +28,7 @@ export default function SavedSection({ saved, query, open, onToggle, onOpenGroup
         aria-expanded={open}
         className="flex w-full items-center gap-2 py-2.5 pr-3 pl-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset"
       >
-        <span className="truncate text-sm font-semibold">{t('saved')}</span>
+        <span className="truncate text-sm font-semibold">{title}</span>
         <span className="shrink-0 rounded-full bg-slate-100 px-1.5 text-[10px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
           {saved.length}
         </span>
@@ -44,12 +48,22 @@ export default function SavedSection({ saved, query, open, onToggle, onOpenGroup
               <span className="min-w-0 flex-1 truncate text-xs font-medium" title={g.urls.join('\n')}>
                 <Highlight text={g.title || t('untitledGroup')} query={query} />
               </span>
-              {g.area === 'local' && (
+              {g.area === 'local' && !onKeep && (
                 <span className="shrink-0 text-[10px] text-slate-400" title={t('savedLocalOnlyTitle')}>
                   {t('savedLocalOnly')}
                 </span>
               )}
               <span className="shrink-0 text-[10px] text-slate-400">{tn('tabCount', g.urls.length)}</span>
+              {onKeep && (
+                <button
+                  type="button"
+                  onClick={() => onKeep(g)}
+                  title={t('keepGroupTitle')}
+                  className="shrink-0 rounded px-2 py-0.5 text-[11px] font-medium ring-1 ring-slate-200 hover:bg-slate-100 dark:ring-slate-700 dark:hover:bg-slate-800"
+                >
+                  {t('keepGroup')}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => onOpenGroup(g)}
