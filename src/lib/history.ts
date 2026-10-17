@@ -22,6 +22,10 @@ export interface Snapshot {
 
 export const MAX_HISTORY = 20
 
+/** "Reclassify · By purpose": the action, then its detail if any. Works in every language. */
+export const historyLabel = (s: Pick<Snapshot, 'label' | 'detail'>, t: (key: MessageKey) => string) =>
+  s.detail ? `${t(s.label)} · ${s.detail}` : t(s.label)
+
 /** The layout of a window: every group with the ids of its tabs, in tab bar order. */
 export function takeSnapshot(
   tabs: { id?: number; index: number; groupId: number }[],
