@@ -154,5 +154,62 @@
   },
   "colorOrange": {
     "message": "橙色"
+  },
+  "saved": {
+    "message": "已儲存"
+  },
+  "saveGroup": {
+    "message": "儲存群組"
+  },
+  "saveGroupTitle": {
+    "message": "保留這個群組的名稱、顏色和分頁，之後可以重新開啟，其他電腦上也可以"
+  },
+  "savedGroupDone": {
+    "message": "已儲存 ✓"
+  },
+  "saveGroupNothing": {
+    "message": "沒有可儲存的分頁"
+  },
+  "savedLocalOnly": {
+    "message": "僅此裝置"
+  },
+  "savedLocalOnlyTitle": {
+    "message": "太大無法同步，只保存在這部裝置上"
+  },
+  "tabCount": {
+    "message": "$VALUE$ 個分頁",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "openSaved": {
+    "message": "開啟"
+  },
+  "openSavedTitle": {
+    "message": "在這個視窗重新開啟為新群組"
+  },
+  "openedSaved": {
+    "message": "已開啟「$VALUE$」",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "openSavedFailed": {
+    "message": "這些分頁都無法開啟"
+  },
+  "deleteSaved": {
+    "message": "刪除已儲存的群組"
+  },
+  "deletedSaved": {
+    "message": "已刪除「$VALUE$」",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
   }
 }

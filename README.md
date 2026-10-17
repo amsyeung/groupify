@@ -20,14 +20,15 @@
 - **Group by site.** One click puts the ungrouped tabs from the same site into their own group, named after the site. Tabs join a group that already has that name.
 - **Close duplicates.** Tabs showing the same page are closed, keeping one of each (the one you're on, a pinned one, or the leftmost). Changed your mind? Click **Undo**.
 - **Make groups.** Tick the tabs you want, give the group a name and click **Group selected**, or group every ungrouped tab at once. New groups get a color that isn't in use yet.
-- **Manage groups.** From the ⋯ menu of a group: rename it, change its color, collapse it in the tab bar, ungroup it or close all its tabs.
+- **Manage groups.** From the ⋯ menu of a group: rename it, change its color, collapse it in the tab bar, save it, ungroup it or close all its tabs.
+- **Save groups for later.** Save a group from its ⋯ menu, close it, and reopen it any time from the **Saved** section as a new group with the same name, color and tabs. Saved groups follow you to your other computers through Chrome sync.
 - **Drag and drop.** Drag a tab onto a group, or onto one of the group shortcuts at the top, to move it there.
 - **Always up to date.** The popup follows changes you make in the tab bar while it's open.
 - **Speaks your language.** English, 繁體中文 and 简体中文, following your Chrome language. Light and dark mode follow your system.
 
 ## Privacy
 
-Groupify only uses the `tabs` and `tabGroups` permissions, to list and organize the tabs in your window. It stores nothing, has no account and sends nothing to any server: everything happens inside your browser.
+Groupify uses the `tabs` and `tabGroups` permissions to list and organize the tabs in your window, and the `storage` permission to keep the groups you save. Saved groups (their name, color and tab addresses) are stored in Chrome's own extension storage and synced by Chrome through your Google account if you have sync on; very large groups stay on your device only. Groupify has no account and sends nothing to any server of its own.
 
 ## Development
 

@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import GroupSection from './components/GroupSection'
 import NavPill from './components/NavPill'
+import SavedSection from './components/SavedSection'
 import TabRow from './components/TabRow'
+import { deleteSaved, openSaved, restoreDeleted, useSavedGroups } from './hooks/useSavedGroups'
 import { useWindowTabs } from './hooks/useWindowTabs'
 import { t } from './lib/i18n'
+import { savedMatchesQuery, type ListedGroup } from './lib/saved'
 import { findDuplicates, groupable, matchesQuery, pickColor, planGroupBySite, tabUrl } from './lib/tabs'
 
 const UNGROUPED = 'ungrouped'
+const SAVED = 'saved'
 
 interface Toast {
   message: string
@@ -18,10 +22,11 @@ const asTabIds = (ids: number[]) => ids as TabIds
 
 export default function App() {
   const { tabs, groups } = useWindowTabs()
+  const saved = useSavedGroups()
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [newGroupName, setNewGroupName] = useState('')
-  const [openIds, setOpenIds] = useState<Set<string>>(new Set([UNGROUPED]))
+  const [openIds, setOpenIds] = useState<Set<string>>(new Set([UNGROUPED, SAVED]))
   const [dragging, setDragging] = useState(false)
   const [toast, setToast] = useState<Toast | null>(null)
   const searchRef = useRef<HTMLInputElement>(null)
@@ -33,6 +38,7 @@ export default function App() {
   const selectedVisible = selectable.filter((tab) => selected.has(tab.id!)).map((tab) => tab.id!)
   const duplicates = useMemo(() => findDuplicates(tabs), [tabs])
   const sitePlan = useMemo(() => planGroupBySite(tabs, groups), [tabs, groups])
+  const visibleSaved = useMemo(() => saved.filter((g) => savedMatchesQuery(g, query)), [saved, query])
 
   useEffect(() => {
     const start = () => setDragging(true)
@@ -110,6 +116,16 @@ export default function App() {
         for (const tab of closing) chrome.tabs.create({ url: tabUrl(tab), index: tab.index, pinned: tab.pinned, active: false })
       },
     })
+  }
+
+  const openSavedGroup = async (group: ListedGroup) => {
+    const opened = await openSaved(group)
+    setToast({ message: opened ? t('openedSaved', group.title || t('untitledGroup')) : t('openSavedFailed') })
+  }
+
+  const deleteSavedGroup = async (group: ListedGroup) => {
+    await deleteSaved(group)
+    setToast({ message: t('deletedSaved', group.title || t('untitledGroup')), undo: () => restoreDeleted(group) })
   }
 
   // ↑/↓ move between the search box and the tab rows; Enter in the search box opens the first match.
@@ -222,7 +238,7 @@ export default function App() {
         )}
       </header>
 
-      <main className="space-y-2 px-3 pb-3">
+      <main className={`space-y-2 px-3 ${toast ? 'pb-16' : 'pb-3'}`}>
         {showUngrouped && (
           <GroupSection
             id={UNGROUPED}
@@ -276,7 +292,20 @@ export default function App() {
           )
         })}
 
-        {searching && visibleTabs.length === 0 && <p className="py-8 text-center text-xs text-slate-500">{t('noResults', query.trim())}</p>}
+        {visibleSaved.length > 0 && (
+          <SavedSection
+            saved={visibleSaved}
+            query={query}
+            open={isOpen(SAVED)}
+            onToggle={() => toggle(SAVED)}
+            onOpenGroup={openSavedGroup}
+            onDelete={deleteSavedGroup}
+          />
+        )}
+
+        {searching && visibleTabs.length === 0 && visibleSaved.length === 0 && (
+          <p className="py-8 text-center text-xs text-slate-500">{t('noResults', query.trim())}</p>
+        )}
       </main>
 
       {toast && (

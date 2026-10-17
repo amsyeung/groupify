@@ -154,5 +154,62 @@
   },
   "colorOrange": {
     "message": "Orange"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "saveGroup": {
+    "message": "Save group"
+  },
+  "saveGroupTitle": {
+    "message": "Keep this group's name, color and tabs so you can reopen it later, also on your other computers"
+  },
+  "savedGroupDone": {
+    "message": "Saved ✓"
+  },
+  "saveGroupNothing": {
+    "message": "Nothing to save"
+  },
+  "savedLocalOnly": {
+    "message": "This device"
+  },
+  "savedLocalOnlyTitle": {
+    "message": "Too large to sync, so it is kept on this device only"
+  },
+  "tabCount": {
+    "message": "$VALUE$ tabs",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "openSaved": {
+    "message": "Open"
+  },
+  "openSavedTitle": {
+    "message": "Reopen as a new group in this window"
+  },
+  "openedSaved": {
+    "message": "Opened “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "openSavedFailed": {
+    "message": "Couldn't open any of these tabs"
+  },
+  "deleteSaved": {
+    "message": "Delete saved group"
+  },
+  "deletedSaved": {
+    "message": "Deleted “$VALUE$”",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
   }
 }
