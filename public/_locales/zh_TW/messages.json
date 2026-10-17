@@ -463,5 +463,88 @@
   },
   "optSource": {
     "message": "原始碼"
+  },
+  "undoLast": {
+    "message": "復原上一步"
+  },
+  "historyOpen": {
+    "message": "歷史記錄（$VALUE$）",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "history": {
+    "message": "歷史記錄"
+  },
+  "historyHint": {
+    "message": "這個視窗的改動，保留到關閉瀏覽器為止"
+  },
+  "historyEmpty": {
+    "message": "暫時沒有。Groupify 每次改動群組前都會在這裡留一個記錄，讓你可以退回不止一步。"
+  },
+  "historyBefore": {
+    "message": "之前：$VALUE$",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "historyGroups": {
+    "message": "$VALUE$ 個群組",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "restore": {
+    "message": "還原"
+  },
+  "restoreTitle": {
+    "message": "把所有群組還原成這次改動之前的樣子；之後才開的分頁會留在未分組。"
+  },
+  "restored": {
+    "message": "已還原群組"
+  },
+  "ungroupAll": {
+    "message": "取消所有分組"
+  },
+  "ungroupAllTitle": {
+    "message": "移除這個視窗的所有群組；分頁會保留，可以從歷史記錄還原。"
+  },
+  "ungroupedAll": {
+    "message": "已取消 $VALUE$ 個群組",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "ungroupedAllOne": {
+    "message": "已取消 1 個群組"
+  },
+  "histMove": {
+    "message": "移動分頁"
+  },
+  "histGroup": {
+    "message": "建立群組"
+  },
+  "histAddTo": {
+    "message": "加入群組"
+  },
+  "histReclassify": {
+    "message": "重新分類"
+  },
+  "histUngroupAll": {
+    "message": "取消所有分組"
+  },
+  "histUngroup": {
+    "message": "取消分組"
+  },
+  "histRestore": {
+    "message": "還原"
   }
 }

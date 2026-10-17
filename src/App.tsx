@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import GroupSection from './components/GroupSection'
+import HistorySection from './components/HistorySection'
 import Menu from './components/Menu'
 import NavPill from './components/NavPill'
 import ReclassifyMenu from './components/ReclassifyMenu'
 import SavedSection from './components/SavedSection'
 import TabRow from './components/TabRow'
+import { recordHistory, restoreSnapshot, useHistory } from './hooks/useHistory'
 import { deleteSaved, keepClosed, openSaved, restoreDeleted, useSavedGroups } from './hooks/useSavedGroups'
 import { useLocks, useSettings } from './hooks/useSynced'
 import { useWindowTabs } from './hooks/useWindowTabs'
-import { isLocked, type ReclassifyMode } from './lib/classify'
+import { isLocked, MODE_LABELS, type ReclassifyMode } from './lib/classify'
+import type { Snapshot } from './lib/history'
 import { t, tn } from './lib/i18n'
 import { dateName, suggestName } from './lib/naming'
 import { reclassify } from './lib/reclassify'
@@ -58,6 +61,8 @@ export default function App() {
   const [dragging, setDragging] = useState(false)
   const [busy, setBusy] = useState(false)
   const [toast, setToast] = useState<Toast | null>(null)
+  const [showHistory, setShowHistory] = useState(false)
+  const history = useHistory()
   const searchRef = useRef<HTMLInputElement>(null)
 
   const searching = query.trim().length > 0
@@ -109,6 +114,7 @@ export default function App() {
   }
 
   const moveTab = async (tabId: number, groupId: number | null) => {
+    await recordHistory('histMove')
     if (groupId === null) await chrome.tabs.ungroup(tabId)
     else await chrome.tabs.group({ tabIds: tabId, groupId })
   }
@@ -121,6 +127,7 @@ export default function App() {
     if (!ids.length) return
     const typed = newGroupName.trim()
     const placeholder = typed || dateName()
+    await recordHistory('histGroup', typed || undefined)
     const groupId = await chrome.tabs.group({ tabIds: asTabIds(ids) })
     await chrome.tabGroups.update(groupId, { title: placeholder, color: pickColor(groups.map((g) => g.color)) })
     setNewGroupName('')
@@ -140,6 +147,7 @@ export default function App() {
   const addToCurrentGroup = async () => {
     if (!currentGroup || !selectable.length) return
     const ids = selectable.map((tab) => tab.id!)
+    await recordHistory('histAddTo', currentGroup.title || undefined)
     await chrome.tabs.group({ tabIds: asTabIds(ids), groupId: currentGroup.id })
     setToast({
       message: t('addedToGroup', currentGroup.title || t('untitledGroup')),
@@ -151,7 +159,7 @@ export default function App() {
     setBusy(true)
     setToast({ message: t('reclassifying'), sticky: true })
     try {
-      const result = await reclassify(mode, tabs, groups, locks, ai)
+      const result = await reclassify(mode, tabs, groups, locks, ai, () => recordHistory('histReclassify', t(MODE_LABELS[mode].label)))
       if (!result) return setToast({ message: t('reclassifyNothing') })
       setOpenIds(null)
       const fallback = settings.cloudAi ? t('projectNoAi') : t('projectNoAiHint')
@@ -161,6 +169,21 @@ export default function App() {
     } finally {
       setBusy(false)
     }
+  }
+
+  const restore = async (snapshot: Snapshot) => {
+    await restoreSnapshot(snapshot)
+    setOpenIds(null)
+    setToast({ message: t('restored') })
+  }
+
+  /** Removes every group in this window; the tabs stay open, and history can bring the groups back. */
+  const ungroupAll = async () => {
+    const grouped = tabs.filter((tab) => tab.groupId !== -1).map((tab) => tab.id!)
+    if (!grouped.length) return
+    const before = await recordHistory('histUngroupAll')
+    await chrome.tabs.ungroup(asTabIds(grouped))
+    setToast({ message: tn('ungroupedAll', groups.length), undo: () => restore(before).catch(() => {}) })
   }
 
   const closeDuplicates = async () => {
@@ -267,6 +290,49 @@ export default function App() {
                 <button
                   type="button"
                   role="menuitem"
+                  disabled={!history.length}
+                  title={
+                    history[0]
+                      ? t('historyBefore', history[0].detail ? `${t(history[0].label)}：${history[0].detail}` : t(history[0].label))
+                      : undefined
+                  }
+                  onClick={() => {
+                    close()
+                    if (history[0]) restore(history[0]).catch(() => {})
+                  }}
+                  className={menuItem}
+                >
+                  {t('undoLast')}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    close()
+                    setShowHistory(true)
+                    requestAnimationFrame(() => document.getElementById('section-history')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+                  }}
+                  className={menuItem}
+                >
+                  {t('historyOpen', history.length)}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  disabled={!groups.length}
+                  title={t('ungroupAllTitle')}
+                  onClick={() => {
+                    close()
+                    ungroupAll().catch(() => {})
+                  }}
+                  className={menuItem}
+                >
+                  {t('ungroupAll')}
+                </button>
+                <div role="separator" className="my-1 border-t border-slate-100 dark:border-slate-800" />
+                <button
+                  type="button"
+                  role="menuitem"
                   disabled={!duplicates.length}
                   title={t('closeDuplicatesTitle')}
                   onClick={() => {
@@ -332,6 +398,8 @@ export default function App() {
       </header>
 
       <main className={`space-y-2 px-3 ${toast ? 'pb-16' : 'pb-3'}`}>
+        {showHistory && <HistorySection history={history} onRestore={(s) => restore(s).catch(() => {})} onClose={() => setShowHistory(false)} />}
+
         {showUngrouped && (
           <GroupSection
             id={UNGROUPED}

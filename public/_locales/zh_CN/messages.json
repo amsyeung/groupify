@@ -463,5 +463,88 @@
   },
   "optSource": {
     "message": "源代码"
+  },
+  "undoLast": {
+    "message": "撤销上一步"
+  },
+  "historyOpen": {
+    "message": "历史记录（$VALUE$）",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "history": {
+    "message": "历史记录"
+  },
+  "historyHint": {
+    "message": "这个窗口的改动，保留到关闭浏览器为止"
+  },
+  "historyEmpty": {
+    "message": "暂时没有。Groupify 每次改动组之前都会在这里留下记录，让你可以退回不止一步。"
+  },
+  "historyBefore": {
+    "message": "之前：$VALUE$",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "historyGroups": {
+    "message": "$VALUE$ 个组",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "restore": {
+    "message": "还原"
+  },
+  "restoreTitle": {
+    "message": "把所有组还原成这次改动之前的样子；之后才打开的标签页会留在未分组。"
+  },
+  "restored": {
+    "message": "已还原组"
+  },
+  "ungroupAll": {
+    "message": "取消所有分组"
+  },
+  "ungroupAllTitle": {
+    "message": "移除这个窗口的所有组；标签页会保留，可以从历史记录还原。"
+  },
+  "ungroupedAll": {
+    "message": "已取消 $VALUE$ 个组",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "ungroupedAllOne": {
+    "message": "已取消 1 个组"
+  },
+  "histMove": {
+    "message": "移动标签页"
+  },
+  "histGroup": {
+    "message": "创建组"
+  },
+  "histAddTo": {
+    "message": "加入组"
+  },
+  "histReclassify": {
+    "message": "重新分类"
+  },
+  "histUngroupAll": {
+    "message": "取消所有分组"
+  },
+  "histUngroup": {
+    "message": "取消分组"
+  },
+  "histRestore": {
+    "message": "还原"
   }
 }
