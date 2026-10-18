@@ -404,7 +404,7 @@
     "message": "Use Groupify’s cloud AI when on-device AI isn’t available"
   },
   "optCloudAiDesc": {
-    "message": "Sends the titles and site names of the tabs being grouped (never full addresses) to Groupify’s server on Cloudflare, which asks an AI model and keeps nothing. Free, shared by everyone, with a daily limit: when it runs out, groups are named after the date."
+    "message": "Sends the titles and site names of the tabs being grouped (never full addresses), and any instruction you type, to Groupify’s server on Cloudflare, which asks an AI model and keeps nothing. Free and shared by everyone, with daily limits: grouping by instruction works 3 times a day, and when the shared limit runs out, groups are named after the date."
   },
   "projectNoAiHint": {
     "message": "No AI available, so tabs were grouped by when they were opened. You can turn on cloud AI in Settings."
@@ -593,5 +593,59 @@
   },
   "historyGroupsOne": {
     "message": "1 group"
+  },
+  "arrangePlaceholder": {
+    "message": "Tell Groupify how to group your tabs"
+  },
+  "arrangeTitle": {
+    "message": "For example: “work tabs together, YouTube and shopping apart”. Press Enter."
+  },
+  "arrangeGo": {
+    "message": "Group by instruction"
+  },
+  "arrangeLeft": {
+    "message": "$VALUE$ left today",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "arrangeNoneLeft": {
+    "message": "None left today"
+  },
+  "arrangeNeedsAi": {
+    "message": "Group by instruction: turn on AI in Settings"
+  },
+  "arranging": {
+    "message": "Grouping as you asked…"
+  },
+  "arranged": {
+    "message": "Grouped as you asked"
+  },
+  "arrangeNothing": {
+    "message": "Nothing to change for that instruction"
+  },
+  "arrangeFailed": {
+    "message": "Couldn’t follow that. Try saying which tabs go where."
+  },
+  "arrangeLimit": {
+    "message": "You’ve used today’s groupings by instruction. More from $VALUE$.",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "arrangeBusy": {
+    "message": "Groupify’s cloud AI has reached today’s limit. Try again from $VALUE$.",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "histArrange": {
+    "message": "Group by instruction"
   }
 }

@@ -56,7 +56,8 @@
             <li><strong>AI runs on your computer first.</strong> Names and task sorting use the AI model built into Chrome when it is installed.</li>
             <li>
               <strong>Cloud AI is optional and off by default.</strong> If you turn it on, only the titles and site names of the tabs being grouped
-              are sent to Groupify's AI server, never full addresses. The server keeps nothing.
+              (and, when you group by instruction, what you typed) are sent to Groupify's AI server, never full addresses. The server keeps none of
+              it; it only counts how often each install groups by instruction each day.
             </li>
             <li><strong>No analytics, no tracking, no ads, nothing sold or shared.</strong></li>
           </ul>
@@ -78,9 +79,10 @@
         <section id="on-device-ai">
           <h2>On-device AI</h2>
           <p>
-            When you group tabs without typing a name, or reclassify by task, the extension asks <strong>Chrome's built-in AI model</strong> (Gemini
-            Nano) to suggest a name or sort the tabs, using the tab titles and site names. For Chinese, it may also use Chrome's built-in translator.
-            Both run on your computer, and the text is not sent to us or to Google.
+            When you group tabs without typing a name, reclassify by task or type an instruction in <em>Tell Groupify how to group your tabs</em>, the
+            extension asks <strong>Chrome's built-in AI model</strong> (Gemini Nano) to suggest a name or sort the tabs, using the tab titles, site
+            names, group names and your instruction. For Chinese, it may also use Chrome's built-in translator. Both run on your computer, and the
+            text is not sent to us or to Google.
           </p>
           <p>
             If Chrome has already downloaded the model, Groupify uses it. If Chrome supports it but hasn't downloaded it, Groupify asks Chrome to
@@ -93,7 +95,7 @@
           <h2>Cloud AI (optional, off by default)</h2>
           <p>
             For computers without Chrome's built-in model, you can turn on <em>Settings → Use Groupify's cloud AI</em>. It is used only when the
-            on-device model isn't available, and only when you group tabs without a name or reclassify by task.
+            on-device model isn't available, and only when you group tabs without a name, reclassify by task or group by instruction.
           </p>
           <h3>What is sent</h3>
           <div class="table-wrap">
@@ -109,11 +111,13 @@
                   <td>
                     For each tab being grouped (at most 40 per request): its <strong>title</strong>, shortened to 120 characters, and its
                     <strong>site name</strong> (for example <code>vercel.com</code>).<br />
-                    The language you use Chrome in (English, Traditional or Simplified Chinese), so the name comes back in that language.
+                    The language you use Chrome in (English, Traditional or Simplified Chinese), so the name comes back in that language.<br />
+                    When you <strong>group by instruction</strong>: the instruction you typed (up to 200 characters), up to 60 tabs, the name of the
+                    group each tab is in and the names of your locked groups, plus a <strong>random install ID</strong> (see below).
                   </td>
                   <td>
-                    Full addresses or paths, page content, cookies, passwords, your Google account, your other tabs, or any identifier for you or your
-                    browser.
+                    Full addresses or paths, page content, cookies, passwords, your Google account, your other tabs, or anything that identifies you.
+                    The install ID is a random number made by the extension; it isn't linked to your Google account or anything else about you.
                   </td>
                 </tr>
               </tbody>
@@ -126,8 +130,14 @@
             grouping, and returns it to the extension. On our server:
           </p>
           <ul>
-            <li>The titles, site names and answers are <strong>never logged or stored</strong>.</li>
-            <li>Your IP address is used only to limit how many requests one address can make per minute. We don't log or store it.</li>
+            <li>The titles, site names, instructions and answers are <strong>never logged or stored</strong>.</li>
+            <li>Your IP address is used to limit how many requests one address can make per minute and per day. It isn't logged.</li>
+            <li>
+              To allow each install 3 groupings by instruction a day, the server keeps a counter next to a one-way hash of the install ID, and another
+              next to a hash of the IP address. The hashes are salted with the date, so they can't be turned back into the ID or address or matched
+              across days, and all of them are deleted when the day ends (00:00 UTC). It also keeps a daily total of AI usage, which isn't linked to
+              anyone.
+            </li>
             <li>Only requests from the Groupify extension are answered.</li>
           </ul>
           <p>
@@ -182,11 +192,19 @@
                   <td>The last 20 groups you closed. Turn it off in <em>Settings</em>, or delete entries from <em>Recently closed</em>.</td>
                 </tr>
                 <tr>
+                  <td>A random install ID, and how many groupings by instruction you have left today</td>
+                  <td>This device only</td>
+                  <td>
+                    Made the first time you group by instruction with cloud AI, and sent only with those requests (see
+                    <a href="#cloud-ai">Cloud AI</a>).
+                  </td>
+                </tr>
+                <tr>
                   <td>When each tab was opened, and a copy of your open groups</td>
                   <td>This device, session storage only</td>
                   <td>
-                    Used to sort tabs by task without AI, remember closed groups and keep the last 20 layouts for <em>History</em>. Cleared when
-                    you close the browser.
+                    Used to sort tabs by task without AI, remember closed groups and keep the last 20 layouts for <em>History</em>. Cleared when you
+                    close the browser.
                   </td>
                 </tr>
               </tbody>
@@ -198,7 +216,10 @@
           <h2>What we don't do</h2>
           <ul>
             <li>No analytics, telemetry, crash reporting or advertising, and no third-party scripts in the extension.</li>
-            <li>No accounts, and no collection of names, email addresses, identifiers or browsing history.</li>
+            <li>
+              No accounts, and no collection of names, email addresses or browsing history. The only identifier is the random install ID used to count
+              groupings by instruction, kept hashed on the server for one day.
+            </li>
             <li>No selling, renting or sharing of user data, and no use of it for advertising, credit or lending decisions.</li>
             <li>No remotely hosted code: everything the extension runs ships inside the package reviewed by the Chrome Web Store.</li>
           </ul>

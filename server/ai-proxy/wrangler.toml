@@ -11,6 +11,13 @@ binding = "AI"
 MODEL = "@cf/qwen/qwen3-30b-a3b-fp8"
 # The store build, and the unpacked build loaded from groupify/dist on the maintainer's computer.
 ALLOWED_ORIGINS = "chrome-extension://kkajifdljgkcniokopfhllcocblblmeh,chrome-extension://jpophckafobndanhcmfhnhclmfpglhmb"
+# Groupify's share of the account's 10,000 free Neurons a day; the rest is kept for other projects
+# on the same Cloudflare account. Grouping by instruction may use up to ARRANGE_NEURONS of it.
+DAILY_NEURONS = "2000"
+ARRANGE_NEURONS = "1500"
+# Groupings by instruction per install, and per IP address, per day (reset at 00:00 UTC).
+ARRANGE_PER_DAY = "3"
+ARRANGE_PER_IP = "10"
 
 [[ratelimits]]
 name = "LIMITER"
@@ -19,6 +26,15 @@ namespace_id = "1001"
   [ratelimits.simple]
   limit = 10
   period = 60
+
+# Today's counts (src/quota.ts): SQLite-backed Durable Objects are included in the Workers Free plan.
+[[durable_objects.bindings]]
+name = "QUOTA"
+class_name = "Quota"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Quota"]
 
 [observability]
 enabled = false

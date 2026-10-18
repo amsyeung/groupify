@@ -404,7 +404,7 @@
     "message": "沒有本機 AI 時，使用 Groupify 的雲端 AI"
   },
   "optCloudAiDesc": {
-    "message": "把要分組的分頁標題和網站名稱（不含完整網址）傳到 Groupify 在 Cloudflare 上的伺服器，由 AI 模型處理，伺服器不會保留任何資料。免費、所有人共用，每日有上限；用完時改以日期命名。"
+    "message": "把要分組的分頁標題和網站名稱（不含完整網址），以及你輸入的指令，傳到 Groupify 在 Cloudflare 上的伺服器，由 AI 模型處理，伺服器不會保留任何資料。免費、所有人共用，每日有上限：按指令分組每天 3 次；共用額度用完時，群組改以日期命名。"
   },
   "projectNoAiHint": {
     "message": "沒有可用的 AI，已按開啟時間分組。可在「設定」開啟雲端 AI。"
@@ -593,5 +593,59 @@
   },
   "historyGroupsOne": {
     "message": "1 個群組"
+  },
+  "arrangePlaceholder": {
+    "message": "告訴 Groupify 想怎樣分組"
+  },
+  "arrangeTitle": {
+    "message": "例如：「工作分頁放一組，YouTube 和購物分開」，按 Enter 送出。"
+  },
+  "arrangeGo": {
+    "message": "按指令分組"
+  },
+  "arrangeLeft": {
+    "message": "今天尚餘 $VALUE$ 次",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "arrangeNoneLeft": {
+    "message": "今天已用完"
+  },
+  "arrangeNeedsAi": {
+    "message": "按指令分組：請先在設定開啟 AI"
+  },
+  "arranging": {
+    "message": "正在按你的指令分組…"
+  },
+  "arranged": {
+    "message": "已按你的指令分組"
+  },
+  "arrangeNothing": {
+    "message": "按這個指令，沒有分頁需要改動"
+  },
+  "arrangeFailed": {
+    "message": "未能理解這個指令，試試說清楚哪些分頁放到哪裏。"
+  },
+  "arrangeLimit": {
+    "message": "今天的指令分組次數已用完，$VALUE$ 後可以再用。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "arrangeBusy": {
+    "message": "Groupify 雲端 AI 今天的用量已滿，請在 $VALUE$ 後再試。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "histArrange": {
+    "message": "按指令分組"
   }
 }

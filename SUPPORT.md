@@ -52,9 +52,15 @@ It puts every tab that isn't in a group yet into one new group, so the tabs you 
 
 If Chrome's on-device AI (Gemini Nano) is already on your computer, it suggests a name from the tab titles. It runs locally, so nothing is sent anywhere, and Groupify never downloads the model itself. If Chrome supports the model but hasn't downloaded it, Settings has a **Download on-device AI** button. Otherwise, the group is named after today's date, unless you turn on cloud AI (below). You can rename it any time from the ⋯ menu.
 
+## Can I just tell Groupify how to group my tabs?
+
+Yes. Type it in **Tell Groupify how to group your tabs** under the main buttons and press <kbd>Enter</kbd>, for example “work tabs together, YouTube and shopping apart” or “put everything about the Japan trip in Travel”. Tabs you don't mention stay where they are, locked groups keep their tabs (they can still take new ones), and **Undo** puts everything back.
+
+It uses Chrome's on-device AI when your computer has it, with no limit. Otherwise it needs **Use Groupify's cloud AI** turned on in Settings, and works 3 times a day; the count starts again at 00:00 UTC (8:00 in Hong Kong). A clear instruction usually gets it right the first time.
+
 ## My computer has no on-device AI. Can I still get names?
 
-Yes: in Settings, turn on **Use Groupify's cloud AI**. It is off by default. When on, and only when Chrome's own model isn't available, the titles and site names of the tabs being grouped (never full addresses) go to Groupify's server on Cloudflare, which asks an AI model and keeps nothing. It is free and shared by everyone with a daily limit; when the limit is reached, groups are named after the date until the next day. The [privacy policy](https://groupify.aoricreative.com/privacy) lists exactly what is sent.
+Yes: in Settings, turn on **Use Groupify's cloud AI**. It is off by default. When on, and only when Chrome's own model isn't available, the titles and site names of the tabs being grouped (never full addresses), and any instruction you type, go to Groupify's server on Cloudflare, which asks an AI model and keeps nothing. It is free and shared by everyone with a daily limit; when the limit is reached, groups are named after the date until the next day. The [privacy policy](https://groupify.aoricreative.com/privacy) lists exactly what is sent.
 
 ## What does "Add to …" do?
 

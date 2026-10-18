@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import ArrangeBox from './components/ArrangeBox'
 import GroupSection from './components/GroupSection'
 import HistorySection from './components/HistorySection'
 import Menu from './components/Menu'
@@ -6,14 +7,16 @@ import NavPill from './components/NavPill'
 import ReclassifyMenu from './components/ReclassifyMenu'
 import SavedSection from './components/SavedSection'
 import TabRow from './components/TabRow'
+import { saveArrangeQuota, useArrangeQuota } from './hooks/useArrangeQuota'
 import { recordHistory, restoreSnapshot, useHistory } from './hooks/useHistory'
 import { deleteSaved, keepClosed, openSaved, restoreDeleted, useSavedGroups } from './hooks/useSavedGroups'
 import { useLocks, useSettings } from './hooks/useSynced'
 import { useWindowTabs } from './hooks/useWindowTabs'
+import { arrangeTabs, resetTime } from './lib/arrange'
 import { isLocked, MODE_LABELS, type ReclassifyMode } from './lib/classify'
 import { historyLabel, type Snapshot } from './lib/history'
 import { t, tn } from './lib/i18n'
-import { dateName, suggestName } from './lib/naming'
+import { aiStatus, dateName, suggestName } from './lib/naming'
 import { asGroupify, noteManualPlacement } from './lib/manual'
 import { reclassify, tidyNewTabs } from './lib/reclassify'
 import { savedMatchesQuery, type ListedGroup } from './lib/saved'
@@ -64,6 +67,9 @@ export default function App() {
   const [toast, setToast] = useState<Toast | null>(null)
   const [showHistory, setShowHistory] = useState(false)
   const history = useHistory()
+  const arrangeLeft = useArrangeQuota()
+  // Whether Chrome's on-device model is on this computer: then grouping by instruction has no daily limit.
+  const [localAi, setLocalAi] = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
 
   const searching = query.trim().length > 0
@@ -78,6 +84,12 @@ export default function App() {
   const ai = { onDevice: settings.useAi, cloud: settings.cloudAi }
   const currentId = currentGroupId(tabs)
   const currentGroup = groups.find((g) => g.id === currentId)
+  const arrangeMode = settings.useAi && localAi ? 'local' : settings.cloudAi ? 'cloud' : 'none'
+
+  useEffect(() => {
+    if (!settings.useAi) return
+    aiStatus().then((status) => setLocalAi(status === 'available'))
+  }, [settings.useAi])
 
   useEffect(() => {
     const start = () => setDragging(true)
@@ -185,6 +197,35 @@ export default function App() {
       setToast({ message: result.usedFallback ? fallback : tn('reclassified', result.groups), undo: () => asGroupify(result.undo).catch(() => {}) })
     } catch {
       setToast(null)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  /** Groups the tabs the way the user's instruction says. Resolves true when something changed. */
+  const runArrange = async (instruction: string): Promise<boolean> => {
+    setBusy(true)
+    setToast({ message: t('arranging'), sticky: true })
+    try {
+      const result = await arrangeTabs(instruction, tabs, groups, locks, ai, () => recordHistory('histArrange', instruction.slice(0, 40)))
+      if (result.remaining !== undefined) await saveArrangeQuota(result.remaining)
+      if (result.status === 'done') {
+        setOpenIds(null)
+        setToast({ message: t('arranged'), undo: () => restore(result.snapshot).catch(() => {}) })
+        return true
+      }
+      const messages = {
+        nothing: t('arrangeNothing'),
+        failed: t('arrangeFailed'),
+        noAi: t('arrangeNeedsAi'),
+        daily_limit: t('arrangeLimit', resetTime()),
+        budget: t('arrangeBusy', resetTime()),
+      }
+      setToast({ message: messages[result.status] })
+      return false
+    } catch {
+      setToast({ message: t('arrangeFailed') })
+      return false
     } finally {
       setBusy(false)
     }
@@ -392,6 +433,7 @@ export default function App() {
           </button>
           <ReclassifyMenu defaultMode={settings.reclassifyMode} busy={busy} onPick={runReclassify} onTidy={() => runTidy().catch(() => {})} />
         </div>
+        <ArrangeBox mode={arrangeMode} remaining={arrangeLeft} busy={busy} onSubmit={runArrange} onOpenSettings={() => openSettings()} />
         {currentGroup && selectable.length > 0 && (
           <button
             type="button"
