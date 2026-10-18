@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest'
+import { check, DEFAULT_LIMITS, readLimits, utcDay } from '../server/ai-proxy/src/budget'
 import {
+  arrangePrompt,
   clusterPrompt,
   extractJson,
   hasBrokenText,
   HttpError,
   namePrompt,
+  neuronsFor,
+  parseArrangement,
+  parseArrangeRequest,
   parseClusters,
   parseName,
   parseRequest,
@@ -66,5 +71,86 @@ describe('extension side', () => {
     expect(cloudTabs([{ title: 'Dashboard', url: 'https://vercel.com/team/project?token=abc' }])).toEqual([
       { title: 'Dashboard', site: 'vercel.com' },
     ])
+  })
+})
+
+const CLIENT = '0f8fad5b-d9cb-469f-a165-70867728950e'
+
+describe('grouping by instruction', () => {
+  it('needs an instruction and an install id, and keeps each tab’s current group', () => {
+    const body = {
+      instruction: '  work   apart ',
+      client: CLIENT.toUpperCase(),
+      tabs: [{ title: 'PR', site: 'GitHub.com', group: 'Work' }],
+      locked: ['Trip', 3, ''],
+    }
+    expect(parseArrangeRequest(JSON.stringify(body))).toEqual({
+      instruction: 'work apart',
+      client: CLIENT,
+      tabs: [{ title: 'PR', site: 'github.com', group: 'Work' }],
+      locked: ['Trip'],
+      lang: 'en',
+    })
+    expect(() => parseArrangeRequest(JSON.stringify({ ...body, instruction: ' ' }))).toThrow(HttpError)
+    expect(() => parseArrangeRequest(JSON.stringify({ ...body, client: 'me' }))).toThrow(HttpError)
+  })
+  it('caps the instruction at 200 characters and 60 tabs', () => {
+    const tabs = Array.from({ length: 70 }, (_, i) => ({ title: `T${i}`, site: 'a.com' }))
+    const req = parseArrangeRequest(JSON.stringify({ instruction: 'x'.repeat(300), client: CLIENT, tabs }))
+    expect(req.instruction).toHaveLength(200)
+    expect(req.tabs).toHaveLength(60)
+  })
+  it('shows tabs with their group and names locked groups', () => {
+    const req = parseArrangeRequest(
+      JSON.stringify({
+        instruction: '放入旅行',
+        client: CLIENT,
+        tabs: [{ title: 'Hotels', site: 'booking.com', group: '' }],
+        locked: ['旅行'],
+        lang: 'zh-Hant',
+      })
+    )
+    const [system, user] = arrangePrompt(req)
+    expect(system.content).toContain('Groups now: "旅行" (locked')
+    expect(system.content).toContain('Traditional Chinese')
+    expect(system.content).toContain('/no_think')
+    expect(user.content).toBe('Instruction: 放入旅行\n\nTabs:\n1. Hotels (booking.com)')
+  })
+  it('read back only valid groups, colours and unused tab numbers', () => {
+    const answer =
+      '<think></think>{"groups":[{"name":"Work","color":"blue","tabs":[1,2,2,9]},{"name":"Solo","color":"gold","tabs":[2,3]},{"name":"","tabs":[4]}],"ungroup":[3,4]}'
+    expect(parseArrangement(answer, 4)).toEqual({
+      groups: [
+        { name: 'Work', color: 'blue', tabs: [1, 2] },
+        { name: 'Solo', tabs: [3] },
+      ],
+      ungroup: [4],
+    })
+    expect(parseArrangement('nonsense', 4)).toEqual({ groups: [], ungroup: [] })
+  })
+})
+
+describe('daily limits', () => {
+  const fresh = { spent: 0, arrangeSpent: 0, clientUses: 0, ipUses: 0 }
+  it('allow 3 groupings by instruction per install and 10 per IP', () => {
+    expect(check('arrange', { ...fresh, clientUses: 2 }, DEFAULT_LIMITS)).toEqual({ ok: true })
+    expect(check('arrange', { ...fresh, clientUses: 3 }, DEFAULT_LIMITS)).toEqual({ ok: false, reason: 'daily_limit' })
+    expect(check('arrange', { ...fresh, ipUses: 10 }, DEFAULT_LIMITS)).toEqual({ ok: false, reason: 'daily_limit' })
+  })
+  it('keep Groupify within its share of Neurons, leaving some for naming', () => {
+    expect(check('arrange', { ...fresh, arrangeSpent: 1500, spent: 1500 }, DEFAULT_LIMITS)).toEqual({ ok: false, reason: 'budget' })
+    expect(check('basic', { ...fresh, arrangeSpent: 1500, spent: 1500 }, DEFAULT_LIMITS)).toEqual({ ok: true })
+    expect(check('basic', { ...fresh, spent: 2000 }, DEFAULT_LIMITS)).toEqual({ ok: false, reason: 'budget' })
+  })
+  it('come from the Worker’s vars, with defaults', () => {
+    expect(readLimits({ DAILY_NEURONS: '1000', ARRANGE_PER_DAY: 'two' })).toEqual({ ...DEFAULT_LIMITS, dailyNeurons: 1000 })
+  })
+  it('count by UTC day', () => {
+    expect(utcDay(Date.UTC(2026, 9, 18, 23, 59))).toBe('2026-10-18')
+  })
+  it('price calls from Workers AI’s token counts, or estimate them', () => {
+    // 1,500 input + 300 output tokens on Qwen3 30B-A3B: about 16 Neurons.
+    expect(neuronsFor({ prompt_tokens: 1500, completion_tokens: 300 }, 0, 0)).toBeCloseTo(16.08, 1)
+    expect(neuronsFor(undefined, 3000, 300)).toBeCloseTo((1000 * 4625 + 100 * 30475) / 1e6, 5)
   })
 })

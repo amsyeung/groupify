@@ -21,6 +21,9 @@ One click puts every new tab into one group, named for you.
 ★ Reclassify
 Sort everything again by task or project, by purpose (development, design, docs, AI tools, video, social, shopping, news…), by site or by last use. Undo puts it all back.
 
+★ Tell it how
+Type what you want, like "work tabs together, YouTube and shopping apart", and Groupify groups your tabs that way.
+
 ★ Your groups stay yours
 Groups you name, rename or drag tabs into are locked automatically, and their sites are remembered, so sorting never pulls them apart. "Only tidy new tabs" files new tabs into the groups they belong to and moves nothing else.
 
@@ -34,7 +37,7 @@ Save a group for later, or reopen one you closed from Recently closed.
 Search titles and addresses. Use ↑ ↓ and Enter to jump to a tab, and Alt+Shift+G to open the side panel.
 
 ★ Private by default
-Your tabs stay on your computer. Names come from the AI built into Chrome when your computer has it. An optional, free cloud AI (off by default) only receives the titles and site names of the tabs being grouped, and keeps nothing.
+Your tabs stay on your computer. Names come from the AI built into Chrome when your computer has it. An optional, free cloud AI (off by default) only receives the titles and site names of the tabs being grouped, and any instruction you type, and keeps nothing.
 
 Available in English, 繁體中文 and 简体中文, in light and dark mode.
 
@@ -55,6 +58,9 @@ Groupify 在 Chrome 側邊欄按你正在做的事整理分頁。
 ★ 重新分類
 按工作／專案、按用途（開發、設計、文件、AI 工具、影音、社交、購物、新聞等）、按網站或按最後使用時間重新分類，可以一鍵復原。
 
+★ 直接說你想怎樣分
+輸入你想要的分法，例如「工作分頁放一組，YouTube 和購物分開」，Groupify 就照着分組。
+
 ★ 你的群組由你決定
 你命名、改名或拖分頁進去的群組會自動鎖定，網站也會被記住，重新分類不會把它們拆散。「只整理新分頁」只把新分頁放進所屬群組，其他分頁不動。
 
@@ -68,7 +74,7 @@ Groupify 在 Chrome 側邊欄按你正在做的事整理分頁。
 按標題或網址搜尋，用 ↑ ↓ 和 Enter 跳到分頁，Alt+Shift+G 開啟側邊欄。
 
 ★ 預設保障私隱
-分頁資料留在你的電腦。電腦有 Chrome 內建 AI 時，由它命名；可選的免費雲端 AI 預設關閉，開啟後只會收到要分組的分頁標題和網站名稱，而且不會保留。
+分頁資料留在你的電腦。電腦有 Chrome 內建 AI 時，由它命名；可選的免費雲端 AI 預設關閉，開啟後只會收到要分組的分頁標題、網站名稱和你輸入的指令，而且不會保留。
 
 支援 English、繁體中文和简体中文，以及淺色和深色模式。
 
@@ -87,6 +93,9 @@ Groupify 在 Chrome 侧边栏按你正在做的事整理标签页。
 ★ 重新分类
 按工作／项目、按用途（开发、设计、文档、AI 工具、影音、社交、购物、新闻等）、按网站或按最后使用时间重新分类，可以一键撤销。
 
+★ 直接说你想怎样分
+输入你想要的分法，例如“工作标签页放一组，YouTube 和购物分开”，Groupify 就照着分组。
+
 ★ 你的组由你决定
 你命名、改名或拖标签页进去的组会自动锁定，网站也会被记住，重新分类不会把它们拆散。“只整理新标签页”只把新标签页放进所属的组，其他标签页不动。
 
@@ -100,7 +109,7 @@ Groupify 在 Chrome 侧边栏按你正在做的事整理标签页。
 按标题或网址搜索，用 ↑ ↓ 和 Enter 跳到标签页，Alt+Shift+G 打开侧边栏。
 
 ★ 默认保护隐私
-标签页数据留在你的电脑。电脑有 Chrome 内置 AI 时，由它命名；可选的免费云端 AI 默认关闭，开启后只会收到要分组的标签页标题和网站名称，而且不会保留。
+标签页数据留在你的电脑。电脑有 Chrome 内置 AI 时，由它命名；可选的免费云端 AI 默认关闭，开启后只会收到要分组的标签页标题、网站名称和你输入的指令，而且不会保留。
 
 支持 English、繁體中文和简体中文，以及浅色和深色模式。
 
@@ -110,12 +119,12 @@ Groupify 在 Chrome 侧边栏按你正在做的事整理标签页。
 
 ### Graphic assets
 
-| Field | File |
-| --- | --- |
-| Store icon (128×128) | keep the current icon (same as the extension's `public/icon128.png`) |
+| Field                           | File                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------ |
+| Store icon (128×128)            | keep the current icon (same as the extension's `public/icon128.png`)                 |
 | Screenshots (1280×800, up to 5) | `screenshots/1-side-panel.jpg` … `5-private.jpg`, in that order; delete the old ones |
-| Small promo tile (440×280) | `promo-small-440x280.jpg` |
-| Marquee promo tile (1400×560) | `promo-marquee-1400x560.jpg` |
+| Small promo tile (440×280)      | `promo-small-440x280.jpg`                                                            |
+| Marquee promo tile (1400×560)   | `promo-marquee-1400x560.jpg`                                                         |
 
 All images are JPEG, so they have no alpha channel, as the store requires.
 
@@ -136,16 +145,16 @@ Organize the tabs in your browser window: search, group, sort and restore tab gr
 
 **Permission justifications** (`storage` and `sidePanel` appear once the new package is uploaded):
 
-| Permission | Justification |
-| --- | --- |
-| `tabs` | Read the titles, addresses and icons of open tabs to list, search, group and close them, and to recognise each tab's site when sorting. |
-| `tabGroups` | Create, rename, recolor, collapse, ungroup and close tab groups, and put back an earlier layout of groups. |
-| `storage` | Save settings, locked groups, remembered sites, saved and recently closed groups, and a short history of group layouts in the browser. |
-| `sidePanel` | Show Groupify in Chrome's side panel so it stays open beside the page. |
+| Permission  | Justification                                                                                                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `tabs`      | Read the titles, addresses and icons of open tabs to list, search, group and close them, and to recognise each tab's site when sorting. |
+| `tabGroups` | Create, rename, recolor, collapse, ungroup and close tab groups, and put back an earlier layout of groups.                              |
+| `storage`   | Save settings, locked groups, remembered sites, saved and recently closed groups, and a short history of group layouts in the browser.  |
+| `sidePanel` | Show Groupify in Chrome's side panel so it stays open beside the page.                                                                  |
 
 **Remote code:** No. (The optional cloud AI returns plain data, never code.)
 
-**Data usage:** tick **Web history** only: with cloud AI turned on, the titles and site names of the tabs being grouped are sent to Groupify's server. Everything else stays in the browser and isn't "collected". Keep all three certifications ticked.
+**Data usage:** tick **Web history** only: with cloud AI turned on, the titles and site names of the tabs being grouped, and any instruction typed for grouping, are sent to Groupify's server. The random install ID used to count groupings by instruction isn't personally identifiable information. Everything else stays in the browser and isn't "collected". Keep all three certifications ticked.
 
 **Privacy policy URL:** https://groupify.aoricreative.com/privacy
 

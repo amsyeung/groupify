@@ -404,7 +404,7 @@
     "message": "没有本机 AI 时，使用 Groupify 的云端 AI"
   },
   "optCloudAiDesc": {
-    "message": "把要分组的标签页标题和网站名称（不含完整网址）传到 Groupify 在 Cloudflare 上的服务器，由 AI 模型处理，服务器不会保留任何数据。免费、所有人共用，每日有上限；用完时改以日期命名。"
+    "message": "把要分组的标签页标题和网站名称（不含完整网址），以及你输入的指令，传到 Groupify 在 Cloudflare 上的服务器，由 AI 模型处理，服务器不会保留任何数据。免费、所有人共用，每日有上限：按指令分组每天 3 次；共用额度用完时，组改以日期命名。"
   },
   "projectNoAiHint": {
     "message": "没有可用的 AI，已按打开时间分组。可在“设置”开启云端 AI。"
@@ -593,5 +593,59 @@
   },
   "historyGroupsOne": {
     "message": "1 个组"
+  },
+  "arrangePlaceholder": {
+    "message": "告诉 Groupify 想怎样分组"
+  },
+  "arrangeTitle": {
+    "message": "例如：“工作标签页放一组，YouTube 和购物分开”，按 Enter 发送。"
+  },
+  "arrangeGo": {
+    "message": "按指令分组"
+  },
+  "arrangeLeft": {
+    "message": "今天还剩 $VALUE$ 次",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "arrangeNoneLeft": {
+    "message": "今天已用完"
+  },
+  "arrangeNeedsAi": {
+    "message": "按指令分组：请先在设置中开启 AI"
+  },
+  "arranging": {
+    "message": "正在按你的指令分组…"
+  },
+  "arranged": {
+    "message": "已按你的指令分组"
+  },
+  "arrangeNothing": {
+    "message": "按这个指令，没有标签页需要改动"
+  },
+  "arrangeFailed": {
+    "message": "未能理解这个指令，试试说清楚哪些标签页放到哪里。"
+  },
+  "arrangeLimit": {
+    "message": "今天的指令分组次数已用完，$VALUE$ 后可以再用。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "arrangeBusy": {
+    "message": "Groupify 云端 AI 今天的用量已满，请在 $VALUE$ 后再试。",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "histArrange": {
+    "message": "按指令分组"
   }
 }

@@ -64,7 +64,7 @@ Name the task, not the websites, unless every tab is from the same site.`
 const ENGLISH = { expectedInputs: [{ type: 'text' as const, languages: ['en'] }], expectedOutputs: [{ type: 'text' as const, languages: ['en'] }] }
 
 /** Runs one prompt on Chrome's on-device model, or returns null if the model isn't already on this computer. */
-async function promptModel(system: string, input: string, schema: object, timeoutMs: number): Promise<string | null> {
+export async function promptModel(system: string, input: string, schema: object, timeoutMs: number): Promise<string | null> {
   const model = globalThis.LanguageModel
   if (!model) return null
   const controller = new AbortController()
