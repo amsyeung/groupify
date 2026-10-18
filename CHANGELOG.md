@@ -4,6 +4,12 @@ See the GitHub Releases page for detailed changelogs: https://github.com/amsyeun
 
 
 
+## [1.3.0](https://github.com/amsyeung/groupify/compare/v1.2.0...v1.3.0) (2026-10-18)
+
+### Features
+
+* group tabs by instruction, with daily limits on the cloud AI ([d0b3157](https://github.com/amsyeung/groupify/commit/d0b3157b47ea0ca901820d4e4b0607c1b5aaf1dd))
+
 ## [1.2.0](https://github.com/amsyeung/groupify/compare/v1.1.0...v1.2.0) (2026-10-17)
 
 ### Features
