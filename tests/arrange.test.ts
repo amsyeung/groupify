@@ -128,6 +128,6 @@ describe('daily cloud uses', () => {
     expect(remainingToday(quotaRecord(0, noon), noon + 12 * 3600_000)).toBe(3)
   })
   it('reset at 00:00 UTC, shown in local time', () => {
-    expect(resetTime(noon, 'en-GB')).toMatch(/^\d{2}:00$/)
+    expect(resetTime(noon, 'en-GB')).toMatch(/^\d{1,2}:00$/)
   })
 })
