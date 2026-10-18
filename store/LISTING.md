@@ -13,36 +13,17 @@ Edit the listing and privacy tabs **before** approving the store step of the nex
 ### Description (English)
 
 ```text
-Groupify keeps your tabs sorted by what you're working on, from Chrome's side panel.
+Keep your tabs sorted by what you're working on, from Chrome's side panel.
 
-★ Group as a series
-One click puts every new tab into one group, named for you.
+▪ Group as a series: every new tab in one group, named for you.
+▪ Reclassify by task, purpose, site or last use.
+▪ Tell it how: "work tabs together, YouTube and shopping apart".
+▪ Groups you make are locked, so sorting never pulls them apart.
+▪ Undo any step, save groups and reopen closed ones.
+▪ Search tabs and jump with ↑ ↓ and Enter. Alt+Shift+G opens the panel.
+▪ Private: your tabs stay on your computer. The optional cloud AI (off by default) only gets tab titles, site names and your instruction.
 
-★ Reclassify
-Sort everything again by task or project, by purpose (development, design, docs, AI tools, video, social, shopping, news…), by site or by last use. Undo puts it all back.
-
-★ Tell it how
-Type what you want, like "work tabs together, YouTube and shopping apart", and Groupify groups your tabs that way.
-
-★ Your groups stay yours
-Groups you name, rename or drag tabs into are locked automatically, and their sites are remembered, so sorting never pulls them apart. "Only tidy new tabs" files new tabs into the groups they belong to and moves nothing else.
-
-★ Go back any number of steps
-History keeps every change Groupify makes, so you can restore any earlier layout. Ungroup all in one click.
-
-★ Save and reopen
-Save a group for later, or reopen one you closed from Recently closed.
-
-★ Find any tab
-Search titles and addresses. Use ↑ ↓ and Enter to jump to a tab, and Alt+Shift+G to open the side panel.
-
-★ Private by default
-Your tabs stay on your computer. Names come from the AI built into Chrome when your computer has it. An optional, free cloud AI (off by default) only receives the titles and site names of the tabs being grouped, and any instruction you type, and keeps nothing.
-
-Available in English, 繁體中文 and 简体中文, in light and dark mode.
-
-Privacy policy: https://groupify.aoricreative.com/privacy
-Help and FAQ: https://github.com/amsyeung/groupify/blob/main/SUPPORT.md
+English, 繁體中文 and 简体中文, light and dark mode.
 ```
 
 ### Description (繁體中文)
@@ -50,71 +31,33 @@ Help and FAQ: https://github.com/amsyeung/groupify/blob/main/SUPPORT.md
 Add a localized listing for Chinese (Traditional) in the dashboard and paste:
 
 ```text
-Groupify 在 Chrome 側邊欄按你正在做的事整理分頁。
+在 Chrome 側邊欄按你正在做的事整理分頁。
 
-★ 組成系列
-一鍵把所有新分頁組成一個群組，並自動命名。
-
-★ 重新分類
-按工作／專案、按用途（開發、設計、文件、AI 工具、影音、社交、購物、新聞等）、按網站或按最後使用時間重新分類，可以一鍵復原。
-
-★ 直接說你想怎樣分
-輸入你想要的分法，例如「工作分頁放一組，YouTube 和購物分開」，Groupify 就照着分組。
-
-★ 你的群組由你決定
-你命名、改名或拖分頁進去的群組會自動鎖定，網站也會被記住，重新分類不會把它們拆散。「只整理新分頁」只把新分頁放進所屬群組，其他分頁不動。
-
-★ 退回任何一步
-歷史記錄保留 Groupify 的每次改動，可以還原到任何一個版本；也可以一鍵取消所有分組。
-
-★ 儲存和重新開啟
-把群組儲存起來，或從「最近關閉」重新開啟已關閉的群組。
-
-★ 快速找到分頁
-按標題或網址搜尋，用 ↑ ↓ 和 Enter 跳到分頁，Alt+Shift+G 開啟側邊欄。
-
-★ 預設保障私隱
-分頁資料留在你的電腦。電腦有 Chrome 內建 AI 時，由它命名；可選的免費雲端 AI 預設關閉，開啟後只會收到要分組的分頁標題、網站名稱和你輸入的指令，而且不會保留。
+▪ 組成系列：一鍵把新分頁組成一組，並自動命名。
+▪ 按工作、用途、網站或最後使用時間重新分類。
+▪ 直接說：「工作分頁放一組，YouTube 和購物分開」。
+▪ 你建立的群組會鎖定，重新分類不會拆散。
+▪ 每一步都可以復原，也可以儲存群組和重開已關閉的群組。
+▪ 搜尋分頁，用 ↑ ↓ 和 Enter 跳轉；Alt+Shift+G 開啟側邊欄。
+▪ 保障私隱：分頁留在你的電腦。可選的雲端 AI 預設關閉，只會收到分頁標題、網站名稱和你的指令。
 
 支援 English、繁體中文和简体中文，以及淺色和深色模式。
-
-私隱政策：https://groupify.aoricreative.com/privacy
-說明與常見問題：https://github.com/amsyeung/groupify/blob/main/SUPPORT.md
 ```
 
 ### Description (简体中文)
 
 ```text
-Groupify 在 Chrome 侧边栏按你正在做的事整理标签页。
+在 Chrome 侧边栏按你正在做的事整理标签页。
 
-★ 组成系列
-一键把所有新标签页组成一个组，并自动命名。
-
-★ 重新分类
-按工作／项目、按用途（开发、设计、文档、AI 工具、影音、社交、购物、新闻等）、按网站或按最后使用时间重新分类，可以一键撤销。
-
-★ 直接说你想怎样分
-输入你想要的分法，例如“工作标签页放一组，YouTube 和购物分开”，Groupify 就照着分组。
-
-★ 你的组由你决定
-你命名、改名或拖标签页进去的组会自动锁定，网站也会被记住，重新分类不会把它们拆散。“只整理新标签页”只把新标签页放进所属的组，其他标签页不动。
-
-★ 退回任意一步
-历史记录保留 Groupify 的每次改动，可以还原到任何一个版本；也可以一键取消所有分组。
-
-★ 保存和重新打开
-把组保存起来，或从“最近关闭”重新打开已关闭的组。
-
-★ 快速找到标签页
-按标题或网址搜索，用 ↑ ↓ 和 Enter 跳到标签页，Alt+Shift+G 打开侧边栏。
-
-★ 默认保护隐私
-标签页数据留在你的电脑。电脑有 Chrome 内置 AI 时，由它命名；可选的免费云端 AI 默认关闭，开启后只会收到要分组的标签页标题、网站名称和你输入的指令，而且不会保留。
+▪ 组成系列：一键把新标签页组成一组，并自动命名。
+▪ 按工作、用途、网站或最后使用时间重新分类。
+▪ 直接说：“工作标签页放一组，YouTube 和购物分开”。
+▪ 你建立的组会锁定，重新分类不会拆散。
+▪ 每一步都可以撤销，也可以保存组和重新打开已关闭的组。
+▪ 搜索标签页，用 ↑ ↓ 和 Enter 跳转；Alt+Shift+G 打开侧边栏。
+▪ 保护隐私：标签页留在你的电脑。可选的云端 AI 默认关闭，只会收到标签页标题、网站名称和你的指令。
 
 支持 English、繁體中文和简体中文，以及浅色和深色模式。
-
-隐私政策：https://groupify.aoricreative.com/privacy
-帮助与常见问题：https://github.com/amsyeung/groupify/blob/main/SUPPORT.md
 ```
 
 ### Graphic assets
