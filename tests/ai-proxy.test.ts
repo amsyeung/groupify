@@ -8,6 +8,7 @@ import {
   HttpError,
   namePrompt,
   neuronsFor,
+  answerOf,
   parseArrangement,
   parseArrangeRequest,
   parseClusters,
@@ -28,15 +29,20 @@ describe('proxy requests', () => {
     expect(() => parseRequest('{"tabs":[]}')).toThrow(HttpError)
     expect(() => parseRequest('nope')).toThrow(HttpError)
   })
-  it('ask for the UI language and turn off Qwen thinking', () => {
+  it('ask for the UI language', () => {
     const req = parseRequest(JSON.stringify({ tabs: [{ title: 'Pins', site: 'pinterest.com' }], lang: 'zh-Hant' }))
     expect(namePrompt(req)[0].content).toContain('Traditional Chinese')
-    expect(clusterPrompt(req)[0].content).toContain('/no_think')
+    expect(clusterPrompt(req)[0].content).toContain('Traditional Chinese')
     expect(namePrompt(req)[1].content).toBe('1. Pins (pinterest.com)')
   })
 })
 
 describe('model answers', () => {
+  it('read the answer from OpenAI-style choices or the older response field', () => {
+    expect(answerOf({ choices: [{ message: { content: '{"name":"旅行"}' } }] })).toBe('{"name":"旅行"}')
+    expect(answerOf({ response: { name: '旅行' } })).toEqual({ name: '旅行' })
+    expect(answerOf({})).toBeUndefined()
+  })
   it('find JSON after a think block or prose', () => {
     expect(extractJson('<think>hmm {"x":1}</think>Here: {"name": "新網站"} done')).toEqual({ name: '新網站' })
     expect(extractJson('no json')).toBeNull()
@@ -113,7 +119,6 @@ describe('grouping by instruction', () => {
     const [system, user] = arrangePrompt(req)
     expect(system.content).toContain('Groups now: "旅行" (locked')
     expect(system.content).toContain('Traditional Chinese')
-    expect(system.content).toContain('/no_think')
     expect(user.content).toBe('Instruction: 放入旅行\n\nTabs:\n1. Hotels (booking.com)')
   })
   it('read back only valid groups, colours and unused tab numbers', () => {
@@ -149,8 +154,8 @@ describe('daily limits', () => {
     expect(utcDay(Date.UTC(2026, 9, 18, 23, 59))).toBe('2026-10-18')
   })
   it('price calls from Workers AI’s token counts, or estimate them', () => {
-    // 1,500 input + 300 output tokens on Qwen3 30B-A3B: about 16 Neurons.
-    expect(neuronsFor({ prompt_tokens: 1500, completion_tokens: 300 }, 0, 0)).toBeCloseTo(16.08, 1)
-    expect(neuronsFor(undefined, 3000, 300)).toBeCloseTo((1000 * 4625 + 100 * 30475) / 1e6, 5)
+    // 1,500 input + 300 output tokens on Gemma 4 26B-A4B: about 22 Neurons.
+    expect(neuronsFor({ prompt_tokens: 1500, completion_tokens: 300 }, 0, 0)).toBeCloseTo(21.82, 1)
+    expect(neuronsFor(undefined, 3000, 300)).toBeCloseTo((1000 * 9091 + 100 * 27273) / 1e6, 5)
   })
 })

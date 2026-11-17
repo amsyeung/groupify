@@ -7,8 +7,9 @@ workers_dev = true
 binding = "AI"
 
 [vars]
-# Qwen3 30B-A3B: cheap on Workers AI and good at Chinese.
-MODEL = "@cf/qwen/qwen3-30b-a3b-fp8"
+# Gemma 4 26B-A4B: about the same Neurons per call as Qwen3 30B-A3B, which Workers AI retired on 2026-11-20.
+# The other small replacement, Qwen3.8 27B, costs about ten times as much.
+MODEL = "@cf/google/gemma-4-26b-a4b-it"
 # The store build, and the unpacked build loaded from groupify/dist on the maintainer's computer.
 ALLOWED_ORIGINS = "chrome-extension://kkajifdljgkcniokopfhllcocblblmeh,chrome-extension://jpophckafobndanhcmfhnhclmfpglhmb"
 # Groupify's share of the account's 10,000 free Neurons a day; the rest is kept for other projects
