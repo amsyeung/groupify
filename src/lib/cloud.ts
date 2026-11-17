@@ -5,7 +5,8 @@
 import { siteOf, tabUrl, type TabLike } from './tabs'
 
 export const CLOUD_AI_URL = 'https://groupify-ai.amsyeung.workers.dev'
-const TIMEOUT_MS = 15_000
+// Gemma 4 on Workers AI takes up to about 15 s to sort 40 tabs, longer when the proxy retries a broken answer.
+const TIMEOUT_MS = 30_000
 
 type Tab = Pick<TabLike, 'title' | 'url' | 'pendingUrl'>
 
