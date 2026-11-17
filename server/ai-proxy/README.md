@@ -8,7 +8,7 @@ extension (side panel) ──HTTPS──▶ groupify-ai.<account>.workers.dev
                                      ├─ titles and hostnames only, ≤40 tabs per request (≤60 by instruction)
                                      ├─ 10 requests per minute per IP
                                      ├─ daily limits, counted in a Durable Object
-                                     └─ Workers AI, Qwen3 30B-A3B
+                                     └─ Workers AI, Gemma 4 26B-A4B
 ```
 
 **Cost.** Workers AI gives every account 10,000 Neurons a day for free, shared by every project on the account. On the Workers Free plan, requests past that fail instead of being billed. A request uses roughly 3 Neurons (naming), 15 (sorting 40 tabs) or 20 (grouping by instruction).
@@ -22,7 +22,7 @@ extension (side panel) ──HTTPS──▶ groupify-ai.<account>.workers.dev
 | `ARRANGE_PER_DAY` | 3       | Groupings by instruction per install                                                            |
 | `ARRANGE_PER_IP`  | 10      | Groupings by instruction per IP address, against made-up install IDs                            |
 
-Neurons are worked out from the token counts Workers AI returns, at Qwen3 30B-A3B's price (`NEURONS_PER_M` in `src/prompts.ts`; update it with the model). When Groupify's share runs out, the extension falls back to naming groups by date. Change a limit by editing the var and deploying again.
+Neurons are worked out from the token counts Workers AI returns, at Gemma 4 26B-A4B's price (`NEURONS_PER_M` in `src/prompts.ts`; update it with the model). When Groupify's share runs out, the extension falls back to naming groups by date. Change a limit by editing the var and deploying again.
 
 **Privacy.** Requests carry tab titles and hostnames, never full URLs, and the instruction when grouping by instruction. None of it is logged or stored: the Worker has observability turned off. The `Quota` Durable Object (SQLite, included in the Workers Free plan) keeps only today's counts: Neurons spent, and uses per install ID and per IP address, both as SHA-256 hashes salted with the date. Everything is deleted when the day changes.
 

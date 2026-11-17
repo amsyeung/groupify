@@ -4,6 +4,7 @@
 
 import { readLimits, utcDay, type Kind } from './budget'
 import {
+  answerOf,
   arrangePrompt,
   clusterPrompt,
   hasBrokenText,
@@ -15,7 +16,7 @@ import {
   parseClusters,
   parseName,
   parseRequest,
-  type Usage,
+  type AiResult,
 } from './prompts'
 import type { Begin } from './quota'
 
@@ -28,7 +29,7 @@ interface QuotaStub {
 }
 
 interface Env {
-  AI: { run(model: string, input: object): Promise<{ response?: unknown; usage?: Usage }> }
+  AI: { run(model: string, input: object): Promise<AiResult> }
   LIMITER: { limit(options: { key: string }): Promise<{ success: boolean }> }
   QUOTA: { idFromName(name: string): unknown; get(id: unknown): QuotaStub }
   /** Comma-separated chrome-extension:// origins allowed to call the proxy. */
@@ -105,18 +106,20 @@ export default {
       }
 
       const messages = 'instruction' in req ? arrangePrompt(req) : route === 'name' ? namePrompt(req) : clusterPrompt(req)
-      const input = { messages, max_tokens: MAX_TOKENS[route], temperature: 0.2 }
+      // Gemma 4 thinks before answering unless told not to; the thinking would use up max_completion_tokens.
+      const input = { messages, max_completion_tokens: MAX_TOKENS[route], temperature: 0.2, chat_template_kwargs: { enable_thinking: false } }
       const promptChars = messages.reduce((n, m) => n + m.content.length, 0)
       let neurons = 0
       const run = async () => {
         const result = await env.AI.run(env.MODEL, input)
-        neurons += neuronsFor(result.usage, promptChars, JSON.stringify(result.response ?? '').length)
-        return result.response
+        const answer = answerOf(result)
+        neurons += neuronsFor(result.usage, promptChars, JSON.stringify(answer ?? '').length)
+        return answer
       }
       let answer: unknown
       try {
         answer = await run()
-        // Qwen now and then cuts a Chinese character in half; one retry usually fixes it.
+        // A model now and then cuts a Chinese character in half; one retry usually fixes it.
         if (hasBrokenText(answer)) answer = await run()
       } catch {
         // Includes the account's free daily allocation running out: the extension falls back without AI.
