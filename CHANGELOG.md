@@ -4,6 +4,12 @@ See the GitHub Releases page for detailed changelogs: https://github.com/amsyeun
 
 
 
+## [1.3.1](https://github.com/amsyeung/groupify/compare/v1.3.0...v1.3.1) (2026-11-17)
+
+### Bug Fixes
+
+* keep the cloud AI working after Workers AI retires Qwen3 30B ([74476c2](https://github.com/amsyeung/groupify/commit/74476c26297c9d9899de7ee3d2a6292ae0a8992b)), references [#12](https://github.com/amsyeung/groupify/issues/12)
+
 ## [1.3.0](https://github.com/amsyeung/groupify/compare/v1.2.0...v1.3.0) (2026-10-18)
 
 ### Features
